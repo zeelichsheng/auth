@@ -30,6 +30,13 @@ public interface Database {
   Client findClientById(String clientId);
 
   /**
+   * Stores an authorization ticket object in database.
+   *
+   * @param authorizationTicket The authorization ticket object.
+   */
+  void storeAuthorizationTicket(AuthorizationTicket authorizationTicket);
+
+  /**
    * Finds an authorization ticket object by authorization code.
    *
    * @param code The authorization code.

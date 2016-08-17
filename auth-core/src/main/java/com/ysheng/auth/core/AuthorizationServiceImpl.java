@@ -74,9 +74,20 @@ public class AuthorizationServiceImpl implements AuthorizationService {
           "Unable to find client with ID: " + request.getClientId());
     }
 
+    String authCode = authValueGenerator.generateAuthCode();
+
+    // Store authorization ticket in database.
+    AuthorizationTicket authorizationTicket = new AuthorizationTicket();
+    authorizationTicket.setCode(authCode);
+    authorizationTicket.setClientId(request.getClientId());
+    authorizationTicket.setRedirectUri(request.getRedirectUri());
+    authorizationTicket.setScope(request.getScope());
+    authorizationTicket.setState(request.getState());
+    database.storeAuthorizationTicket(authorizationTicket);
+
     // Build the response.
     AuthorizationResponse response = new AuthorizationResponse();
-    response.setCode(authValueGenerator.generateAuthCode());
+    response.setCode(authCode);
     if (request.getState() != null) {
       response.setState(request.getState());
     }
