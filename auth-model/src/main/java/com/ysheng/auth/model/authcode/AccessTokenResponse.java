@@ -13,6 +13,8 @@
 
 package com.ysheng.auth.model.authcode;
 
+import com.ysheng.auth.model.AccessTokenType;
+
 /**
  * Defines the data structure of access token response for Authorization Code Grant.
  */
@@ -22,7 +24,7 @@ public class AccessTokenResponse {
   private String accessToken;
 
   // REQUIRED. The type of the token.
-  private String tokenType;
+  private AccessTokenType tokenType;
 
   // RECOMMENDED. The lifetime in seconds of the access token.
   private Long expiresIn;
@@ -47,11 +49,11 @@ public class AccessTokenResponse {
     this.accessToken = accessToken;
   }
 
-  public String getTokenType() {
+  public AccessTokenType getTokenType() {
     return tokenType;
   }
 
-  public void setTokenType(String tokenType) {
+  public void setTokenType(AccessTokenType tokenType) {
     this.tokenType = tokenType;
   }
 

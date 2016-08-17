@@ -11,24 +11,11 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.common.core.generator;
+package com.ysheng.auth.model;
 
 /**
- * Defines the interface to generate auth related values.
+ * Defines the access token type.
  */
-public interface AuthValueGenerator {
-
-  /**
-   * Generates an authorization code.
-   *
-   * @return An unique authorization code.
-   */
-  String generateAuthCode();
-
-  /**
-   * Generates an access token.
-   *
-   * @return An unique access token.
-   */
-  String generateAccessToken();
+public enum AccessTokenType {
+  BEARER
 }

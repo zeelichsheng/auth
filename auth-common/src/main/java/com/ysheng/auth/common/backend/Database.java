@@ -13,12 +13,27 @@
 
 package com.ysheng.auth.common.backend;
 
-import com.ysheng.auth.model.client.Client;
+import com.ysheng.auth.model.database.AuthorizationTicket;
+import com.ysheng.auth.model.database.Client;
 
 /**
  * Defines the interface of backend database related functions.
  */
 public interface Database {
 
+  /**
+   * Finds a client object by client identifier.
+   *
+   * @param clientId The client identifier.
+   * @return A client object that matches the client identifier.
+   */
   Client findClientById(String clientId);
+
+  /**
+   * Finds an authorization ticket object by authorization code.
+   *
+   * @param code The authorization code.
+   * @return An authorization ticket object that matches the authorization code.
+   */
+  AuthorizationTicket findAuthorizationTicketByCode(String code);
 }

@@ -11,12 +11,36 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.client;
+package com.ysheng.auth.model.database;
 
 /**
- * Defines the type of client.
+ * Defines the data structure of auth client.
  */
-public enum ClientType {
-  CONFIDENTIAL,
-  PUBLIC
+public class Client {
+
+  // Type of the client.
+  private ClientType type;
+
+  // ID of the client.
+  private String id;
+
+  ///
+  /// Getters and Setters.
+  ///
+
+  public ClientType getType() {
+    return type;
+  }
+
+  public void setType(ClientType type) {
+    this.type = type;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
 }

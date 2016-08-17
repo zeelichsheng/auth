@@ -13,7 +13,10 @@
 
 package com.ysheng.auth.common.core;
 
+import com.ysheng.auth.common.core.exception.AuthCodeAccessTokenException;
 import com.ysheng.auth.common.core.exception.AuthCodeAuthorizationException;
+import com.ysheng.auth.model.authcode.AccessTokenRequest;
+import com.ysheng.auth.model.authcode.AccessTokenResponse;
 import com.ysheng.auth.model.authcode.AuthorizationRequest;
 import com.ysheng.auth.model.authcode.AuthorizationResponse;
 
@@ -27,6 +30,17 @@ public interface AuthorizationService {
    *
    * @param request The authorization request that contains required information.
    * @return The authorization response that contains the authorization code.
+   * @throws AuthCodeAuthorizationException The exception contains error details.
    */
   AuthorizationResponse authorize(AuthorizationRequest request) throws AuthCodeAuthorizationException;
+
+  /**
+   * Issues an access token for a client with an auth code received from authorization of
+   * Authorization Code Grant type.
+   *
+   * @param request The access token request that contains required information.
+   * @return The access token response that contains the access token.
+   * @throws AuthCodeAccessTokenException The exception contains error details.
+   */
+  AccessTokenResponse issueAccessToken(AccessTokenRequest request) throws AuthCodeAccessTokenException;
 }

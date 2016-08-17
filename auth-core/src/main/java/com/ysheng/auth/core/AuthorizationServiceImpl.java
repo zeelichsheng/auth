@@ -15,12 +15,18 @@ package com.ysheng.auth.core;
 
 import com.ysheng.auth.common.backend.Database;
 import com.ysheng.auth.common.core.AuthorizationService;
+import com.ysheng.auth.common.core.exception.AuthCodeAccessTokenException;
 import com.ysheng.auth.common.core.exception.AuthCodeAuthorizationException;
 import com.ysheng.auth.common.core.generator.AuthValueGenerator;
+import com.ysheng.auth.model.AccessTokenType;
+import com.ysheng.auth.model.authcode.AccessTokenErrorType;
+import com.ysheng.auth.model.authcode.AccessTokenRequest;
+import com.ysheng.auth.model.authcode.AccessTokenResponse;
 import com.ysheng.auth.model.authcode.AuthorizationErrorType;
 import com.ysheng.auth.model.authcode.AuthorizationRequest;
 import com.ysheng.auth.model.authcode.AuthorizationResponse;
-import com.ysheng.auth.model.client.Client;
+import com.ysheng.auth.model.database.AuthorizationTicket;
+import com.ysheng.auth.model.database.Client;
 
 /**
  * Implementation of the authorization related functions.
@@ -37,6 +43,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
    * Constructs an AuthorizationServiceImpl object.
    *
    * @param database The database object to interact with persistence store.
+   * @param authValueGenerator The generator object to generate auth related values.
    */
   public AuthorizationServiceImpl(
       Database database,
@@ -50,6 +57,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
    *
    * @param request The authorization request that contains required information.
    * @return The authorization response that contains the authorization code.
+   * @throws AuthCodeAuthorizationException The exception contains error details.
    */
   public AuthorizationResponse authorize(AuthorizationRequest request) throws AuthCodeAuthorizationException {
     // Validate the request.
@@ -63,7 +71,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     if (client == null) {
       throw new AuthCodeAuthorizationException(
           AuthorizationErrorType.UNAUTHORIZED_CLIENT,
-          "Client ID is invalid in request");
+          "Unable to find client with ID: " + request.getClientId());
     }
 
     // Build the response.
@@ -72,6 +80,60 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     if (request.getState() != null) {
       response.setState(request.getState());
     }
+
+    return response;
+  }
+
+  /**
+   * Issues an access token for a client with an auth code received from authorization of
+   * Authorization Code Grant type.
+   *
+   * @param request The access token request that contains required information.
+   * @return The access token response that contains the access token.
+   * @throws AuthCodeAccessTokenException The exception contains error details.
+   */
+  public AccessTokenResponse issueAccessToken(AccessTokenRequest request) throws AuthCodeAccessTokenException {
+    // Validate the request.
+    if (!AccessTokenRequest.VALID_GRANT_TYPE.equals(request.getGrantType())) {
+      throw new AuthCodeAccessTokenException(
+          AccessTokenErrorType.UNSUPPORTED_GRANT_TYPE,
+          "Unsupported grant type in request: " + request.getGrantType().toString());
+    }
+
+    Client client = database.findClientById(request.getClientId());
+    if (client == null) {
+      throw new AuthCodeAccessTokenException(
+          AccessTokenErrorType.UNAUTHORIZED_CLIENT,
+          "Unable to find client with ID: " + request.getClientId());
+    }
+
+    AuthorizationTicket authorizationTicket = database.findAuthorizationTicketByCode(request.getCode());
+    if (authorizationTicket == null) {
+      throw new AuthCodeAccessTokenException(
+          AccessTokenErrorType.INVALID_REQUEST,
+          "Unable to find authorization code: " + request.getCode());
+    }
+
+    if (authorizationTicket.getRedirectUri() != null &&
+        !authorizationTicket.getRedirectUri().equals(request.getRedirectUri())) {
+      throw new AuthCodeAccessTokenException(
+          AccessTokenErrorType.INVALID_REQUEST,
+          "Mismatch of redirect URI: " + request.getRedirectUri());
+    }
+
+    if (!client.getId().equals(authorizationTicket.getClientId())) {
+      throw new AuthCodeAccessTokenException(
+          AccessTokenErrorType.INVALID_CLIENT,
+          "Invalid client ID: " + request.getClientId());
+    }
+
+    // Build the response.
+    AccessTokenResponse response = new AccessTokenResponse();
+    response.setAccessToken(authValueGenerator.generateAccessToken());
+    response.setTokenType(AccessTokenType.BEARER);
+    // TODO: change how we calculate the token expiration.
+    // Also consider how to set refresh token and scop.
+    response.setExpiresIn((long) Integer.MAX_VALUE);
 
     return response;
   }
