@@ -11,49 +11,36 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.database;
-
-import com.ysheng.auth.model.ClientType;
+package com.ysheng.auth.model.client;
 
 /**
- * Defines the data structure of auth client.
+ * Defines the data structure of client registration error response.
  */
-public class Client {
+public class ClientRegistrationErrorResponse {
 
-  // Type of the client.
-  private ClientType type;
+  // Client registration error code.
+  private ClientRegistrationErrorType error;
 
-  // ID of the client.
-  private String id;
-
-  // Secret of the client.
-  private String secret;
+  // Human-readable ASCII text providing additional information.
+  private String errorDescription;
 
   ///
   /// Getters and Setters.
   ///
 
-  public ClientType getType() {
-    return type;
+  public ClientRegistrationErrorType getError() {
+    return error;
   }
 
-  public void setType(ClientType type) {
-    this.type = type;
+  public void setError(ClientRegistrationErrorType error) {
+    this.error = error;
   }
 
-  public String getId() {
-    return id;
+  public String getErrorDescription() {
+    return errorDescription;
   }
 
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  public String getSecret() {
-    return secret;
-  }
-
-  public void setSecret(String secret) {
-    this.secret = secret;
+  public void setErrorDescription(String errorDescription) {
+    this.errorDescription = errorDescription;
   }
 }

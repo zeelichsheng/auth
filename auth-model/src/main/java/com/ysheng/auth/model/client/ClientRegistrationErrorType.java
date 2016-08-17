@@ -11,12 +11,12 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.database;
+package com.ysheng.auth.model.client;
 
 /**
- * Defines the type of client.
+ * Defines the error types used in the client registration error response.
  */
-public enum ClientType {
-  CONFIDENTIAL,
-  PUBLIC
+public enum ClientRegistrationErrorType {
+  INVALID_REQUEST,
+  ALREADY_REGISTERED
 }
