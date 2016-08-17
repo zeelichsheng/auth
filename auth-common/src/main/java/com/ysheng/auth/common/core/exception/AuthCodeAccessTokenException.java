@@ -40,4 +40,24 @@ public class AuthCodeAccessTokenException extends Exception {
     this.error = error;
     this.errorDescription = errorDescription;
   }
+
+  ///
+  /// Getters and Setters.
+  ///
+
+  public AccessTokenErrorType getError() {
+    return error;
+  }
+
+  public void setError(AccessTokenErrorType error) {
+    this.error = error;
+  }
+
+  public String getErrorDescription() {
+    return errorDescription;
+  }
+
+  public void setErrorDescription(String errorDescription) {
+    this.errorDescription = errorDescription;
+  }
 }

@@ -40,4 +40,24 @@ public class AuthCodeAuthorizationException extends Exception {
     this.error = error;
     this.errorDescription = errorDescription;
   }
+
+  ///
+  /// Getters and Setters.
+  ///
+
+  public AuthorizationErrorType getError() {
+    return error;
+  }
+
+  public void setError(AuthorizationErrorType error) {
+    this.error = error;
+  }
+
+  public String getErrorDescription() {
+    return errorDescription;
+  }
+
+  public void setErrorDescription(String errorDescription) {
+    this.errorDescription = errorDescription;
+  }
 }

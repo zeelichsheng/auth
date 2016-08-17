@@ -40,4 +40,24 @@ public class ClientRegistrationException extends Exception {
     this.error = error;
     this.errorDescription = errorDescription;
   }
+
+  ///
+  /// Getters and Setters.
+  ///
+
+  public ClientRegistrationErrorType getError() {
+    return error;
+  }
+
+  public void setError(ClientRegistrationErrorType error) {
+    this.error = error;
+  }
+
+  public String getErrorDescription() {
+    return errorDescription;
+  }
+
+  public void setErrorDescription(String errorDescription) {
+    this.errorDescription = errorDescription;
+  }
 }
