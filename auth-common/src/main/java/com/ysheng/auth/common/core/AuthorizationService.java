@@ -15,10 +15,13 @@ package com.ysheng.auth.common.core;
 
 import com.ysheng.auth.common.core.exception.AuthCodeAccessTokenException;
 import com.ysheng.auth.common.core.exception.AuthCodeAuthorizationException;
+import com.ysheng.auth.common.core.exception.ClientRegistrationException;
 import com.ysheng.auth.model.authcode.AccessTokenRequest;
 import com.ysheng.auth.model.authcode.AccessTokenResponse;
 import com.ysheng.auth.model.authcode.AuthorizationRequest;
 import com.ysheng.auth.model.authcode.AuthorizationResponse;
+import com.ysheng.auth.model.client.ClientRegistrationRequest;
+import com.ysheng.auth.model.client.ClientRegistrationResponse;
 
 /**
  * Defines the interface of authorization related functions.
@@ -26,11 +29,20 @@ import com.ysheng.auth.model.authcode.AuthorizationResponse;
 public interface AuthorizationService {
 
   /**
+   * Registers a client with the authentication server.
+   *
+   * @param request The client registration request that contains required information.
+   * @return The client registration response that contains the client identifier and secret.
+   * @throws ClientRegistrationException The exception that contains error details.
+   */
+  ClientRegistrationResponse registerClient(ClientRegistrationRequest request) throws ClientRegistrationException;
+
+  /**
    * Authorizes an authorization request of Authorization Code Grant type.
    *
    * @param request The authorization request that contains required information.
    * @return The authorization response that contains the authorization code.
-   * @throws AuthCodeAuthorizationException The exception contains error details.
+   * @throws AuthCodeAuthorizationException The exception that contains error details.
    */
   AuthorizationResponse authorize(AuthorizationRequest request) throws AuthCodeAuthorizationException;
 
@@ -40,7 +52,7 @@ public interface AuthorizationService {
    *
    * @param request The access token request that contains required information.
    * @return The access token response that contains the access token.
-   * @throws AuthCodeAccessTokenException The exception contains error details.
+   * @throws AuthCodeAccessTokenException The exception that contains error details.
    */
   AccessTokenResponse issueAccessToken(AccessTokenRequest request) throws AuthCodeAccessTokenException;
 }

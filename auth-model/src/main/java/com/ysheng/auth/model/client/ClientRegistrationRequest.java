@@ -25,4 +25,24 @@ public class ClientRegistrationRequest {
 
   // Redirect URI of the client.
   private String redirectUri;
+
+  ///
+  /// Getters and Setters.
+  ///
+
+  public ClientType getType() {
+    return type;
+  }
+
+  public void setType(ClientType type) {
+    this.type = type;
+  }
+
+  public String getRedirectUri() {
+    return redirectUri;
+  }
+
+  public void setRedirectUri(String redirectUri) {
+    this.redirectUri = redirectUri;
+  }
 }

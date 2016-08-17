@@ -11,38 +11,28 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.common.core.generator;
+package com.ysheng.auth.common.utility;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
- * Defines the interface to generate auth related values.
+ * Defines utility functions related to URI.
  */
-public interface AuthValueGenerator {
+public class UriUtil {
 
   /**
-   * Generates a client identifier.
+   * Determines whether the given URI is in valid format.
    *
-   * @return An unique client identifier.
+   * @param uri The URI string to be validated.
+   * @return True if the give URI is valid. False otherwise.
    */
-  String generateClientId();
-
-  /**
-   * Generates a client secret.
-   *
-   * @return An unique client secret.
-   */
-  String generateClientSecret();
-
-  /**
-   * Generates an authorization code.
-   *
-   * @return An unique authorization code.
-   */
-  String generateAuthCode();
-
-  /**
-   * Generates an access token.
-   *
-   * @return An unique access token.
-   */
-  String generateAccessToken();
+  public static boolean isValidUri(String uri) {
+    try {
+      new URL(uri);
+      return true;
+    } catch (MalformedURLException ex) {
+      return false;
+    }
+  }
 }

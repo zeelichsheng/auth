@@ -22,24 +22,39 @@ import com.ysheng.auth.model.database.Client;
 public interface Database {
 
   /**
+   * Stores a client object in database.
+   *
+   * @param client The client object to be stored.
+   */
+  void storeClient(Client client);
+
+  /**
    * Finds a client object by client identifier.
    *
-   * @param clientId The client identifier.
+   * @param clientId The client identifier to be matched.
    * @return A client object that matches the client identifier.
    */
   Client findClientById(String clientId);
 
   /**
+   * Finds a client object by redirect URI.
+   *
+   * @param redirectUri The client redirect URI to be matched.
+   * @return A client object that matches the redirect URI.
+   */
+  Client findClientByRedirectUri(String redirectUri);
+
+  /**
    * Stores an authorization ticket object in database.
    *
-   * @param authorizationTicket The authorization ticket object.
+   * @param authorizationTicket The authorization ticket object to be stored.
    */
   void storeAuthorizationTicket(AuthorizationTicket authorizationTicket);
 
   /**
    * Finds an authorization ticket object by authorization code.
    *
-   * @param code The authorization code.
+   * @param code The authorization code to be matched.
    * @return An authorization ticket object that matches the authorization code.
    */
   AuthorizationTicket findAuthorizationTicketByCode(String code);

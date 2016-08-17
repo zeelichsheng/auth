@@ -29,6 +29,9 @@ public class Client {
   // Secret of the client.
   private String secret;
 
+  // Redirect URI of the client.
+  private String redirectUri;
+
   ///
   /// Getters and Setters.
   ///
@@ -55,5 +58,13 @@ public class Client {
 
   public void setSecret(String secret) {
     this.secret = secret;
+  }
+
+  public String getRedirectUri() {
+    return redirectUri;
+  }
+
+  public void setRedirectUri(String redirectUri) {
+    this.redirectUri = redirectUri;
   }
 }

@@ -23,4 +23,24 @@ public class ClientRegistrationResponse {
 
   // The secret of the client.
   private String clientSecret;
+
+  ///
+  /// Getters and Setters.
+  ///
+
+  public String getClientId() {
+    return clientId;
+  }
+
+  public void setClientId(String clientId) {
+    this.clientId = clientId;
+  }
+
+  public String getClientSecret() {
+    return clientSecret;
+  }
+
+  public void setClientSecret(String clientSecret) {
+    this.clientSecret = clientSecret;
+  }
 }
