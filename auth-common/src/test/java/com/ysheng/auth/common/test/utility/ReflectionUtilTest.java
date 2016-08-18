@@ -15,7 +15,6 @@ package com.ysheng.auth.common.test.utility;
 
 import com.ysheng.auth.common.utility.ReflectionUtil;
 import org.testng.annotations.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
