@@ -26,16 +26,27 @@ import java.util.stream.Collectors;
 public class ClientAdapter {
 
   // The template for the entity key.
-  private static final String ENTITY_KEY_TEMPLATE = "auth-client:id:%s";
+  private static final String ENTITY_KEY_TEMPLATE = "auth-client:%s:%s";
 
   /**
    * Returns the Redis key for the object.
    *
    * @param clientId The client identifier.
+   * @param redirectUri The client redirect URI.
    * @return The key for the object.
    */
-  public static String getKey(String clientId) {
-    return String.format(ENTITY_KEY_TEMPLATE, clientId);
+  public static String getKey(
+      String clientId,
+      String redirectUri) {
+    if (clientId == null) {
+      clientId = "*";
+    }
+
+    if (redirectUri == null) {
+      redirectUri = "*";
+    }
+
+    return String.format(ENTITY_KEY_TEMPLATE, clientId, redirectUri);
   }
 
   /**

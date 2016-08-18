@@ -44,7 +44,7 @@ public class RedisDatabase implements Database {
    */
   public void storeClient(Client client) {
     redisClient.hmset(
-        ClientAdapter.getKey(client.getId()),
+        ClientAdapter.getKey(client.getId(), client.getRedirectUri()),
         ClientAdapter.toHash(client));
   }
 
@@ -56,7 +56,7 @@ public class RedisDatabase implements Database {
    */
   public Client findClientById(String clientId) {
     return ClientAdapter.fromHash(
-        redisClient.hgetAll(ClientAdapter.getKey(clientId)));
+        redisClient.hgetAll(ClientAdapter.getKey(clientId, null)));
   }
 
   /**

@@ -16,6 +16,7 @@ package com.ysheng.auth.backend.redis.test.adapter;
 import com.ysheng.auth.backend.redis.adapter.ClientAdapter;
 import com.ysheng.auth.model.ClientType;
 import com.ysheng.auth.model.database.Client;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -30,12 +31,23 @@ import java.util.Map;
  */
 public class ClientAdapterTest {
 
-  @Test
-  public void succeedsToGetKey() {
-    String clientId = "clientId";
-    String key = ClientAdapter.getKey(clientId);
+  @Test(dataProvider = "ClientKeyMetadata")
+  public void succeedsToGetKey(
+      String clientId,
+      String redirectUri,
+      String expectedKey) {
+    String key = ClientAdapter.getKey(clientId, redirectUri);
 
-    assertThat(key, equalTo("auth-client:id:clientId"));
+    assertThat(key, equalTo(expectedKey));
+  }
+
+  @DataProvider(name = "ClientKeyMetadata")
+  public Object[][] provideClientKeyMetadata() {
+    return new Object[][] {
+        { "clientId", "redirectUri", "auth-client:clientId:redirectUri" },
+        { "clientId", null, "auth-client:clientId:*" },
+        { null, "redirectUri", "auth-client:*:redirectUri" }
+    };
   }
 
   @Test
