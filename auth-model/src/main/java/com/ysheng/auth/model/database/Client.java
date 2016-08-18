@@ -18,18 +18,22 @@ import com.ysheng.auth.model.ClientType;
 /**
  * Defines the data structure of auth client.
  */
-public class Client {
+public class Client implements DatabaseObject {
 
   // Type of the client.
+  @DatabaseObjectDataField
   private ClientType type;
 
   // ID of the client.
+  @DatabaseObjectDataField
   private String id;
 
   // Secret of the client.
+  @DatabaseObjectDataField
   private String secret;
 
   // Redirect URI of the client.
+  @DatabaseObjectDataField
   private String redirectUri;
 
   ///

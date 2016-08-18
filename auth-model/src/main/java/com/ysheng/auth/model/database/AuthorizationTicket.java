@@ -17,22 +17,27 @@ package com.ysheng.auth.model.database;
  * Defines the data structure of an authorization ticket that contains auth
  * related information being persisted in the database.
  */
-public class AuthorizationTicket {
+public class AuthorizationTicket implements DatabaseObject {
 
   // The authorization code.
+  @DatabaseObjectDataField
   private String code;
 
   // The client identifier.
+  @DatabaseObjectDataField
   private String clientId;
 
   // The URI the resource owner is redirected to.
+  @DatabaseObjectDataField
   private String redirectUri;
 
   // The scope of the access request.
+  @DatabaseObjectDataField
   private String scope;
 
   // An opaque value used by the client to maintain state between
   // the request and the callback.
+  @DatabaseObjectDataField
   private String state;
 
   ///
