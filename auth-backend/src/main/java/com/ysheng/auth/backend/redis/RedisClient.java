@@ -13,6 +13,8 @@
 
 package com.ysheng.auth.backend.redis;
 
+import com.ysheng.auth.backend.redis.entity.Entity;
+
 /**
  * Defines the interface of Redis related functions.
  */
@@ -27,4 +29,11 @@ public interface RedisClient {
    * Closes a Redis connection.
    */
   void closeConnection();
+
+  /**
+   * Implements hmset command in Redis.
+   *
+   * @param entity The entity to be executed with hmset command.
+   */
+  void hmset(Entity entity);
 }

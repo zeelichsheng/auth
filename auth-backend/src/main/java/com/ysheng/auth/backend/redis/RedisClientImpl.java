@@ -13,8 +13,12 @@
 
 package com.ysheng.auth.backend.redis;
 
+import com.ysheng.auth.backend.redis.entity.Entity;
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisSentinelPool;
+
+import java.util.function.Consumer;
 
 /**
  * Implementation of Redis related functions.
@@ -59,5 +63,36 @@ public class RedisClientImpl implements RedisClient {
    */
   public void closeConnection() {
     connectionPool.close();
+  }
+
+  /**
+   * Implements hmset command in Redis.
+   *
+   * @param entity The entity to be executed with hmset command.
+   */
+  public void hmset(Entity entity) {
+    doRedis(
+        resource -> {
+          resource.hmset(
+              entity.getKey(),
+              entity.getHash()
+          );
+        }
+    );
+  }
+
+  /**
+   * Executes a Redis command by picking a resource from the connection pool.
+   *
+   * @param consumer The Redis command that consumes the connection resource.
+   */
+  private void doRedis(Consumer<Jedis> consumer) {
+    Jedis resource = connectionPool.getResource();
+
+    try {
+      consumer.accept(resource);
+    } finally {
+      resource.close();
+    }
   }
 }
