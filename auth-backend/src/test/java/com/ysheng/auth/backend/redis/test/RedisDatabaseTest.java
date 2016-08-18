@@ -55,12 +55,15 @@ public class RedisDatabaseTest {
   @Test
   public void succeedsToFindClientById() {
     RedisClient redisClient = mock(RedisClient.class);
+    Set<String> keys = new HashSet<>();
+    keys.add("key");
     Map<String, String> hash = new HashMap<>();
     hash.put("id", "clientId");
     hash.put("secret", "clientSecret");
     hash.put("type", "CONFIDENTIAL");
     hash.put("redirectUri", "http://1.2.3.4");
 
+    doReturn(keys).when(redisClient).keys(anyString());
     doReturn(hash).when(redisClient).hgetAll(anyString());
 
     RedisDatabase database = new RedisDatabase(redisClient);

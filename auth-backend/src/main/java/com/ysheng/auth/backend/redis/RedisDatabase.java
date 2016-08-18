@@ -57,8 +57,9 @@ public class RedisDatabase implements Database {
    * @return A client object that matches the client identifier.
    */
   public Client findClientById(String clientId) {
+    Set<String> keys = redisClient.keys(ClientAdapter.getKey(clientId, null));
     return ClientAdapter.fromHash(
-        redisClient.hgetAll(ClientAdapter.getKey(clientId, null)));
+        redisClient.hgetAll(keys.iterator().next()));
   }
 
   /**
