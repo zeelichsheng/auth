@@ -19,6 +19,8 @@ import com.ysheng.auth.model.database.AuthorizationTicket;
 import com.ysheng.auth.model.database.Client;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.Set;
+
 /**
  * Implementation of the backend database based on Redis.
  */
@@ -66,8 +68,9 @@ public class RedisDatabase implements Database {
    * @return A client object that matches the redirect URI.
    */
   public Client findClientByRedirectUri(String redirectUri) {
-    throw new NotImplementedException();
-
+    Set<String> keys = redisClient.keys(ClientAdapter.getKey(null, redirectUri));
+    return ClientAdapter.fromHash(
+        redisClient.hgetAll(keys.iterator().next()));
   }
 
   /**

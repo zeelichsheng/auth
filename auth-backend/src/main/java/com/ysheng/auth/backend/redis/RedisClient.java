@@ -14,6 +14,7 @@
 package com.ysheng.auth.backend.redis;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Defines the interface of Redis related functions.
@@ -45,4 +46,12 @@ public interface RedisClient {
    * @return The value of the database entity.
    */
   Map<String, String> hgetAll(String key);
+
+  /**
+   * Implements keys command in Redis.
+   *
+   * @param keyPattern The key pattern.
+   * @return The set of keys that matches the key pattern.
+   */
+  Set<String> keys(String keyPattern);
 }

@@ -26,7 +26,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Tests for {@link com.ysheng.auth.backend.redis.RedisDatabase}.
@@ -63,6 +65,26 @@ public class RedisDatabaseTest {
 
     RedisDatabase database = new RedisDatabase(redisClient);
     database.findClientById("clientId");
+
+    verify(redisClient).hgetAll(anyString());
+  }
+
+  @Test
+  public void succeedsToFindClientByRedirectUri() {
+    RedisClient redisClient = mock(RedisClient.class);
+    Set<String> keys = new HashSet<>();
+    keys.add("key");
+    Map<String, String> hash = new HashMap<>();
+    hash.put("id", "clientId");
+    hash.put("secret", "clientSecret");
+    hash.put("type", "CONFIDENTIAL");
+    hash.put("redirectUri", "http://1.2.3.4");
+
+    doReturn(keys).when(redisClient).keys(anyString());
+    doReturn(hash).when(redisClient).hgetAll(anyString());
+
+    RedisDatabase database = new RedisDatabase(redisClient);
+    database.findClientByRedirectUri("http://1.2.3.4");
 
     verify(redisClient).hgetAll(anyString());
   }

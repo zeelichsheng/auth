@@ -20,6 +20,7 @@ import redis.clients.jedis.JedisSentinelPool;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -92,6 +93,21 @@ public class RedisClientImpl implements RedisClient {
     );
 
     return hash.iterator().next();
+  }
+
+  /**
+   * Implements keys command in Redis.
+   *
+   * @param keyPattern The key pattern.
+   * @return The set of keys that matches the key pattern.
+   */
+  public Set<String> keys(String keyPattern) {
+    final List<Set<String>> keys = new ArrayList<>();
+    doRedis(
+      resource -> keys.add(resource.keys(keyPattern))
+    );
+
+    return keys.iterator().next();
   }
 
   /**
