@@ -14,53 +14,53 @@
 package com.ysheng.auth.backend.redis.adapter;
 
 import com.ysheng.auth.common.utility.ReflectionUtil;
-import com.ysheng.auth.model.database.Client;
+import com.ysheng.auth.model.database.AuthorizationTicket;
 import com.ysheng.auth.model.database.DatabaseObjectDataField;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Defines the adapter for a client entity in Redis.
+ * Defines the adapter for an authorization ticket entity in Redis.
  */
-public class ClientAdapter {
+public class AuthorizationTicketAdapter {
 
   // The template for the entity key.
-  private static final String ENTITY_KEY_TEMPLATE = "auth-client:%s:%s";
+  private static final String ENTITY_KEY_TEMPLATE = "auth-authorization-ticket:%s:%s";
 
   /**
    * Returns the Redis key for the object.
    *
    * @param clientId The client identifier.
-   * @param redirectUri The client redirect URI.
+   * @param code The authorization code.
    * @return The key for the object.
    */
   public static String getKey(
       String clientId,
-      String redirectUri) {
+      String code) {
     if (clientId == null) {
       clientId = "*";
     }
 
-    if (redirectUri == null) {
-      redirectUri = "*";
+    if (code == null) {
+      code = "*";
     }
 
-    return String.format(ENTITY_KEY_TEMPLATE, clientId, redirectUri);
+    return String.format(ENTITY_KEY_TEMPLATE, clientId, code);
   }
 
   /**
    * Returns the Redis hash for the object.
    *
-   * @param client The database object.
+   * @param authorizationTicket The database object.
    * @return The hash for the object.
    */
-  public static Map<String, String> toHash(Client client) {
+  public static Map<String, String> toHash(AuthorizationTicket authorizationTicket) {
     try {
       return ReflectionUtil.getAnnotatedFieldNamesAndValues(
-          Client.class,
+          AuthorizationTicket.class,
           DatabaseObjectDataField.class,
-          client)
+          authorizationTicket)
           .entrySet()
           .stream()
           .collect(Collectors.toMap(e -> e.getKey(),
@@ -76,17 +76,17 @@ public class ClientAdapter {
    * @param hash The Redis hash.
    * @return The database object.
    */
-  public static Client fromHash(Map<String, String> hash) {
-    Client client = new Client();
+  public static AuthorizationTicket fromHash(Map<String, String> hash) {
+    AuthorizationTicket authorizationTicket = new AuthorizationTicket();
     try {
       ReflectionUtil.setFieldValues(
-          Client.class,
-          client,
+          AuthorizationTicket.class,
+          authorizationTicket,
           hash);
     } catch (Throwable t) {
-      client = null;
+      authorizationTicket = null;
     }
 
-    return client;
+    return authorizationTicket;
   }
 }
