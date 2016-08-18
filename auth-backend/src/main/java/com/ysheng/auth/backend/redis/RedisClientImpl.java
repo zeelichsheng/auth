@@ -13,11 +13,13 @@
 
 package com.ysheng.auth.backend.redis;
 
-import com.ysheng.auth.backend.redis.entity.Entity;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisSentinelPool;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -68,17 +70,28 @@ public class RedisClientImpl implements RedisClient {
   /**
    * Implements hmset command in Redis.
    *
-   * @param entity The entity to be executed with hmset command.
+   * @param key The key of the database entity.
+   * @param hash The value of the database entity.
    */
-  public void hmset(Entity entity) {
+  public void hmset(String key, Map<String, String> hash) {
     doRedis(
-        resource -> {
-          resource.hmset(
-              entity.getKey(),
-              entity.getHash()
-          );
-        }
+        resource -> resource.hmset(key, hash)
     );
+  }
+
+  /**
+   * Implements hgetall command in Redis.
+   *
+   * @param key The key of the database entity.
+   * @return The value of the database entity.
+   */
+  public Map<String, String> hgetAll(String key) {
+    final List<Map<String, String>> hash = new ArrayList<>();
+    doRedis(
+        resource -> hash.add(resource.hgetAll(key))
+    );
+
+    return hash.iterator().next();
   }
 
   /**

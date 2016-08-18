@@ -11,9 +11,9 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.backend.redis.entity;
+package com.ysheng.auth.backend.redis.adapter;
 
-import com.ysheng.auth.common.utility.AnnotationUtil;
+import com.ysheng.auth.common.utility.ReflectionUtil;
 import com.ysheng.auth.model.database.Client;
 import com.ysheng.auth.model.database.DatabaseObjectDataField;
 
@@ -21,42 +21,32 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Defines the data structure of a client entity in Redis format.
+ * Defines the adapter for a client entity in Redis.
  */
-public class ClientEntity implements Entity<Client> {
+public class ClientAdapter {
 
   // The template for the entity key.
   private static final String ENTITY_KEY_TEMPLATE = "auth-client:id:%s";
 
-  // The client database object.
-  private Client client;
-
-  /**
-   * Constructs a ClientEntity from a client database object.
-   *
-   * @param client The client database object.
-   */
-  public ClientEntity(Client client) {
-    this.client = client;
-  }
-
   /**
    * Returns the Redis key for the object.
    *
+   * @param clientId The client identifier.
    * @return The key for the object.
    */
-  public String getKey() {
-    return String.format(ENTITY_KEY_TEMPLATE, client.getId());
+  public static String getKey(String clientId) {
+    return String.format(ENTITY_KEY_TEMPLATE, clientId);
   }
 
   /**
    * Returns the Redis hash for the object.
    *
+   * @param client The database object.
    * @return The hash for the object.
    */
-  public Map<String, String> getHash() {
+  public static Map<String, String> toHash(Client client) {
     try {
-      return AnnotationUtil.getAnnotatedFields(
+      return ReflectionUtil.getAnnotatedFieldNamesAndValues(
           Client.class,
           DatabaseObjectDataField.class,
           client)
@@ -67,5 +57,25 @@ public class ClientEntity implements Entity<Client> {
     } catch (Throwable t) {
       return null;
     }
+  }
+
+  /**
+   * Parses the Redis hash.
+   *
+   * @param hash The Redis hash.
+   * @return The database object.
+   */
+  public static Client fromHash(Map<String, String> hash) {
+    Client client = new Client();
+    try {
+      ReflectionUtil.setFieldValues(
+          Client.class,
+          client,
+          hash);
+    } catch (Throwable t) {
+      client = null;
+    }
+
+    return client;
   }
 }

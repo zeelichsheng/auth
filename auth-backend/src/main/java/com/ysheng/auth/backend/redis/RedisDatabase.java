@@ -13,7 +13,7 @@
 
 package com.ysheng.auth.backend.redis;
 
-import com.ysheng.auth.backend.redis.entity.ClientEntity;
+import com.ysheng.auth.backend.redis.adapter.ClientAdapter;
 import com.ysheng.auth.common.backend.Database;
 import com.ysheng.auth.model.database.AuthorizationTicket;
 import com.ysheng.auth.model.database.Client;
@@ -43,7 +43,9 @@ public class RedisDatabase implements Database {
    * @param client The client object to be stored.
    */
   public void storeClient(Client client) {
-    redisClient.hmset(new ClientEntity(client));
+    redisClient.hmset(
+        ClientAdapter.getKey(client.getId()),
+        ClientAdapter.toHash(client));
   }
 
   /**
@@ -53,7 +55,8 @@ public class RedisDatabase implements Database {
    * @return A client object that matches the client identifier.
    */
   public Client findClientById(String clientId) {
-    throw new NotImplementedException();
+    return ClientAdapter.fromHash(
+        redisClient.hgetAll(ClientAdapter.getKey(clientId)));
   }
 
   /**

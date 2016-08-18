@@ -13,7 +13,7 @@
 
 package com.ysheng.auth.backend.redis;
 
-import com.ysheng.auth.backend.redis.entity.Entity;
+import java.util.Map;
 
 /**
  * Defines the interface of Redis related functions.
@@ -33,7 +33,16 @@ public interface RedisClient {
   /**
    * Implements hmset command in Redis.
    *
-   * @param entity The entity to be executed with hmset command.
+   * @param key The key of the database entity.
+   * @param hash The value of the database entity.
    */
-  void hmset(Entity entity);
+  void hmset(String key, Map<String, String> hash);
+
+  /**
+   * Implements hgetall command in Redis.
+   *
+   * @param key The key of the database entity.
+   * @return The value of the database entity.
+   */
+  Map<String, String> hgetAll(String key);
 }
