@@ -13,8 +13,15 @@
 
 package com.ysheng.auth.model.database;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * Defines the annotation to mark the fields of a database object.
  */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
 public @interface DatabaseObjectDataField {
 }

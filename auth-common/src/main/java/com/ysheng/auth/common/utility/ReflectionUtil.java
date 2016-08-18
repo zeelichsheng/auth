@@ -40,6 +40,11 @@ public class ReflectionUtil {
       Object annotatedObject) throws Throwable {
     Map<String, Object> result = new HashMap<>();
     for (Field field : annotatedType.getDeclaredFields()) {
+      boolean fieldAccessible = field.isAccessible();
+      if (!fieldAccessible) {
+        field.setAccessible(true);
+      }
+
       for (Annotation annotation : field.getDeclaredAnnotations()) {
         if (annotation.annotationType() == annotationType) {
           Object value = field.get(annotatedObject);
@@ -47,6 +52,10 @@ public class ReflectionUtil {
             result.put(field.getName(), field.get(annotatedObject));
           }
         }
+      }
+
+      if (!fieldAccessible) {
+        field.setAccessible(false);
       }
     }
 
@@ -75,14 +84,14 @@ public class ReflectionUtil {
           continue;
         }
 
-        boolean fieldAccessable = field.isAccessible();
+        boolean fieldAccessible = field.isAccessible();
         Class fieldType = field.getType();
 
-        if (!fieldAccessable) {
+        if (!fieldAccessible) {
           field.setAccessible(true);
         }
 
-        if (Enum.class == fieldType) {
+        if (fieldType.isEnum()) {
           fieldValue = Enum.valueOf(fieldType, fieldValueStr);
         } else if (Integer.class == fieldType) {
           fieldValue = Integer.parseInt(fieldValueStr);
@@ -91,7 +100,7 @@ public class ReflectionUtil {
         }
 
         field.set(object, fieldValue);
-        if (!fieldAccessable) {
+        if (!fieldAccessible) {
           field.setAccessible(false);
         }
       }
