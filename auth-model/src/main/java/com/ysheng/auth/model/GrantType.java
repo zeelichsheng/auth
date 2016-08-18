@@ -18,4 +18,7 @@ package com.ysheng.auth.model;
  */
 public enum GrantType {
   AUTHORIZATION_CODE,
+  IMPLICIT,
+  PASSWORD,
+  CLIENT_CREDENTIALS
 }
