@@ -13,6 +13,7 @@
 
 package com.ysheng.auth.backend.redis;
 
+import com.ysheng.auth.backend.redis.adapter.AuthorizationTicketAdapter;
 import com.ysheng.auth.backend.redis.adapter.ClientAdapter;
 import com.ysheng.auth.common.backend.Database;
 import com.ysheng.auth.model.database.AuthorizationTicket;
@@ -80,8 +81,9 @@ public class RedisDatabase implements Database {
    * @param authorizationTicket The authorization ticket object to be stored.
    */
   public void storeAuthorizationTicket(AuthorizationTicket authorizationTicket) {
-    throw new NotImplementedException();
-
+    redisClient.hmset(
+        AuthorizationTicketAdapter.getKey(authorizationTicket.getClientId(), authorizationTicket.getCode()),
+        AuthorizationTicketAdapter.toHash(authorizationTicket));
   }
 
   /**

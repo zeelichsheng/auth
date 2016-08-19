@@ -16,6 +16,7 @@ package com.ysheng.auth.backend.redis.test;
 import com.ysheng.auth.backend.redis.RedisClient;
 import com.ysheng.auth.backend.redis.RedisDatabase;
 import com.ysheng.auth.model.ClientType;
+import com.ysheng.auth.model.database.AuthorizationTicket;
 import com.ysheng.auth.model.database.Client;
 import org.testng.annotations.Test;
 import static org.mockito.ArgumentMatchers.anyMap;
@@ -90,5 +91,23 @@ public class RedisDatabaseTest {
     database.findClientByRedirectUri("http://1.2.3.4");
 
     verify(redisClient).hgetAll(anyString());
+  }
+
+  @Test
+  public void succeedsToStoreAuthorizationTicket() {
+    RedisClient redisClient = mock(RedisClient.class);
+    doNothing().when(redisClient).hmset(anyString(), anyMap());
+
+    AuthorizationTicket authorizationTicket = new AuthorizationTicket();
+    authorizationTicket.setCode("code");
+    authorizationTicket.setClientId("clientId");
+    authorizationTicket.setRedirectUri("http://1.2.3.4");
+    authorizationTicket.setScope("scope");
+    authorizationTicket.setState("state");
+
+    RedisDatabase database = new RedisDatabase(redisClient);
+    database.storeAuthorizationTicket(authorizationTicket);
+
+    verify(redisClient).hmset(anyString(), anyMap());
   }
 }
