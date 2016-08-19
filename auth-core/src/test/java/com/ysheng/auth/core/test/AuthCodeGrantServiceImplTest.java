@@ -16,11 +16,9 @@ package com.ysheng.auth.core.test;
 import com.ysheng.auth.common.backend.Database;
 import com.ysheng.auth.common.core.exception.AuthCodeAccessTokenException;
 import com.ysheng.auth.common.core.exception.AuthCodeAuthorizationException;
-import com.ysheng.auth.common.core.exception.ClientRegistrationException;
 import com.ysheng.auth.common.core.generator.AuthValueGenerator;
-import com.ysheng.auth.core.AuthorizationServiceImpl;
+import com.ysheng.auth.core.AuthCodeGrantServiceImpl;
 import com.ysheng.auth.model.AccessTokenType;
-import com.ysheng.auth.model.ClientType;
 import com.ysheng.auth.model.GrantType;
 import com.ysheng.auth.model.ResponseType;
 import com.ysheng.auth.model.authcode.AccessTokenErrorType;
@@ -29,114 +27,28 @@ import com.ysheng.auth.model.authcode.AccessTokenResponse;
 import com.ysheng.auth.model.authcode.AuthorizationErrorType;
 import com.ysheng.auth.model.authcode.AuthorizationRequest;
 import com.ysheng.auth.model.authcode.AuthorizationResponse;
-import com.ysheng.auth.model.client.ClientRegistrationErrorType;
-import com.ysheng.auth.model.client.ClientRegistrationRequest;
-import com.ysheng.auth.model.client.ClientRegistrationResponse;
 import com.ysheng.auth.model.database.AuthorizationTicket;
 import com.ysheng.auth.model.database.Client;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.testng.Assert.fail;
 
 /**
- * Tests for {@link com.ysheng.auth.core.AuthorizationServiceImpl}.
+ * Tests {@link com.ysheng.auth.core.AuthCodeGrantServiceImpl}.
  */
-public class AuthorizationServiceImplTest {
+public class AuthCodeGrantServiceImplTest {
 
   @Test(enabled = false)
   public void dummy() {
   }
 
   /**
-   * Tests for {@link com.ysheng.auth.core.AuthorizationServiceImpl#registerClient}.
-   */
-  public static class RegisterClientTest {
-
-    @Test
-    public void failsWithNullRedirectUri() {
-      ClientRegistrationRequest request = new ClientRegistrationRequest();
-      request.setType(ClientType.CONFIDENTIAL);
-      request.setRedirectUri(null);
-
-      AuthorizationServiceImpl service = new AuthorizationServiceImpl(null, null);
-
-      try {
-        service.registerClient(request);
-        fail("Client registration should fail with null redirect URI");
-      } catch (ClientRegistrationException ex) {
-        assertThat(ex.getError(), is(ClientRegistrationErrorType.INVALID_REQUEST));
-        assertThat(ex.getMessage(), equalTo("Redirect URI cannot be null"));
-      }
-    }
-
-    @Test
-    public void failsWithInvalidRedirectUri() {
-      ClientRegistrationRequest request = new ClientRegistrationRequest();
-      request.setType(ClientType.CONFIDENTIAL);
-      request.setRedirectUri("invalidUri");
-
-      AuthorizationServiceImpl service = new AuthorizationServiceImpl(null, null);
-
-      try {
-        service.registerClient(request);
-        fail("Client registration should fail with invalid redirect URI");
-      } catch (ClientRegistrationException ex) {
-        assertThat(ex.getError(), is(ClientRegistrationErrorType.INVALID_REQUEST));
-        assertThat(ex.getMessage(), equalTo("Invalid redirect URI: invalidUri"));
-      }
-    }
-
-    @Test
-    public void failsWithExistingClient() {
-      Database database = mock(Database.class);
-      doReturn(new Client()).when(database).findClientByRedirectUri(anyString());
-
-      ClientRegistrationRequest request = new ClientRegistrationRequest();
-      request.setType(ClientType.CONFIDENTIAL);
-      request.setRedirectUri("http://1.2.3.4");
-
-      AuthorizationServiceImpl service = new AuthorizationServiceImpl(database, null);
-
-      try {
-        service.registerClient(request);
-        fail("Client registration should fail with existing client");
-      } catch (ClientRegistrationException ex) {
-        assertThat(ex.getError(), is(ClientRegistrationErrorType.ALREADY_REGISTERED));
-        assertThat(ex.getMessage(), equalTo("Client already registered with redirect URI: http://1.2.3.4"));
-      }
-    }
-
-    @Test
-    public void succeedsToRegister() throws Throwable {
-      Database database = mock(Database.class);
-      doReturn(null).when(database).findClientByRedirectUri(anyString());
-      doNothing().when(database).storeClient(any(Client.class));
-
-      AuthValueGenerator authValueGenerator = mock(AuthValueGenerator.class);
-      doReturn("clientId").when(authValueGenerator).generateClientId();
-      doReturn("clientSecret").when(authValueGenerator).generateClientSecret();
-
-      ClientRegistrationRequest request = new ClientRegistrationRequest();
-      request.setType(ClientType.CONFIDENTIAL);
-      request.setRedirectUri("http://1.2.3.4");
-
-      AuthorizationServiceImpl service = new AuthorizationServiceImpl(database, authValueGenerator);
-
-      ClientRegistrationResponse response = service.registerClient(request);
-      assertThat(response.getClientId(), equalTo("clientId"));
-      assertThat(response.getClientSecret(), equalTo("clientSecret"));
-    }
-  }
-
-  /**
-   * Tests for {@link com.ysheng.auth.core.AuthorizationServiceImpl#authorize}.
+   * Tests for {@link com.ysheng.auth.core.AuthCodeGrantServiceImpl#authorize}.
    */
   public static class AuthorizeTest {
 
@@ -145,7 +57,7 @@ public class AuthorizationServiceImplTest {
       AuthorizationRequest request = new AuthorizationRequest();
       request.setResponseType(ResponseType.TOKEN);
 
-      AuthorizationServiceImpl service = new AuthorizationServiceImpl(null, null);
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(null, null);
 
       try {
         service.authorize(request);
@@ -165,7 +77,7 @@ public class AuthorizationServiceImplTest {
       request.setResponseType(ResponseType.CODE);
       request.setClientId("clientId");
 
-      AuthorizationServiceImpl service = new AuthorizationServiceImpl(database, null);
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
       try {
         service.authorize(request);
@@ -189,7 +101,7 @@ public class AuthorizationServiceImplTest {
       request.setClientId("clientId");
       request.setState("state");
 
-      AuthorizationServiceImpl service = new AuthorizationServiceImpl(database, authValueGenerator);
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, authValueGenerator);
 
       AuthorizationResponse response = service.authorize(request);
       assertThat(response.getCode(), equalTo("authCode"));
@@ -198,7 +110,7 @@ public class AuthorizationServiceImplTest {
   }
 
   /**
-   * Tests for {@link com.ysheng.auth.core.AuthorizationServiceImpl#issueAccessToken}.
+   * Tests for {@link com.ysheng.auth.core.AuthCodeGrantServiceImpl#issueAccessToken}.
    */
   public static class IssueAccessTokenTest {
 
@@ -207,7 +119,7 @@ public class AuthorizationServiceImplTest {
       AccessTokenRequest request = new AccessTokenRequest();
       request.setGrantType(GrantType.IMPLICIT);
 
-      AuthorizationServiceImpl service = new AuthorizationServiceImpl(null, null);
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(null, null);
 
       try {
         service.issueAccessToken(request);
@@ -227,7 +139,7 @@ public class AuthorizationServiceImplTest {
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
       request.setClientId("clientId");
 
-      AuthorizationServiceImpl service = new AuthorizationServiceImpl(database, null);
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
       try {
         service.issueAccessToken(request);
@@ -249,7 +161,7 @@ public class AuthorizationServiceImplTest {
       request.setClientId("clientId");
       request.setCode("code");
 
-      AuthorizationServiceImpl service = new AuthorizationServiceImpl(database, null);
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
       try {
         service.issueAccessToken(request);
@@ -274,7 +186,7 @@ public class AuthorizationServiceImplTest {
       request.setCode("code");
       request.setRedirectUri("http://5.6.7.8");
 
-      AuthorizationServiceImpl service = new AuthorizationServiceImpl(database, null);
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
       try {
         service.issueAccessToken(request);
@@ -302,7 +214,7 @@ public class AuthorizationServiceImplTest {
       request.setCode("code");
       request.setRedirectUri("http://1.2.3.4");
 
-      AuthorizationServiceImpl service = new AuthorizationServiceImpl(database, null);
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
       try {
         service.issueAccessToken(request);
@@ -333,7 +245,7 @@ public class AuthorizationServiceImplTest {
       request.setCode("code");
       request.setRedirectUri("http://1.2.3.4");
 
-      AuthorizationServiceImpl service = new AuthorizationServiceImpl(database, authValueGenerator);
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, authValueGenerator);
 
       AccessTokenResponse response = service.issueAccessToken(request);
       assertThat(response.getAccessToken(), equalTo("accessToken"));

@@ -14,30 +14,23 @@
 package com.ysheng.auth.core;
 
 import com.ysheng.auth.common.backend.Database;
-import com.ysheng.auth.common.core.AuthorizationService;
 import com.ysheng.auth.common.core.exception.AuthCodeAccessTokenException;
 import com.ysheng.auth.common.core.exception.AuthCodeAuthorizationException;
-import com.ysheng.auth.common.core.exception.ClientRegistrationException;
 import com.ysheng.auth.common.core.generator.AuthValueGenerator;
-import com.ysheng.auth.common.utility.UriUtil;
 import com.ysheng.auth.model.AccessTokenType;
-import com.ysheng.auth.model.ClientType;
 import com.ysheng.auth.model.authcode.AccessTokenErrorType;
 import com.ysheng.auth.model.authcode.AccessTokenRequest;
 import com.ysheng.auth.model.authcode.AccessTokenResponse;
 import com.ysheng.auth.model.authcode.AuthorizationErrorType;
 import com.ysheng.auth.model.authcode.AuthorizationRequest;
 import com.ysheng.auth.model.authcode.AuthorizationResponse;
-import com.ysheng.auth.model.client.ClientRegistrationErrorType;
-import com.ysheng.auth.model.client.ClientRegistrationRequest;
-import com.ysheng.auth.model.client.ClientRegistrationResponse;
 import com.ysheng.auth.model.database.AuthorizationTicket;
 import com.ysheng.auth.model.database.Client;
 
 /**
- * Implementation of the authorization related functions.
+ * Implements authorization code grant related functions.
  */
-public class AuthorizationServiceImpl implements AuthorizationService {
+public class AuthCodeGrantServiceImpl {
 
   // The database handler.
   private Database database;
@@ -46,65 +39,16 @@ public class AuthorizationServiceImpl implements AuthorizationService {
   private AuthValueGenerator authValueGenerator;
 
   /**
-   * Constructs an AuthorizationServiceImpl object.
+   * Constructs an AuthCodeGrantServiceImpl object.
    *
    * @param database The database object to interact with persistence store.
    * @param authValueGenerator The generator object to generate auth related values.
    */
-  public AuthorizationServiceImpl(
+  public AuthCodeGrantServiceImpl(
       Database database,
       AuthValueGenerator authValueGenerator) {
     this.database = database;
     this.authValueGenerator = authValueGenerator;
-  }
-
-  /**
-   * Registers a client with the authentication server.
-   *
-   * @param request The client registration request that contains required information.
-   * @return The client registration response that contains the client identifier and secret.
-   * @throws com.ysheng.auth.common.core.exception.ClientRegistrationException The exception that contains error details.
-   */
-  public ClientRegistrationResponse registerClient(ClientRegistrationRequest request)
-      throws ClientRegistrationException {
-    // Validate the request.
-    if (request.getRedirectUri() == null) {
-      throw new ClientRegistrationException(
-          ClientRegistrationErrorType.INVALID_REQUEST,
-          "Redirect URI cannot be null");
-    }
-
-    if (!UriUtil.isValidUri(request.getRedirectUri())) {
-      throw new ClientRegistrationException(
-          ClientRegistrationErrorType.INVALID_REQUEST,
-          "Invalid redirect URI: " + request.getRedirectUri());
-    }
-
-    Client existingClient = database.findClientByRedirectUri(request.getRedirectUri());
-    if (existingClient != null) {
-      throw new ClientRegistrationException(
-          ClientRegistrationErrorType.ALREADY_REGISTERED,
-          "Client already registered with redirect URI: " + request.getRedirectUri());
-    }
-
-    String clientId = authValueGenerator.generateClientId();
-    String clientSecret = ClientType.CONFIDENTIAL.equals(request.getType()) ?
-        authValueGenerator.generateClientSecret() : null;
-
-    // Store client in database.
-    Client client = new Client();
-    client.setType(request.getType());
-    client.setId(clientId);
-    client.setSecret(clientSecret);
-    client.setRedirectUri(request.getRedirectUri());
-    database.storeClient(client);
-
-    // Build the response.
-    ClientRegistrationResponse response = new ClientRegistrationResponse();
-    response.setClientId(clientId);
-    response.setClientSecret(clientSecret);
-
-    return response;
   }
 
   /**
