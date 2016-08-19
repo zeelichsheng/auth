@@ -14,8 +14,8 @@
 package com.ysheng.auth.core.test;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.common.core.exception.ClientRegistrationException;
-import com.ysheng.auth.common.core.generator.AuthValueGenerator;
+import com.ysheng.auth.core.exception.ClientRegistrationException;
+import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.core.ClientServiceImpl;
 import com.ysheng.auth.model.ClientType;
 import com.ysheng.auth.model.client.ClientRegistrationErrorType;

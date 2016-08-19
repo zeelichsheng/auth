@@ -11,29 +11,29 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.common.core.exception;
+package com.ysheng.auth.core.exception;
 
-import com.ysheng.auth.model.client.ClientRegistrationErrorType;
+import com.ysheng.auth.model.authcode.AuthorizationErrorType;
 
 /**
- * Defines an exception type related to client registration failure.
+ * Defines an exception type related to authorization failure for Authorization Code Grant.
  */
-public class ClientRegistrationException extends Exception {
+public class AuthCodeAuthorizationException extends Exception {
 
   // The error code.
-  private ClientRegistrationErrorType error;
+  private AuthorizationErrorType error;
 
   // The error description.
   private String errorDescription;
 
   /**
-   * Constructs an ClientRegistrationException object.
+   * Constructs an AuthCodeAuthorizationException object.
    *
    * @param error The error code.
    * @param errorDescription The error description.
    */
-  public ClientRegistrationException(
-      ClientRegistrationErrorType error,
+  public AuthCodeAuthorizationException(
+      AuthorizationErrorType error,
       String errorDescription) {
     super(errorDescription);
 
@@ -45,11 +45,11 @@ public class ClientRegistrationException extends Exception {
   /// Getters and Setters.
   ///
 
-  public ClientRegistrationErrorType getError() {
+  public AuthorizationErrorType getError() {
     return error;
   }
 
-  public void setError(ClientRegistrationErrorType error) {
+  public void setError(AuthorizationErrorType error) {
     this.error = error;
   }
 

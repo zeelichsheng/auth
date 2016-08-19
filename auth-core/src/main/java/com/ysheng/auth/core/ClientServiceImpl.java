@@ -14,8 +14,8 @@
 package com.ysheng.auth.core;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.common.core.exception.ClientRegistrationException;
-import com.ysheng.auth.common.core.generator.AuthValueGenerator;
+import com.ysheng.auth.core.exception.ClientRegistrationException;
+import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.common.utility.UriUtil;
 import com.ysheng.auth.model.ClientType;
 import com.ysheng.auth.model.client.ClientRegistrationErrorType;
@@ -52,7 +52,7 @@ public class ClientServiceImpl {
    *
    * @param request The client registration request that contains required information.
    * @return The client registration response that contains the client identifier and secret.
-   * @throws com.ysheng.auth.common.core.exception.ClientRegistrationException The exception that contains error details.
+   * @throws com.ysheng.auth.core.exception.ClientRegistrationException The exception that contains error details.
    */
   public ClientRegistrationResponse registerClient(ClientRegistrationRequest request)
       throws ClientRegistrationException {

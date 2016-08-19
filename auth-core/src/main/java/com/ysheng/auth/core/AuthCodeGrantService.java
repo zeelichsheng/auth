@@ -11,10 +11,10 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.common.core;
+package com.ysheng.auth.core;
 
-import com.ysheng.auth.common.core.exception.AuthCodeAccessTokenException;
-import com.ysheng.auth.common.core.exception.AuthCodeAuthorizationException;
+import com.ysheng.auth.core.exception.AuthCodeAccessTokenException;
+import com.ysheng.auth.core.exception.AuthCodeAuthorizationException;
 import com.ysheng.auth.model.authcode.AccessTokenRequest;
 import com.ysheng.auth.model.authcode.AccessTokenResponse;
 import com.ysheng.auth.model.authcode.AuthorizationRequest;

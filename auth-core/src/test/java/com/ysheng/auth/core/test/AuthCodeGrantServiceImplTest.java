@@ -14,9 +14,9 @@
 package com.ysheng.auth.core.test;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.common.core.exception.AuthCodeAccessTokenException;
-import com.ysheng.auth.common.core.exception.AuthCodeAuthorizationException;
-import com.ysheng.auth.common.core.generator.AuthValueGenerator;
+import com.ysheng.auth.core.exception.AuthCodeAccessTokenException;
+import com.ysheng.auth.core.exception.AuthCodeAuthorizationException;
+import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.core.AuthCodeGrantServiceImpl;
 import com.ysheng.auth.model.AccessTokenType;
 import com.ysheng.auth.model.GrantType;

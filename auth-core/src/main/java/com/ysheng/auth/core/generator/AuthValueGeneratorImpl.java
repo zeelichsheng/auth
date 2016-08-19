@@ -13,8 +13,6 @@
 
 package com.ysheng.auth.core.generator;
 
-import com.ysheng.auth.common.core.generator.AuthValueGenerator;
-
 /**
  * Implementation of the generator that generates auth related values.
  */

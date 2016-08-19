@@ -11,9 +11,9 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.common.core;
+package com.ysheng.auth.core;
 
-import com.ysheng.auth.common.core.exception.ClientRegistrationException;
+import com.ysheng.auth.core.exception.ClientRegistrationException;
 import com.ysheng.auth.model.client.ClientRegistrationRequest;
 import com.ysheng.auth.model.client.ClientRegistrationResponse;
 
