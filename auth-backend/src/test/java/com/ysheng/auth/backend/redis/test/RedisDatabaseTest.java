@@ -19,16 +19,13 @@ import com.ysheng.auth.model.ClientType;
 import com.ysheng.auth.model.database.AuthorizationTicket;
 import com.ysheng.auth.model.database.Client;
 import org.testng.annotations.Test;
-import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -39,7 +36,7 @@ public class RedisDatabaseTest {
   @Test
   public void succeedsToStoreClient() {
     RedisClient redisClient = mock(RedisClient.class);
-    doNothing().when(redisClient).hmset(anyString(), anyMap());
+    doNothing().when(redisClient).set(anyString(), anyString());
 
     Client client = new Client();
     client.setId("clientId");
@@ -50,7 +47,7 @@ public class RedisDatabaseTest {
     RedisDatabase database = new RedisDatabase(redisClient);
     database.storeClient(client);
 
-    verify(redisClient).hmset(anyString(), anyMap());
+    verify(redisClient).set(anyString(), anyString());
   }
 
   @Test
@@ -58,19 +55,17 @@ public class RedisDatabaseTest {
     RedisClient redisClient = mock(RedisClient.class);
     Set<String> keys = new HashSet<>();
     keys.add("key");
-    Map<String, String> hash = new HashMap<>();
-    hash.put("id", "clientId");
-    hash.put("secret", "clientSecret");
-    hash.put("type", "CONFIDENTIAL");
-    hash.put("redirectUri", "http://1.2.3.4");
+    String hash =
+        "{\"type\":\"CONFIDENTIAL\",\"id\":\"clientId\",\"secret\":\"clientSecret\"," +
+            "\"redirectUri\":\"http://1.2.3.4\"}";
 
     doReturn(keys).when(redisClient).keys(anyString());
-    doReturn(hash).when(redisClient).hgetAll(anyString());
+    doReturn(hash).when(redisClient).get(anyString());
 
     RedisDatabase database = new RedisDatabase(redisClient);
     database.findClientById("clientId");
 
-    verify(redisClient).hgetAll(anyString());
+    verify(redisClient).get(anyString());
   }
 
   @Test
@@ -78,25 +73,23 @@ public class RedisDatabaseTest {
     RedisClient redisClient = mock(RedisClient.class);
     Set<String> keys = new HashSet<>();
     keys.add("key");
-    Map<String, String> hash = new HashMap<>();
-    hash.put("id", "clientId");
-    hash.put("secret", "clientSecret");
-    hash.put("type", "CONFIDENTIAL");
-    hash.put("redirectUri", "http://1.2.3.4");
+    String hash =
+        "{\"type\":\"CONFIDENTIAL\",\"id\":\"clientId\",\"secret\":\"clientSecret\"," +
+            "\"redirectUri\":\"http://1.2.3.4\"}";
 
     doReturn(keys).when(redisClient).keys(anyString());
-    doReturn(hash).when(redisClient).hgetAll(anyString());
+    doReturn(hash).when(redisClient).get(anyString());
 
     RedisDatabase database = new RedisDatabase(redisClient);
     database.findClientByRedirectUri("http://1.2.3.4");
 
-    verify(redisClient).hgetAll(anyString());
+    verify(redisClient).get(anyString());
   }
 
   @Test
   public void succeedsToStoreAuthorizationTicket() {
     RedisClient redisClient = mock(RedisClient.class);
-    doNothing().when(redisClient).hmset(anyString(), anyMap());
+    doNothing().when(redisClient).set(anyString(), anyString());
 
     AuthorizationTicket authorizationTicket = new AuthorizationTicket();
     authorizationTicket.setCode("code");
@@ -108,24 +101,20 @@ public class RedisDatabaseTest {
     RedisDatabase database = new RedisDatabase(redisClient);
     database.storeAuthorizationTicket(authorizationTicket);
 
-    verify(redisClient).hmset(anyString(), anyMap());
+    verify(redisClient).set(anyString(), anyString());
   }
 
   @Test
   public void succeedsToFindAuthorizationTicketByCodeAndClientId() {
     RedisClient redisClient = mock(RedisClient.class);
-    Map<String, String> hash = new HashMap<>();
-    hash.put("clientId", "clientId");
-    hash.put("code", "code");
-    hash.put("scope", "scope");
-    hash.put("redirectUri", "http://1.2.3.4");
-    hash.put("state", "state");
+    String hash = "{\"code\":\"code\",\"clientId\":\"clientId\",\"redirectUri\":\"http://1.2.3.4\"," +
+        "\"scope\":\"scope\",\"state\":\"state\"}";
 
-    doReturn(hash).when(redisClient).hgetAll(anyString());
+    doReturn(hash).when(redisClient).get(anyString());
 
     RedisDatabase database = new RedisDatabase(redisClient);
     database.findAuthorizationTicketByCodeAndClientId("code", "clientId");
 
-    verify(redisClient).hgetAll(anyString());
+    verify(redisClient).get(anyString());
   }
 }

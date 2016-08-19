@@ -13,27 +13,30 @@
 
 package com.ysheng.auth.model.database;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ysheng.auth.model.ClientType;
 
 /**
  * Defines the data structure of auth client.
  */
-public class Client implements DatabaseObject {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Client {
 
   // Type of the client.
-  @DatabaseObjectDataField
+  @JsonProperty(required = true)
   private ClientType type;
 
   // ID of the client.
-  @DatabaseObjectDataField
+  @JsonProperty(required = true)
   private String id;
 
   // Secret of the client.
-  @DatabaseObjectDataField
+  @JsonProperty
   private String secret;
 
   // Redirect URI of the client.
-  @DatabaseObjectDataField
+  @JsonProperty(required = true)
   private String redirectUri;
 
   ///

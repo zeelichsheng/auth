@@ -20,11 +20,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Tests for {@link com.ysheng.auth.backend.redis.adapter.ClientAdapter}.
@@ -58,26 +54,18 @@ public class ClientAdapterTest {
     client.setType(ClientType.CONFIDENTIAL);
     client.setRedirectUri("http://1.2.3.4");
 
-    Map<String, String> hash = ClientAdapter.toHash(client);
+    String hash = ClientAdapter.toHash(client);
 
-    assertThat(hash.size(), is(4));
-    assertThat(hash.containsKey("id"), is(true));
-    assertThat(hash.get("id"), equalTo("clientId"));
-    assertThat(hash.containsKey("secret"), is(true));
-    assertThat(hash.get("secret"), equalTo("clientSecret"));
-    assertThat(hash.containsKey("type"), is(true));
-    assertThat(hash.get("type"), equalTo("CONFIDENTIAL"));
-    assertThat(hash.containsKey("redirectUri"), is(true));
-    assertThat(hash.get("redirectUri"), equalTo("http://1.2.3.4"));
+    assertThat(hash, equalTo(
+        "{\"type\":\"CONFIDENTIAL\",\"id\":\"clientId\",\"secret\":\"clientSecret\",\"redirectUri\":\"http://1.2.3.4\"}"
+    ));
   }
 
   @Test
   public void succeedsToConvertFromHash() {
-    Map<String, String> hash = new HashMap<>();
-    hash.put("id", "clientId");
-    hash.put("secret", "clientSecret");
-    hash.put("type", "CONFIDENTIAL");
-    hash.put("redirectUri", "http://1.2.3.4");
+    String hash =
+        "{\"type\":\"CONFIDENTIAL\",\"id\":\"clientId\",\"secret\":\"clientSecret\"," +
+            "\"redirectUri\":\"http://1.2.3.4\"}";
 
     Client client = ClientAdapter.fromHash(hash);
     assertThat(client, notNullValue());

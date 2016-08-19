@@ -13,31 +13,35 @@
 
 package com.ysheng.auth.model.database;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Defines the data structure of an authorization ticket that contains auth
  * related information being persisted in the database.
  */
-public class AuthorizationTicket implements DatabaseObject {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class AuthorizationTicket {
 
   // The authorization code.
-  @DatabaseObjectDataField
+  @JsonProperty(required = true)
   private String code;
 
   // The client identifier.
-  @DatabaseObjectDataField
+  @JsonProperty(required = true)
   private String clientId;
 
   // The URI the resource owner is redirected to.
-  @DatabaseObjectDataField
+  @JsonProperty
   private String redirectUri;
 
   // The scope of the access request.
-  @DatabaseObjectDataField
+  @JsonProperty
   private String scope;
 
   // An opaque value used by the client to maintain state between
   // the request and the callback.
-  @DatabaseObjectDataField
+  @JsonProperty
   private String state;
 
   ///

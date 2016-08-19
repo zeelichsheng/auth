@@ -69,6 +69,33 @@ public class RedisClientImpl implements RedisClient {
   }
 
   /**
+   * Implements set command in Redis.
+   *
+   * @param key The key of the database entity.
+   * @param value The value of the database entity.
+   */
+  public void set(String key, String value) {
+    doRedis(
+        resource -> resource.set(key, value)
+    );
+  }
+
+  /**
+   * Implements get command in Redis.
+   *
+   * @param key The key of the database entity.
+   * @return The value of the database entity.
+   */
+  public String get(String key) {
+    final List<String> hash = new ArrayList<>();
+    doRedis(
+        resource -> hash.add(resource.get(key))
+    );
+
+    return hash.iterator().next();
+  }
+
+  /**
    * Implements hmset command in Redis.
    *
    * @param key The key of the database entity.

@@ -13,12 +13,11 @@
 
 package com.ysheng.auth.backend.redis.adapter;
 
-import com.ysheng.auth.common.utility.ReflectionUtil;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ysheng.auth.model.database.AuthorizationTicket;
-import com.ysheng.auth.model.database.DatabaseObjectDataField;
 
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.io.IOException;
 
 /**
  * Defines the adapter for an authorization ticket entity in Redis.
@@ -27,6 +26,9 @@ public class AuthorizationTicketAdapter {
 
   // The template for the entity key.
   private static final String ENTITY_KEY_TEMPLATE = "auth-authorization-ticket:%s:%s";
+
+  // The JSON object mapper.
+  private static final ObjectMapper objectMapper = new ObjectMapper();
 
   /**
    * Returns the Redis key for the object.
@@ -55,17 +57,10 @@ public class AuthorizationTicketAdapter {
    * @param authorizationTicket The database object.
    * @return The hash for the object.
    */
-  public static Map<String, String> toHash(AuthorizationTicket authorizationTicket) {
+  public static String toHash(AuthorizationTicket authorizationTicket) {
     try {
-      return ReflectionUtil.getAnnotatedFieldNamesAndValues(
-          AuthorizationTicket.class,
-          DatabaseObjectDataField.class,
-          authorizationTicket)
-          .entrySet()
-          .stream()
-          .collect(Collectors.toMap(e -> e.getKey(),
-              e -> e.getValue() == null ? null : e.getValue().toString()));
-    } catch (Throwable t) {
+      return objectMapper.writeValueAsString(authorizationTicket);
+    } catch (IOException ex) {
       return null;
     }
   }
@@ -76,17 +71,14 @@ public class AuthorizationTicketAdapter {
    * @param hash The Redis hash.
    * @return The database object.
    */
-  public static AuthorizationTicket fromHash(Map<String, String> hash) {
-    AuthorizationTicket authorizationTicket = new AuthorizationTicket();
+  public static AuthorizationTicket fromHash(String hash) {
     try {
-      ReflectionUtil.setFieldValues(
-          AuthorizationTicket.class,
-          authorizationTicket,
-          hash);
-    } catch (Throwable t) {
-      authorizationTicket = null;
+      return objectMapper.readValue(
+          hash,
+          new TypeReference<AuthorizationTicket>() {
+          });
+    } catch (IOException ex) {
+      return null;
     }
-
-    return authorizationTicket;
   }
 }

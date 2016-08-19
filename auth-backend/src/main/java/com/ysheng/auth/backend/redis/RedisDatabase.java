@@ -45,7 +45,7 @@ public class RedisDatabase implements Database {
    * @param client The client object to be stored.
    */
   public void storeClient(Client client) {
-    redisClient.hmset(
+    redisClient.set(
         ClientAdapter.getKey(client.getId(), client.getRedirectUri()),
         ClientAdapter.toHash(client));
   }
@@ -59,7 +59,7 @@ public class RedisDatabase implements Database {
   public Client findClientById(String clientId) {
     Set<String> keys = redisClient.keys(ClientAdapter.getKey(clientId, null));
     return ClientAdapter.fromHash(
-        redisClient.hgetAll(keys.iterator().next()));
+        redisClient.get(keys.iterator().next()));
   }
 
   /**
@@ -71,7 +71,7 @@ public class RedisDatabase implements Database {
   public Client findClientByRedirectUri(String redirectUri) {
     Set<String> keys = redisClient.keys(ClientAdapter.getKey(null, redirectUri));
     return ClientAdapter.fromHash(
-        redisClient.hgetAll(keys.iterator().next()));
+        redisClient.get(keys.iterator().next()));
   }
 
   /**
@@ -80,7 +80,7 @@ public class RedisDatabase implements Database {
    * @param authorizationTicket The authorization ticket object to be stored.
    */
   public void storeAuthorizationTicket(AuthorizationTicket authorizationTicket) {
-    redisClient.hmset(
+    redisClient.set(
         AuthorizationTicketAdapter.getKey(authorizationTicket.getClientId(), authorizationTicket.getCode()),
         AuthorizationTicketAdapter.toHash(authorizationTicket));
   }
@@ -96,6 +96,6 @@ public class RedisDatabase implements Database {
       String code,
       String clientId) {
     return AuthorizationTicketAdapter.fromHash(
-        redisClient.hgetAll(AuthorizationTicketAdapter.getKey(clientId, code)));
+        redisClient.get(AuthorizationTicketAdapter.getKey(clientId, code)));
   }
 }

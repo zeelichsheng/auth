@@ -13,12 +13,11 @@
 
 package com.ysheng.auth.backend.redis.adapter;
 
-import com.ysheng.auth.common.utility.ReflectionUtil;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ysheng.auth.model.database.Client;
-import com.ysheng.auth.model.database.DatabaseObjectDataField;
 
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.io.IOException;
 
 /**
  * Defines the adapter for a client entity in Redis.
@@ -27,6 +26,9 @@ public class ClientAdapter {
 
   // The template for the entity key.
   private static final String ENTITY_KEY_TEMPLATE = "auth-client:%s:%s";
+
+  // The JSON object mapper.
+  private static final ObjectMapper objectMapper = new ObjectMapper();
 
   /**
    * Returns the Redis key for the object.
@@ -55,17 +57,10 @@ public class ClientAdapter {
    * @param client The database object.
    * @return The hash for the object.
    */
-  public static Map<String, String> toHash(Client client) {
+  public static String toHash(Client client) {
     try {
-      return ReflectionUtil.getAnnotatedFieldNamesAndValues(
-          Client.class,
-          DatabaseObjectDataField.class,
-          client)
-          .entrySet()
-          .stream()
-          .collect(Collectors.toMap(e -> e.getKey(),
-              e -> e.getValue() == null ? null : e.getValue().toString()));
-    } catch (Throwable t) {
+      return objectMapper.writeValueAsString(client);
+    } catch (IOException ex) {
       return null;
     }
   }
@@ -76,17 +71,14 @@ public class ClientAdapter {
    * @param hash The Redis hash.
    * @return The database object.
    */
-  public static Client fromHash(Map<String, String> hash) {
-    Client client = new Client();
+  public static Client fromHash(String hash) {
     try {
-      ReflectionUtil.setFieldValues(
-          Client.class,
-          client,
-          hash);
-    } catch (Throwable t) {
-      client = null;
+      return objectMapper.readValue(
+          hash,
+          new TypeReference<Client>() {
+          });
+    } catch (IOException ex) {
+      return null;
     }
-
-    return client;
   }
 }

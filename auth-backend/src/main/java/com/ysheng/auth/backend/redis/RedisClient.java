@@ -32,6 +32,22 @@ public interface RedisClient {
   void closeConnection();
 
   /**
+   * Implements set command in Redis.
+   *
+   * @param key The key of the database entity.
+   * @param value The value of the database entity.
+   */
+  void set(String key, String value);
+
+  /**
+   * Implements get command in Redis.
+   *
+   * @param key The key of the database entity.
+   * @return The value of the database entity.
+   */
+  String get(String key);
+
+  /**
    * Implements hmset command in Redis.
    *
    * @param key The key of the database entity.

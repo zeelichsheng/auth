@@ -19,11 +19,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Tests for {@link com.ysheng.auth.backend.redis.adapter.AuthorizationTicketAdapter}.
@@ -58,29 +54,19 @@ public class AuthorizationTicketAdapterTest {
     authorizationTicket.setScope("scope");
     authorizationTicket.setState("state");
 
-    Map<String, String> hash = AuthorizationTicketAdapter.toHash(authorizationTicket);
+    String hash = AuthorizationTicketAdapter.toHash(authorizationTicket);
 
-    assertThat(hash.size(), is(5));
-    assertThat(hash.containsKey("code"), is(true));
-    assertThat(hash.get("code"), equalTo("code"));
-    assertThat(hash.containsKey("clientId"), is(true));
-    assertThat(hash.get("clientId"), equalTo("clientId"));
-    assertThat(hash.containsKey("redirectUri"), is(true));
-    assertThat(hash.get("redirectUri"), equalTo("http://1.2.3.4"));
-    assertThat(hash.containsKey("scope"), is(true));
-    assertThat(hash.get("scope"), equalTo("scope"));
-    assertThat(hash.containsKey("state"), is(true));
-    assertThat(hash.get("state"), equalTo("state"));
+    assertThat(hash, equalTo(
+        "{\"code\":\"code\",\"clientId\":\"clientId\",\"redirectUri\":\"http://1.2.3.4\"," +
+        "\"scope\":\"scope\",\"state\":\"state\"}"
+    ));
   }
 
   @Test
   public void succeedsToConvertFromHash() {
-    Map<String, String> hash = new HashMap<>();
-    hash.put("code", "code");
-    hash.put("clientId", "clientId");
-    hash.put("redirectUri", "http://1.2.3.4");
-    hash.put("scope", "scope");
-    hash.put("state", "state");
+    String hash =
+        "{\"code\":\"code\",\"clientId\":\"clientId\",\"redirectUri\":\"http://1.2.3.4\"," +
+            "\"scope\":\"scope\",\"state\":\"state\"}";
 
     AuthorizationTicket authorizationTicket = AuthorizationTicketAdapter.fromHash(hash);
     assertThat(authorizationTicket, notNullValue());
