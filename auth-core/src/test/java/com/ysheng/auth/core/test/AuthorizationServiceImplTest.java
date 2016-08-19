@@ -242,7 +242,7 @@ public class AuthorizationServiceImplTest {
     public void failsWithNonExistAuthorizationTicket() {
       Database database = mock(Database.class);
       doReturn(new Client()).when(database).findClientById(anyString());
-      doReturn(null).when(database).findAuthorizationTicketByCode(anyString());
+      doReturn(null).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
 
       AccessTokenRequest request = new AccessTokenRequest();
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
@@ -266,7 +266,7 @@ public class AuthorizationServiceImplTest {
       authorizationTicket.setRedirectUri("http://1.2.3.4");
       Database database = mock(Database.class);
       doReturn(new Client()).when(database).findClientById(anyString());
-      doReturn(authorizationTicket).when(database).findAuthorizationTicketByCode(anyString());
+      doReturn(authorizationTicket).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
 
       AccessTokenRequest request = new AccessTokenRequest();
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
@@ -294,7 +294,7 @@ public class AuthorizationServiceImplTest {
       authorizationTicket.setClientId("clientId1");
       Database database = mock(Database.class);
       doReturn(client).when(database).findClientById(anyString());
-      doReturn(authorizationTicket).when(database).findAuthorizationTicketByCode(anyString());
+      doReturn(authorizationTicket).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
 
       AccessTokenRequest request = new AccessTokenRequest();
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
@@ -322,7 +322,7 @@ public class AuthorizationServiceImplTest {
       authorizationTicket.setClientId("clientId");
       Database database = mock(Database.class);
       doReturn(client).when(database).findClientById(anyString());
-      doReturn(authorizationTicket).when(database).findAuthorizationTicketByCode(anyString());
+      doReturn(authorizationTicket).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
 
       AuthValueGenerator authValueGenerator = mock(AuthValueGenerator.class);
       doReturn("accessToken").when(authValueGenerator).generateAccessToken();

@@ -55,7 +55,10 @@ public interface Database {
    * Finds an authorization ticket object by authorization code.
    *
    * @param code The authorization code to be matched.
-   * @return An authorization ticket object that matches the authorization code.
+   * @param clientId The client identifier to be matched.
+   * @return An authorization ticket object that matches the authorization code and client identifier.
    */
-  AuthorizationTicket findAuthorizationTicketByCode(String code);
+  AuthorizationTicket findAuthorizationTicketByCodeAndClientId(
+      String code,
+      String clientId);
 }

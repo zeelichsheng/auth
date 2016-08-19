@@ -173,7 +173,9 @@ public class AuthorizationServiceImpl implements AuthorizationService {
           "Unable to find client with ID: " + request.getClientId());
     }
 
-    AuthorizationTicket authorizationTicket = database.findAuthorizationTicketByCode(request.getCode());
+    AuthorizationTicket authorizationTicket = database.findAuthorizationTicketByCodeAndClientId(
+        request.getCode(),
+        request.getClientId());
     if (authorizationTicket == null) {
       throw new AuthCodeAccessTokenException(
           AccessTokenErrorType.INVALID_REQUEST,
