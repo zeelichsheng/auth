@@ -15,9 +15,9 @@ package com.ysheng.auth.backend.redis;
 
 import com.ysheng.auth.backend.redis.adapter.AuthorizationTicketAdapter;
 import com.ysheng.auth.backend.redis.adapter.ClientAdapter;
-import com.ysheng.auth.common.backend.Database;
-import com.ysheng.auth.model.database.AuthorizationTicket;
-import com.ysheng.auth.model.database.Client;
+import com.ysheng.auth.backend.Database;
+import com.ysheng.auth.backend.model.AuthorizationTicket;
+import com.ysheng.auth.backend.model.Client;
 
 import java.util.Set;
 

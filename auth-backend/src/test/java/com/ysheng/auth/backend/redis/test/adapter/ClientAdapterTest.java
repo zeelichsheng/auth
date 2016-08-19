@@ -15,7 +15,7 @@ package com.ysheng.auth.backend.redis.test.adapter;
 
 import com.ysheng.auth.backend.redis.adapter.ClientAdapter;
 import com.ysheng.auth.model.ClientType;
-import com.ysheng.auth.model.database.Client;
+import com.ysheng.auth.backend.model.Client;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;

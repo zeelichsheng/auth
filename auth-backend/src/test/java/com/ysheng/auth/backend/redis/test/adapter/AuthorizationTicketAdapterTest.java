@@ -14,7 +14,7 @@
 package com.ysheng.auth.backend.redis.test.adapter;
 
 import com.ysheng.auth.backend.redis.adapter.AuthorizationTicketAdapter;
-import com.ysheng.auth.model.database.AuthorizationTicket;
+import com.ysheng.auth.backend.model.AuthorizationTicket;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;

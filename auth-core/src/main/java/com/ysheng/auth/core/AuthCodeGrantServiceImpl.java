@@ -13,7 +13,7 @@
 
 package com.ysheng.auth.core;
 
-import com.ysheng.auth.common.backend.Database;
+import com.ysheng.auth.backend.Database;
 import com.ysheng.auth.common.core.exception.AuthCodeAccessTokenException;
 import com.ysheng.auth.common.core.exception.AuthCodeAuthorizationException;
 import com.ysheng.auth.common.core.generator.AuthValueGenerator;
@@ -24,8 +24,8 @@ import com.ysheng.auth.model.authcode.AccessTokenResponse;
 import com.ysheng.auth.model.authcode.AuthorizationErrorType;
 import com.ysheng.auth.model.authcode.AuthorizationRequest;
 import com.ysheng.auth.model.authcode.AuthorizationResponse;
-import com.ysheng.auth.model.database.AuthorizationTicket;
-import com.ysheng.auth.model.database.Client;
+import com.ysheng.auth.backend.model.AuthorizationTicket;
+import com.ysheng.auth.backend.model.Client;
 
 /**
  * Implements authorization code grant related functions.

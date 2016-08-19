@@ -11,10 +11,10 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.common.backend;
+package com.ysheng.auth.backend;
 
-import com.ysheng.auth.model.database.AuthorizationTicket;
-import com.ysheng.auth.model.database.Client;
+import com.ysheng.auth.backend.model.AuthorizationTicket;
+import com.ysheng.auth.backend.model.Client;
 
 /**
  * Defines the interface of backend database related functions.
