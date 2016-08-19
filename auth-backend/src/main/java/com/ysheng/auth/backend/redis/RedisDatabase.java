@@ -18,7 +18,6 @@ import com.ysheng.auth.backend.redis.adapter.ClientAdapter;
 import com.ysheng.auth.common.backend.Database;
 import com.ysheng.auth.model.database.AuthorizationTicket;
 import com.ysheng.auth.model.database.Client;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Set;
 
@@ -96,6 +95,7 @@ public class RedisDatabase implements Database {
   public AuthorizationTicket findAuthorizationTicketByCodeAndClientId(
       String code,
       String clientId) {
-    throw new NotImplementedException();
+    return AuthorizationTicketAdapter.fromHash(
+        redisClient.hgetAll(AuthorizationTicketAdapter.getKey(clientId, code)));
   }
 }

@@ -110,4 +110,22 @@ public class RedisDatabaseTest {
 
     verify(redisClient).hmset(anyString(), anyMap());
   }
+
+  @Test
+  public void succeedsToFindAuthorizationTicketByCodeAndClientId() {
+    RedisClient redisClient = mock(RedisClient.class);
+    Map<String, String> hash = new HashMap<>();
+    hash.put("clientId", "clientId");
+    hash.put("code", "code");
+    hash.put("scope", "scope");
+    hash.put("redirectUri", "http://1.2.3.4");
+    hash.put("state", "state");
+
+    doReturn(hash).when(redisClient).hgetAll(anyString());
+
+    RedisDatabase database = new RedisDatabase(redisClient);
+    database.findAuthorizationTicketByCodeAndClientId("code", "clientId");
+
+    verify(redisClient).hgetAll(anyString());
+  }
 }
