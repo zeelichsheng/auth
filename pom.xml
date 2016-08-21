@@ -26,6 +26,7 @@
 
   <modules>
     <module>./auth-backend</module>
+    <module>./auth-frontend</module>
     <module>./auth-common</module>
     <module>./auth-core</module>
     <module>./auth-model</module>
