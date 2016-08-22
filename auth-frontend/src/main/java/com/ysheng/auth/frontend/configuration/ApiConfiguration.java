@@ -15,6 +15,7 @@ package com.ysheng.auth.frontend.configuration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ysheng.auth.model.configuration.backend.BackendConfiguration;
+import com.ysheng.auth.model.configuration.core.CoreConfiguration;
 import io.dropwizard.Configuration;
 
 /**
@@ -23,5 +24,28 @@ import io.dropwizard.Configuration;
 public class ApiConfiguration extends Configuration {
 
   @JsonProperty
+  private CoreConfiguration coreConfiguration;
+
+  @JsonProperty
   private BackendConfiguration backendConfiguration;
+
+  ///
+  /// Getters and Setters.
+  ///
+
+  public CoreConfiguration getCoreConfiguration() {
+    return coreConfiguration;
+  }
+
+  public void setCoreConfiguration(CoreConfiguration coreConfiguration) {
+    this.coreConfiguration = coreConfiguration;
+  }
+
+  public BackendConfiguration getBackendConfiguration() {
+    return backendConfiguration;
+  }
+
+  public void setBackendConfiguration(BackendConfiguration backendConfiguration) {
+    this.backendConfiguration = backendConfiguration;
+  }
 }

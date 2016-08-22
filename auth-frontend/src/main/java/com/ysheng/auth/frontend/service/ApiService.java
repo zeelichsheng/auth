@@ -29,7 +29,10 @@ public class ApiService extends Application<ApiConfiguration> {
   // The API configuration.
   private ApiConfiguration configuration;
 
-  // The backend database object.
+  // The factory builder.
+  private FactoryBuilder factoryBuilder;
+
+  // The database object that provides database related operations.
   private Database database;
 
   // The client service that provides client related operations.
@@ -43,10 +46,13 @@ public class ApiService extends Application<ApiConfiguration> {
    * Constructs an ApiService object.
    *
    * @param configuration The API configuration.
+   * @param factoryBuilder The factory builder.
    */
   public ApiService(
-      ApiConfiguration configuration) {
+      ApiConfiguration configuration,
+      FactoryBuilder factoryBuilder) {
     this.configuration = configuration;
+    this.factoryBuilder = factoryBuilder;
   }
 
   /**
@@ -63,10 +69,22 @@ public class ApiService extends Application<ApiConfiguration> {
    *
    * @param configuration The configuration object.
    * @param environment The environment object.
+   * @throws Exception The exception that contains the detail error description.
    */
   @Override
   public void run(
       ApiConfiguration configuration,
-      Environment environment) {
+      Environment environment) throws Exception {
+    produceServices();
+  }
+
+  private void produceServices() throws Exception {
+    database = factoryBuilder.getDatabaseFactory().produce(configuration.getBackendConfiguration());
+
+    clientService = factoryBuilder.getClientServiceFactory().produce(
+        database, configuration.getCoreConfiguration());
+
+    authCodeGrantService = factoryBuilder.getAuthCodeGrantServiceFactory().produce(
+        database, configuration.getCoreConfiguration());
   }
 }
