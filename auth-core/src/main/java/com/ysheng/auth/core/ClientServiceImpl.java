@@ -26,7 +26,7 @@ import com.ysheng.auth.model.client.ClientRegistrationResponse;
 /**
  * Implements client related functions.
  */
-public class ClientServiceImpl {
+public class ClientServiceImpl implements ClientService {
 
   // The database handler.
   private Database database;
