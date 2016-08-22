@@ -13,7 +13,6 @@
 
 package com.ysheng.auth.backend;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import com.ysheng.auth.backend.redis.RedisDatabase;
 import com.ysheng.auth.model.configuration.backend.BackendConfiguration;
 import com.ysheng.auth.model.configuration.backend.RedisConfiguration;
@@ -34,7 +33,8 @@ public class DatabaseFactoryTest {
     backendConfiguration.setDatabaseType(null);
 
     try {
-      DatabaseFactory.produce(backendConfiguration);
+      DatabaseFactory factory = new DatabaseFactory();
+      factory.produce(backendConfiguration);
       fail("Database factory should fail with null database type");
     } catch (IllegalArgumentException ex) {
       assertThat(ex.getMessage(), equalTo("Database type cannot be null"));
@@ -47,7 +47,8 @@ public class DatabaseFactoryTest {
     backendConfiguration.setDatabaseType("unknownDatabaseType");
 
     try {
-      DatabaseFactory.produce(backendConfiguration);
+      DatabaseFactory factory = new DatabaseFactory();
+      factory.produce(backendConfiguration);
       fail("Database factory should fail with invalid database type");
     } catch (IllegalArgumentException ex) {
       assertThat(ex.getMessage(), equalTo("Unknown database type: unknownDatabaseType"));
@@ -61,7 +62,8 @@ public class DatabaseFactoryTest {
     backendConfiguration.setDatabaseType(databaseType);
     backendConfiguration.setRedisConfiguration(redisConfiguration);
 
-    Database database = DatabaseFactory.produce(backendConfiguration);
+    DatabaseFactory factory = new DatabaseFactory();
+    Database database = factory.produce(backendConfiguration);
     assertThat(database.getClass(), equalTo(RedisDatabase.class));
   }
 

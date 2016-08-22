@@ -29,7 +29,7 @@ public class DatabaseFactory {
    * @return A database object.
    * @throws Exception The exception that contains detail error description.
    */
-  public static Database produce(BackendConfiguration backendConfiguration) throws Exception {
+  public Database produce(BackendConfiguration backendConfiguration) throws Exception {
     if (backendConfiguration.getDatabaseType() == null) {
       throw new IllegalArgumentException("Database type cannot be null");
     }

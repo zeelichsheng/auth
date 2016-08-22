@@ -37,7 +37,8 @@ public class AuthValueGeneratorFactoryTest {
     authValueGeneratorConfiguration.setAuthCodeGeneratorType(null);
 
     try {
-      AuthValueGeneratorFactory.produce(authValueGeneratorConfiguration);
+      AuthValueGeneratorFactory factory = new AuthValueGeneratorFactory();
+      factory.produce(authValueGeneratorConfiguration);
       fail("Auth value generator factory should fail with null generator type");
     } catch (IllegalArgumentException ex) {
       assertThat(ex.getMessage(), equalTo("Value generator type cannot be null"));
@@ -50,7 +51,8 @@ public class AuthValueGeneratorFactoryTest {
     authValueGeneratorConfiguration.setAuthCodeGeneratorType("unknownGeneratorType");
 
     try {
-      AuthValueGeneratorFactory.produce(authValueGeneratorConfiguration);
+      AuthValueGeneratorFactory factory = new AuthValueGeneratorFactory();
+      factory.produce(authValueGeneratorConfiguration);
       fail("Auth value generator factory should fail with unknown generator type");
     } catch (IllegalArgumentException ex) {
       assertThat(ex.getMessage(), equalTo("Unknown value generator type: unknownGeneratorType"));
@@ -59,7 +61,8 @@ public class AuthValueGeneratorFactoryTest {
 
   @Test
   public void succeedsToProduceWithNullConfiguration() {
-    AuthValueGenerator generator = AuthValueGeneratorFactory.produce(null);
+    AuthValueGeneratorFactory factory = new AuthValueGeneratorFactory();
+    AuthValueGenerator generator = factory.produce(null);
     assertThat(generator, notNullValue());
   }
 
@@ -68,7 +71,8 @@ public class AuthValueGeneratorFactoryTest {
     AuthValueGeneratorConfiguration authValueGeneratorConfiguration = new AuthValueGeneratorConfiguration();
     authValueGeneratorConfiguration.setAuthCodeGeneratorType(generatorType);
 
-    AuthValueGenerator generator = AuthValueGeneratorFactory.produce(authValueGeneratorConfiguration);
+    AuthValueGeneratorFactory factory = new AuthValueGeneratorFactory();
+    AuthValueGenerator generator = factory.produce(authValueGeneratorConfiguration);
     String authCode = generator.generateAuthCode();
     UUID authCodeUuid = UUID.fromString(authCode);
     assertThat(authCode, equalTo(authCodeUuid.toString()));

@@ -29,11 +29,11 @@ public class AuthCodeGrantServiceFactory {
    * @param configuration The core configuration.
    * @return An auth code grant service object.
    */
-  public static AuthCodeGrantService produce(
+  public AuthCodeGrantService produce(
       Database database,
       CoreConfiguration configuration) {
     return new AuthCodeGrantServiceImpl(
         database,
-        AuthValueGeneratorFactory.produce(configuration.getAuthValueGeneratorConfiguration()));
+        new AuthValueGeneratorFactory().produce(configuration.getAuthValueGeneratorConfiguration()));
   }
 }

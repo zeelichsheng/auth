@@ -26,7 +26,7 @@ public class AuthValueGeneratorFactory {
    * @param configuration The auth value generator configuration.
    * @return An auth value generator.
    */
-  public static AuthValueGenerator produce(AuthValueGeneratorConfiguration configuration) {
+  public AuthValueGenerator produce(AuthValueGeneratorConfiguration configuration) {
     if (configuration == null) {
       configuration = new AuthValueGeneratorConfiguration();
     }
@@ -39,7 +39,7 @@ public class AuthValueGeneratorFactory {
     );
   }
 
-  private static ValueGenerator produceValueGenerator(String valueGeneratorType) {
+  private ValueGenerator produceValueGenerator(String valueGeneratorType) {
     if (valueGeneratorType == null) {
       throw new IllegalArgumentException("Value generator type cannot be null");
     }
