@@ -11,35 +11,43 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.core.exception;
+package com.ysheng.auth.model.authcode;
 
-import com.ysheng.auth.model.authcode.AuthorizationErrorType;
+import com.ysheng.auth.model.BaseException;
 
 /**
- * Defines an exception type related to authorization failure for Authorization Code Grant.
+ * Defines the data structure of authorization error for Authorization Code Grant.
  */
-public class AuthCodeAuthorizationException extends Exception {
-
-  // The error code.
-  private AuthorizationErrorType error;
-
-  // The error description.
-  private String errorDescription;
+public class AuthorizationError extends BaseException {
 
   /**
-   * Constructs an AuthCodeAuthorizationException object.
+   * Constructs an AuthorizationError object.
    *
    * @param error The error code.
-   * @param errorDescription The error description.
+   * @param errorDescription The error message.
    */
-  public AuthCodeAuthorizationException(
+  public AuthorizationError(
       AuthorizationErrorType error,
       String errorDescription) {
     super(errorDescription);
-
     this.error = error;
     this.errorDescription = errorDescription;
   }
+
+  // REQUIRED. A single ASCII error code.
+  private AuthorizationErrorType error;
+
+  // OPTIONAL. Human-readable ASCII text providing additional
+  // information.
+  private String errorDescription;
+
+  // OPTIONAL. A URI identifying a human-readable web page with
+  // information about the error.
+  private String errorUri;
+
+  // REQUIRED if a "state" parameter was present in the client
+  // authorization request.
+  private String state;
 
   ///
   /// Getters and Setters.
@@ -59,5 +67,21 @@ public class AuthCodeAuthorizationException extends Exception {
 
   public void setErrorDescription(String errorDescription) {
     this.errorDescription = errorDescription;
+  }
+
+  public String getErrorUri() {
+    return errorUri;
+  }
+
+  public void setErrorUri(String errorUri) {
+    this.errorUri = errorUri;
+  }
+
+  public String getState() {
+    return state;
+  }
+
+  public void setState(String state) {
+    this.state = state;
   }
 }

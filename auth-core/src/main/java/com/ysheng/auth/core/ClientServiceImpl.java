@@ -14,10 +14,10 @@
 package com.ysheng.auth.core;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.core.exception.ClientRegistrationException;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.common.utility.UriUtil;
 import com.ysheng.auth.model.ClientType;
+import com.ysheng.auth.model.client.ClientRegistrationError;
 import com.ysheng.auth.model.client.ClientRegistrationErrorType;
 import com.ysheng.auth.model.client.ClientRegistrationRequest;
 import com.ysheng.auth.model.client.ClientRegistrationResponse;
@@ -52,26 +52,26 @@ public class ClientServiceImpl {
    *
    * @param request The client registration request that contains required information.
    * @return The client registration response that contains the client identifier and secret.
-   * @throws com.ysheng.auth.core.exception.ClientRegistrationException The exception that contains error details.
+   * @throws ClientRegistrationError The exception that contains error details.
    */
   public ClientRegistrationResponse registerClient(ClientRegistrationRequest request)
-      throws ClientRegistrationException {
+      throws ClientRegistrationError {
     // Validate the request.
     if (request.getRedirectUri() == null) {
-      throw new ClientRegistrationException(
+      throw new ClientRegistrationError(
           ClientRegistrationErrorType.INVALID_REQUEST,
           "Redirect URI cannot be null");
     }
 
     if (!UriUtil.isValidUri(request.getRedirectUri())) {
-      throw new ClientRegistrationException(
+      throw new ClientRegistrationError(
           ClientRegistrationErrorType.INVALID_REQUEST,
           "Invalid redirect URI: " + request.getRedirectUri());
     }
 
     Client existingClient = database.findClientByRedirectUri(request.getRedirectUri());
     if (existingClient != null) {
-      throw new ClientRegistrationException(
+      throw new ClientRegistrationError(
           ClientRegistrationErrorType.ALREADY_REGISTERED,
           "Client already registered with redirect URI: " + request.getRedirectUri());
     }

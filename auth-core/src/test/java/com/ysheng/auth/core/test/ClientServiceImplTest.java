@@ -14,10 +14,10 @@
 package com.ysheng.auth.core.test;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.core.exception.ClientRegistrationException;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.core.ClientServiceImpl;
 import com.ysheng.auth.model.ClientType;
+import com.ysheng.auth.model.client.ClientRegistrationError;
 import com.ysheng.auth.model.client.ClientRegistrationErrorType;
 import com.ysheng.auth.model.client.ClientRegistrationRequest;
 import com.ysheng.auth.model.client.ClientRegistrationResponse;
@@ -58,7 +58,7 @@ public class ClientServiceImplTest {
       try {
         service.registerClient(request);
         fail("Client registration should fail with null redirect URI");
-      } catch (ClientRegistrationException ex) {
+      } catch (ClientRegistrationError ex) {
         assertThat(ex.getError(), is(ClientRegistrationErrorType.INVALID_REQUEST));
         assertThat(ex.getMessage(), equalTo("Redirect URI cannot be null"));
       }
@@ -75,7 +75,7 @@ public class ClientServiceImplTest {
       try {
         service.registerClient(request);
         fail("Client registration should fail with invalid redirect URI");
-      } catch (ClientRegistrationException ex) {
+      } catch (ClientRegistrationError ex) {
         assertThat(ex.getError(), is(ClientRegistrationErrorType.INVALID_REQUEST));
         assertThat(ex.getMessage(), equalTo("Invalid redirect URI: invalidUri"));
       }
@@ -95,7 +95,7 @@ public class ClientServiceImplTest {
       try {
         service.registerClient(request);
         fail("Client registration should fail with existing client");
-      } catch (ClientRegistrationException ex) {
+      } catch (ClientRegistrationError ex) {
         assertThat(ex.getError(), is(ClientRegistrationErrorType.ALREADY_REGISTERED));
         assertThat(ex.getMessage(), equalTo("Client already registered with redirect URI: http://1.2.3.4"));
       }

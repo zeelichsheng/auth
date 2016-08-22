@@ -14,13 +14,13 @@
 package com.ysheng.auth.core;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.core.exception.AuthCodeAccessTokenException;
-import com.ysheng.auth.core.exception.AuthCodeAuthorizationException;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.AccessTokenType;
+import com.ysheng.auth.model.authcode.AccessTokenError;
 import com.ysheng.auth.model.authcode.AccessTokenErrorType;
 import com.ysheng.auth.model.authcode.AccessTokenRequest;
 import com.ysheng.auth.model.authcode.AccessTokenResponse;
+import com.ysheng.auth.model.authcode.AuthorizationError;
 import com.ysheng.auth.model.authcode.AuthorizationErrorType;
 import com.ysheng.auth.model.authcode.AuthorizationRequest;
 import com.ysheng.auth.model.authcode.AuthorizationResponse;
@@ -56,19 +56,19 @@ public class AuthCodeGrantServiceImpl {
    *
    * @param request The authorization request that contains required information.
    * @return The authorization response that contains the authorization code.
-   * @throws AuthCodeAuthorizationException The exception contains error details.
+   * @throws AuthorizationError The exception contains error details.
    */
-  public AuthorizationResponse authorize(AuthorizationRequest request) throws AuthCodeAuthorizationException {
+  public AuthorizationResponse authorize(AuthorizationRequest request) throws AuthorizationError {
     // Validate the request.
     if (!AuthorizationRequest.VALID_RESPONSE_TYPE.equals(request.getResponseType())) {
-      throw new AuthCodeAuthorizationException(
+      throw new AuthorizationError(
           AuthorizationErrorType.UNSUPPORTED_RESPONSE_TYPE,
           "Unsupported response type in request: " + request.getResponseType().toString());
     }
 
     Client client = database.findClientById(request.getClientId());
     if (client == null) {
-      throw new AuthCodeAuthorizationException(
+      throw new AuthorizationError(
           AuthorizationErrorType.UNAUTHORIZED_CLIENT,
           "Unable to find client with ID: " + request.getClientId());
     }
@@ -100,19 +100,19 @@ public class AuthCodeGrantServiceImpl {
    *
    * @param request The access token request that contains required information.
    * @return The access token response that contains the access token.
-   * @throws AuthCodeAccessTokenException The exception contains error details.
+   * @throws AccessTokenError The exception contains error details.
    */
-  public AccessTokenResponse issueAccessToken(AccessTokenRequest request) throws AuthCodeAccessTokenException {
+  public AccessTokenResponse issueAccessToken(AccessTokenRequest request) throws AccessTokenError {
     // Validate the request.
     if (!AccessTokenRequest.VALID_GRANT_TYPE.equals(request.getGrantType())) {
-      throw new AuthCodeAccessTokenException(
+      throw new AccessTokenError(
           AccessTokenErrorType.UNSUPPORTED_GRANT_TYPE,
           "Unsupported grant type in request: " + request.getGrantType().toString());
     }
 
     Client client = database.findClientById(request.getClientId());
     if (client == null) {
-      throw new AuthCodeAccessTokenException(
+      throw new AccessTokenError(
           AccessTokenErrorType.UNAUTHORIZED_CLIENT,
           "Unable to find client with ID: " + request.getClientId());
     }
@@ -121,20 +121,20 @@ public class AuthCodeGrantServiceImpl {
         request.getCode(),
         request.getClientId());
     if (authorizationTicket == null) {
-      throw new AuthCodeAccessTokenException(
+      throw new AccessTokenError(
           AccessTokenErrorType.INVALID_REQUEST,
           "Unable to find authorization code: " + request.getCode());
     }
 
     if (authorizationTicket.getRedirectUri() != null &&
         !authorizationTicket.getRedirectUri().equals(request.getRedirectUri())) {
-      throw new AuthCodeAccessTokenException(
+      throw new AccessTokenError(
           AccessTokenErrorType.INVALID_REQUEST,
           "Mismatch of redirect URI: " + request.getRedirectUri());
     }
 
     if (!client.getId().equals(authorizationTicket.getClientId())) {
-      throw new AuthCodeAccessTokenException(
+      throw new AccessTokenError(
           AccessTokenErrorType.INVALID_CLIENT,
           "Invalid client ID: " + request.getClientId());
     }

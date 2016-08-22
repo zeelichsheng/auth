@@ -13,13 +13,29 @@
 
 package com.ysheng.auth.model.client;
 
-/**
- * Defines the data structure of client unregistration error response.
- */
-public class ClientUnregistrationErrorResponse {
+import com.ysheng.auth.model.BaseException;
 
-  // Client unregistration error code.
-  private ClientUnregistrationErrorType error;
+/**
+ * Defines the data structure of client registration error response.
+ */
+public class ClientRegistrationError extends BaseException {
+
+  /**
+   * Constructs a ClientRegistrationError object.
+   *
+   * @param error The error code.
+   * @param errorDescription The error message.
+   */
+  public ClientRegistrationError(
+      ClientRegistrationErrorType error,
+      String errorDescription) {
+    super(errorDescription);
+    this.error = error;
+    this.errorDescription = errorDescription;
+  }
+
+  // Client registration error code.
+  private ClientRegistrationErrorType error;
 
   // Human-readable ASCII text providing additional information.
   private String errorDescription;
@@ -28,11 +44,11 @@ public class ClientUnregistrationErrorResponse {
   /// Getters and Setters.
   ///
 
-  public ClientUnregistrationErrorType getError() {
+  public ClientRegistrationErrorType getError() {
     return error;
   }
 
-  public void setError(ClientUnregistrationErrorType error) {
+  public void setError(ClientRegistrationErrorType error) {
     this.error = error;
   }
 

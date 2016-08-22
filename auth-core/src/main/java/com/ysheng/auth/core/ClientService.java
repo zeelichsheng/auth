@@ -13,7 +13,7 @@
 
 package com.ysheng.auth.core;
 
-import com.ysheng.auth.core.exception.ClientRegistrationException;
+import com.ysheng.auth.model.client.ClientRegistrationError;
 import com.ysheng.auth.model.client.ClientRegistrationRequest;
 import com.ysheng.auth.model.client.ClientRegistrationResponse;
 
@@ -27,7 +27,7 @@ public interface ClientService {
    *
    * @param request The client registration request that contains required information.
    * @return The client registration response that contains the client identifier and secret.
-   * @throws ClientRegistrationException The exception that contains error details.
+   * @throws ClientRegistrationError The exception that contains error details.
    */
-  ClientRegistrationResponse registerClient(ClientRegistrationRequest request) throws ClientRegistrationException;
+  ClientRegistrationResponse registerClient(ClientRegistrationRequest request) throws ClientRegistrationError;
 }

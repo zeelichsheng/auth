@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Yu Sheng. All Rights Reserved.
+ * Copyright 2016 VMware, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy of
@@ -13,10 +13,26 @@
 
 package com.ysheng.auth.model.authcode;
 
+import com.ysheng.auth.model.BaseException;
+
 /**
- * Defines the data structure of access token error response for Authorization Code Grant.
+ * Defines the data structure of access token error for Authorization Code Grant.
  */
-public class AccessTokenErrorResponse {
+public class AccessTokenError extends BaseException {
+
+  /**
+   * Constructs an AccessTokenError object.
+   *
+   * @param error The error code.
+   * @param errorDescription The error message.
+   */
+  public AccessTokenError(
+      AccessTokenErrorType error,
+      String errorDescription) {
+    super(errorDescription);
+    this.error = error;
+    this.errorDescription = errorDescription;
+  }
 
   // REQUIRED. A single ASCII error code.
   private AccessTokenErrorType error;

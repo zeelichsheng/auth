@@ -11,45 +11,44 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.core.exception;
+package com.ysheng.auth.model.client;
 
-import com.ysheng.auth.model.client.ClientRegistrationErrorType;
+import com.ysheng.auth.model.BaseException;
 
 /**
- * Defines an exception type related to client registration failure.
+ * Defines the data structure of client unregistration error response.
  */
-public class ClientRegistrationException extends Exception {
-
-  // The error code.
-  private ClientRegistrationErrorType error;
-
-  // The error description.
-  private String errorDescription;
+public class ClientUnregistrationError extends BaseException {
 
   /**
-   * Constructs an ClientRegistrationException object.
+   * Constructs a ClientUnregistrationError object.
    *
    * @param error The error code.
-   * @param errorDescription The error description.
+   * @param errorDescription The error message.
    */
-  public ClientRegistrationException(
-      ClientRegistrationErrorType error,
+  public ClientUnregistrationError(
+      ClientUnregistrationErrorType error,
       String errorDescription) {
     super(errorDescription);
-
     this.error = error;
     this.errorDescription = errorDescription;
   }
+
+  // Client unregistration error code.
+  private ClientUnregistrationErrorType error;
+
+  // Human-readable ASCII text providing additional information.
+  private String errorDescription;
 
   ///
   /// Getters and Setters.
   ///
 
-  public ClientRegistrationErrorType getError() {
+  public ClientUnregistrationErrorType getError() {
     return error;
   }
 
-  public void setError(ClientRegistrationErrorType error) {
+  public void setError(ClientUnregistrationErrorType error) {
     this.error = error;
   }
 

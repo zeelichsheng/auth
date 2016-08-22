@@ -14,16 +14,16 @@
 package com.ysheng.auth.core.test;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.core.exception.AuthCodeAccessTokenException;
-import com.ysheng.auth.core.exception.AuthCodeAuthorizationException;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.core.AuthCodeGrantServiceImpl;
 import com.ysheng.auth.model.AccessTokenType;
 import com.ysheng.auth.model.GrantType;
 import com.ysheng.auth.model.ResponseType;
+import com.ysheng.auth.model.authcode.AccessTokenError;
 import com.ysheng.auth.model.authcode.AccessTokenErrorType;
 import com.ysheng.auth.model.authcode.AccessTokenRequest;
 import com.ysheng.auth.model.authcode.AccessTokenResponse;
+import com.ysheng.auth.model.authcode.AuthorizationError;
 import com.ysheng.auth.model.authcode.AuthorizationErrorType;
 import com.ysheng.auth.model.authcode.AuthorizationRequest;
 import com.ysheng.auth.model.authcode.AuthorizationResponse;
@@ -62,7 +62,7 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.authorize(request);
         fail("Authorization should fail with unsupported response type");
-      } catch (AuthCodeAuthorizationException ex) {
+      } catch (AuthorizationError ex) {
         assertThat(ex.getError(), is(AuthorizationErrorType.UNSUPPORTED_RESPONSE_TYPE));
         assertThat(ex.getMessage(), equalTo("Unsupported response type in request: TOKEN"));
       }
@@ -82,7 +82,7 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.authorize(request);
         fail("Authorization should fail with non-exist client");
-      } catch (AuthCodeAuthorizationException ex) {
+      } catch (AuthorizationError ex) {
         assertThat(ex.getError(), is(AuthorizationErrorType.UNAUTHORIZED_CLIENT));
         assertThat(ex.getMessage(), equalTo("Unable to find client with ID: clientId"));
       }
@@ -124,7 +124,7 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.issueAccessToken(request);
         fail("Issuing access token should fail with unsupported grant type");
-      } catch (AuthCodeAccessTokenException ex) {
+      } catch (AccessTokenError ex) {
         assertThat(ex.getError(), is(AccessTokenErrorType.UNSUPPORTED_GRANT_TYPE));
         assertThat(ex.getMessage(), equalTo("Unsupported grant type in request: IMPLICIT"));
       }
@@ -144,7 +144,7 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.issueAccessToken(request);
         fail("Issuing access token should fail with non-exist client");
-      } catch (AuthCodeAccessTokenException ex) {
+      } catch (AccessTokenError ex) {
         assertThat(ex.getError(), is(AccessTokenErrorType.UNAUTHORIZED_CLIENT));
         assertThat(ex.getMessage(), equalTo("Unable to find client with ID: clientId"));
       }
@@ -166,7 +166,7 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.issueAccessToken(request);
         fail("Issuing access token should fail with non-exist authorization ticket");
-      } catch (AuthCodeAccessTokenException ex) {
+      } catch (AccessTokenError ex) {
         assertThat(ex.getError(), is(AccessTokenErrorType.INVALID_REQUEST));
         assertThat(ex.getMessage(), equalTo("Unable to find authorization code: code"));
       }
@@ -191,7 +191,7 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.issueAccessToken(request);
         fail("Issuing access token should fail with mis-matching redirect URIs");
-      } catch (AuthCodeAccessTokenException ex) {
+      } catch (AccessTokenError ex) {
         assertThat(ex.getError(), is(AccessTokenErrorType.INVALID_REQUEST));
         assertThat(ex.getMessage(), equalTo("Mismatch of redirect URI: http://5.6.7.8"));
       }
@@ -219,7 +219,7 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.issueAccessToken(request);
         fail("Issuing access token should fail with mis-matching client identifiers");
-      } catch (AuthCodeAccessTokenException ex) {
+      } catch (AccessTokenError ex) {
         assertThat(ex.getError(), is(AccessTokenErrorType.INVALID_CLIENT));
         assertThat(ex.getMessage(), equalTo("Invalid client ID: clientId2"));
       }
