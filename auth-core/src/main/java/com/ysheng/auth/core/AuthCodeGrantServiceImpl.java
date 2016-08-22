@@ -30,7 +30,7 @@ import com.ysheng.auth.model.authcode.AuthorizationResponse;
 /**
  * Implements authorization code grant related functions.
  */
-public class AuthCodeGrantServiceImpl {
+public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
 
   // The database handler.
   private Database database;
