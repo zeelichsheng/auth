@@ -13,6 +13,7 @@
 
 package com.ysheng.auth.backend.redis;
 
+import com.ysheng.auth.model.configuration.backend.RedisConfiguration;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisSentinelPool;

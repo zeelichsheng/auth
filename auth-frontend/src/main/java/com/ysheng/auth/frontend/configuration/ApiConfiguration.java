@@ -13,10 +13,15 @@
 
 package com.ysheng.auth.frontend.configuration;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ysheng.auth.model.configuration.backend.BackendConfiguration;
 import io.dropwizard.Configuration;
 
 /**
  * Defines the data structure that contains API configuration.
  */
 public class ApiConfiguration extends Configuration {
+
+  @JsonProperty
+  private BackendConfiguration backendConfiguration;
 }

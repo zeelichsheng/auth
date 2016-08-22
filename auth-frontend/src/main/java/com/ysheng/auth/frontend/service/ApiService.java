@@ -13,6 +13,9 @@
 
 package com.ysheng.auth.frontend.service;
 
+import com.ysheng.auth.backend.Database;
+import com.ysheng.auth.core.AuthCodeGrantService;
+import com.ysheng.auth.core.ClientService;
 import com.ysheng.auth.frontend.configuration.ApiConfiguration;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -22,6 +25,29 @@ import io.dropwizard.setup.Environment;
  * Defines the API service.
  */
 public class ApiService extends Application<ApiConfiguration> {
+
+  // The API configuration.
+  private ApiConfiguration configuration;
+
+  // The backend database object.
+  private Database database;
+
+  // The client service that provides client related operations.
+  private ClientService clientService;
+
+  // The authorization code grant service that provides auth code
+  // related operations.
+  private AuthCodeGrantService authCodeGrantService;
+
+  /**
+   * Constructs an ApiService object.
+   *
+   * @param configuration The API configuration.
+   */
+  public ApiService(
+      ApiConfiguration configuration) {
+    this.configuration = configuration;
+  }
 
   /**
    * Initializes the API service.
