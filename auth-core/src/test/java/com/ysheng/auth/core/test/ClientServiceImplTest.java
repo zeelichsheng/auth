@@ -14,14 +14,14 @@
 package com.ysheng.auth.core.test;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.core.generator.AuthValueGenerator;
+import com.ysheng.auth.backend.model.Client;
 import com.ysheng.auth.core.ClientServiceImpl;
+import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.ClientType;
 import com.ysheng.auth.model.client.ClientRegistrationError;
 import com.ysheng.auth.model.client.ClientRegistrationErrorType;
 import com.ysheng.auth.model.client.ClientRegistrationRequest;
 import com.ysheng.auth.model.client.ClientRegistrationResponse;
-import com.ysheng.auth.backend.model.Client;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
