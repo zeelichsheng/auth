@@ -22,15 +22,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BackendConfiguration {
 
-  /**
-   * The type of the database;
-   */
+  // The type of the database;
   @JsonProperty(required = true)
   private String databaseType;
 
-  /**
-   * Redis specific configuration.
-   */
+  // Redis specific configuration.
   @JsonProperty
   private RedisConfiguration redisConfiguration;
 
