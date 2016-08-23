@@ -17,6 +17,7 @@ import com.ysheng.auth.backend.Database;
 import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.core.ClientService;
 import com.ysheng.auth.frontend.configuration.ApiConfiguration;
+import com.ysheng.auth.frontend.resource.client.ClientsResource;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -76,6 +77,7 @@ public class ApiService extends Application<ApiConfiguration> {
       ApiConfiguration configuration,
       Environment environment) throws Exception {
     produceServices();
+    registerResources(environment);
   }
 
   private void produceServices() throws Exception {
@@ -86,5 +88,9 @@ public class ApiService extends Application<ApiConfiguration> {
 
     authCodeGrantService = factoryBuilder.getAuthCodeGrantServiceFactory().produce(
         database, configuration.getCoreConfiguration());
+  }
+
+  private void registerResources(Environment environment) {
+    environment.jersey().register(new ClientsResource(clientService));
   }
 }
