@@ -14,6 +14,7 @@
 package com.ysheng.auth.frontend.test.resource;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import com.ysheng.auth.frontend.mapper.InternalExceptionMapper;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.DropwizardResourceConfig;
 import org.glassfish.jersey.client.ClientConfig;
@@ -57,6 +58,8 @@ public class ResourceTestHelper {
   }
 
   public void setup() throws Exception {
+    singletons.add(new InternalExceptionMapper());
+
     test = new JerseyTest() {
       @Override
       protected TestContainerFactory getTestContainerFactory() throws TestContainerException {

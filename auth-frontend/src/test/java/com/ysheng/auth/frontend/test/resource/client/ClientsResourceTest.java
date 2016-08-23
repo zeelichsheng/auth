@@ -18,15 +18,19 @@ import com.ysheng.auth.frontend.resource.client.ClientsResource;
 import com.ysheng.auth.frontend.resource.route.ClientRoute;
 import com.ysheng.auth.frontend.test.resource.ResourceTestHelper;
 import com.ysheng.auth.model.ClientType;
+import com.ysheng.auth.model.ExternalException;
+import com.ysheng.auth.model.client.ClientRegistrationError;
+import com.ysheng.auth.model.client.ClientRegistrationErrorType;
 import com.ysheng.auth.model.client.ClientRegistrationRequest;
 import com.ysheng.auth.model.client.ClientRegistrationResponse;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
 import javax.ws.rs.client.Entity;
@@ -64,7 +68,7 @@ public class ClientsResourceTest {
     ClientRegistrationResponse response = new ClientRegistrationResponse();
     response.setClientId("clientId");
 
-    doReturn(response).when(clientService).registerClient(eq(request));
+    doReturn(response).when(clientService).registerClient(any(ClientRegistrationRequest.class));
 
     ClientRegistrationResponse actualResponse = testHelper.getClient()
         .target(ClientRoute.API)
@@ -72,6 +76,26 @@ public class ClientsResourceTest {
         .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE))
         .readEntity(ClientRegistrationResponse.class);
 
-    assertThat(actualResponse, is(response));
+    assertThat(actualResponse.getClientId(), equalTo(response.getClientId()));
+  }
+
+  @Test
+  public void failsToRegister() throws Throwable {
+    ClientRegistrationRequest request = new ClientRegistrationRequest();
+    request.setType(ClientType.CONFIDENTIAL);
+    ClientRegistrationError error = new ClientRegistrationError(
+        ClientRegistrationErrorType.INVALID_REQUEST,
+        "Invalid request");
+
+    doThrow(error).when(clientService).registerClient(any(ClientRegistrationRequest.class));
+
+    ExternalException actualError = testHelper.getClient()
+        .target(ClientRoute.API)
+        .request()
+        .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE))
+        .readEntity(ExternalException.class);
+
+    assertThat(actualError.getErrorCode(), equalTo(error.getError().toString()));
+    assertThat(actualError.getErrorDescription(), equalTo(error.getErrorDescription()));
   }
 }
