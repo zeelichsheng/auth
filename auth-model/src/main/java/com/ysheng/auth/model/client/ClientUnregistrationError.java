@@ -13,12 +13,12 @@
 
 package com.ysheng.auth.model.client;
 
-import com.ysheng.auth.model.BaseException;
+import com.ysheng.auth.model.InternalException;
 
 /**
  * Defines the data structure of client unregistration error response.
  */
-public class ClientUnregistrationError extends BaseException {
+public class ClientUnregistrationError extends InternalException {
 
   /**
    * Constructs a ClientUnregistrationError object.
@@ -29,7 +29,7 @@ public class ClientUnregistrationError extends BaseException {
   public ClientUnregistrationError(
       ClientUnregistrationErrorType error,
       String errorDescription) {
-    super(errorDescription);
+    super(error.toString(), errorDescription);
     this.error = error;
     this.errorDescription = errorDescription;
   }

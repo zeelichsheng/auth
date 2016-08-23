@@ -13,12 +13,12 @@
 
 package com.ysheng.auth.model.authcode;
 
-import com.ysheng.auth.model.BaseException;
+import com.ysheng.auth.model.InternalException;
 
 /**
  * Defines the data structure of authorization error for Authorization Code Grant.
  */
-public class AuthorizationError extends BaseException {
+public class AuthorizationError extends InternalException {
 
   /**
    * Constructs an AuthorizationError object.
@@ -29,7 +29,7 @@ public class AuthorizationError extends BaseException {
   public AuthorizationError(
       AuthorizationErrorType error,
       String errorDescription) {
-    super(errorDescription);
+    super(error.toString(), errorDescription);
     this.error = error;
     this.errorDescription = errorDescription;
   }
