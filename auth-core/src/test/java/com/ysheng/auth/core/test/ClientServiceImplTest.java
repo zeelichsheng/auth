@@ -27,7 +27,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -82,29 +81,8 @@ public class ClientServiceImplTest {
     }
 
     @Test
-    public void failsWithExistingClient() {
-      Database database = mock(Database.class);
-      doReturn(new Client()).when(database).findClientByRedirectUri(anyString());
-
-      ClientRegistrationRequest request = new ClientRegistrationRequest();
-      request.setType(ClientType.CONFIDENTIAL);
-      request.setRedirectUri("http://1.2.3.4");
-
-      ClientServiceImpl service = new ClientServiceImpl(database, null);
-
-      try {
-        service.registerClient(request);
-        fail("Client registration should fail with existing client");
-      } catch (ClientRegistrationError ex) {
-        assertThat(ex.getError(), is(ClientRegistrationErrorType.ALREADY_REGISTERED));
-        assertThat(ex.getMessage(), equalTo("Client already registered with redirect URI: http://1.2.3.4"));
-      }
-    }
-
-    @Test
     public void succeedsToRegister() throws Throwable {
       Database database = mock(Database.class);
-      doReturn(null).when(database).findClientByRedirectUri(anyString());
       doNothing().when(database).storeClient(any(Client.class));
 
       AuthValueGenerator authValueGenerator = mock(AuthValueGenerator.class);

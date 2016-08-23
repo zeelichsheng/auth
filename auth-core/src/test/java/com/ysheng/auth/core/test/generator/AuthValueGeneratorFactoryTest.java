@@ -18,7 +18,6 @@ import com.ysheng.auth.core.generator.AuthValueGeneratorFactory;
 import com.ysheng.auth.model.configuration.core.AuthValueGeneratorConfiguration;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;

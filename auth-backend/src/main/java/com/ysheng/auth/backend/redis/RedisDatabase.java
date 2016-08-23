@@ -46,7 +46,7 @@ public class RedisDatabase implements Database {
    */
   public void storeClient(Client client) {
     redisClient.set(
-        ClientAdapter.getKey(client.getId(), client.getRedirectUri()),
+        ClientAdapter.getKey(client.getId()),
         ClientAdapter.toHash(client));
   }
 
@@ -57,19 +57,7 @@ public class RedisDatabase implements Database {
    * @return A client object that matches the client identifier.
    */
   public Client findClientById(String clientId) {
-    Set<String> keys = redisClient.keys(ClientAdapter.getKey(clientId, null));
-    return ClientAdapter.fromHash(
-        redisClient.get(keys.iterator().next()));
-  }
-
-  /**
-   * Finds a client object by redirect URI.
-   *
-   * @param redirectUri The client redirect URI to be matched.
-   * @return A client object that matches the redirect URI.
-   */
-  public Client findClientByRedirectUri(String redirectUri) {
-    Set<String> keys = redisClient.keys(ClientAdapter.getKey(null, redirectUri));
+    Set<String> keys = redisClient.keys(ClientAdapter.getKey(clientId));
     return ClientAdapter.fromHash(
         redisClient.get(keys.iterator().next()));
   }

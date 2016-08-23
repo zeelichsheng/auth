@@ -69,24 +69,6 @@ public class RedisDatabaseTest {
   }
 
   @Test
-  public void succeedsToFindClientByRedirectUri() {
-    RedisClient redisClient = mock(RedisClient.class);
-    Set<String> keys = new HashSet<>();
-    keys.add("key");
-    String hash =
-        "{\"type\":\"CONFIDENTIAL\",\"id\":\"clientId\",\"secret\":\"clientSecret\"," +
-            "\"redirectUri\":\"http://1.2.3.4\"}";
-
-    doReturn(keys).when(redisClient).keys(anyString());
-    doReturn(hash).when(redisClient).get(anyString());
-
-    RedisDatabase database = new RedisDatabase(redisClient);
-    database.findClientByRedirectUri("http://1.2.3.4");
-
-    verify(redisClient).get(anyString());
-  }
-
-  @Test
   public void succeedsToStoreAuthorizationTicket() {
     RedisClient redisClient = mock(RedisClient.class);
     doNothing().when(redisClient).set(anyString(), anyString());

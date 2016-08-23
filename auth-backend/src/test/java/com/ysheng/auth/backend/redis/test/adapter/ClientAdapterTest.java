@@ -30,9 +30,8 @@ public class ClientAdapterTest {
   @Test(dataProvider = "ClientKeyMetadata")
   public void succeedsToGetKey(
       String clientId,
-      String redirectUri,
       String expectedKey) {
-    String key = ClientAdapter.getKey(clientId, redirectUri);
+    String key = ClientAdapter.getKey(clientId);
 
     assertThat(key, equalTo(expectedKey));
   }
@@ -40,9 +39,8 @@ public class ClientAdapterTest {
   @DataProvider(name = "ClientKeyMetadata")
   public Object[][] provideClientKeyMetadata() {
     return new Object[][] {
-        { "clientId", "redirectUri", "auth-client:clientId:redirectUri" },
-        { "clientId", null, "auth-client:clientId:*" },
-        { null, "redirectUri", "auth-client:*:redirectUri" }
+        { "clientId", "auth-client:clientId" },
+        { null, "auth-client:*" }
     };
   }
 

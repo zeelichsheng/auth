@@ -69,13 +69,6 @@ public class ClientServiceImpl implements ClientService {
           "Invalid redirect URI: " + request.getRedirectUri());
     }
 
-    Client existingClient = database.findClientByRedirectUri(request.getRedirectUri());
-    if (existingClient != null) {
-      throw new ClientRegistrationError(
-          ClientRegistrationErrorType.ALREADY_REGISTERED,
-          "Client already registered with redirect URI: " + request.getRedirectUri());
-    }
-
     String clientId = authValueGenerator.generateClientId();
     String clientSecret = ClientType.CONFIDENTIAL.equals(request.getType()) ?
         authValueGenerator.generateClientSecret() : null;

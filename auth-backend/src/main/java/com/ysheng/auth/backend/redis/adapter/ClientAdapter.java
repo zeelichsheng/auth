@@ -25,7 +25,7 @@ import java.io.IOException;
 public class ClientAdapter {
 
   // The template for the entity key.
-  private static final String ENTITY_KEY_TEMPLATE = "auth-client:%s:%s";
+  private static final String ENTITY_KEY_TEMPLATE = "auth-client:%s";
 
   // The JSON object mapper.
   private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -34,21 +34,15 @@ public class ClientAdapter {
    * Returns the Redis key for the object.
    *
    * @param clientId The client identifier.
-   * @param redirectUri The client redirect URI.
    * @return The key for the object.
    */
   public static String getKey(
-      String clientId,
-      String redirectUri) {
+      String clientId) {
     if (clientId == null) {
       clientId = "*";
     }
 
-    if (redirectUri == null) {
-      redirectUri = "*";
-    }
-
-    return String.format(ENTITY_KEY_TEMPLATE, clientId, redirectUri);
+    return String.format(ENTITY_KEY_TEMPLATE, clientId);
   }
 
   /**

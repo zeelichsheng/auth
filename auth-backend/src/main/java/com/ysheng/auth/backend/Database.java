@@ -37,14 +37,6 @@ public interface Database {
   Client findClientById(String clientId);
 
   /**
-   * Finds a client object by redirect URI.
-   *
-   * @param redirectUri The client redirect URI to be matched.
-   * @return A client object that matches the redirect URI.
-   */
-  Client findClientByRedirectUri(String redirectUri);
-
-  /**
    * Stores an authorization ticket object in database.
    *
    * @param authorizationTicket The authorization ticket object to be stored.
