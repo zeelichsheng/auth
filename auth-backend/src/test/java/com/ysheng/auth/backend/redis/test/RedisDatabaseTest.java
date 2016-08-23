@@ -51,6 +51,17 @@ public class RedisDatabaseTest {
   }
 
   @Test
+  public void succeedsToRemoveClient() {
+    RedisClient redisClient = mock(RedisClient.class);
+    doNothing().when(redisClient).remove(anyString());
+
+    RedisDatabase database = new RedisDatabase(redisClient);
+    database.removeClient("clientId");
+
+    verify(redisClient).remove(anyString());
+  }
+
+  @Test
   public void succeedsToFindClientById() {
     RedisClient redisClient = mock(RedisClient.class);
     Set<String> keys = new HashSet<>();

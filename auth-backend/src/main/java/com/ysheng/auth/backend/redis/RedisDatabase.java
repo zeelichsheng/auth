@@ -51,6 +51,15 @@ public class RedisDatabase implements Database {
   }
 
   /**
+   * Removes a client object from database.
+   *
+   * @param clientId The client identifier.
+   */
+  public void removeClient(String clientId) {
+    redisClient.remove(ClientAdapter.getKey(clientId));
+  }
+
+  /**
    * Finds a client object by client identifier.
    *
    * @param clientId The client identifier to be matched.

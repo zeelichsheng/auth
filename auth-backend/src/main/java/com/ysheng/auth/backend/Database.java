@@ -29,6 +29,13 @@ public interface Database {
   void storeClient(Client client);
 
   /**
+   * Removes a client object from database.
+   *
+   * @param clientId The client identifier.
+   */
+  void removeClient(String clientId);
+
+  /**
    * Finds a client object by client identifier.
    *
    * @param clientId The client identifier to be matched.

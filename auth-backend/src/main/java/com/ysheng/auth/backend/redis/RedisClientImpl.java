@@ -97,6 +97,17 @@ public class RedisClientImpl implements RedisClient {
   }
 
   /**
+   * Implements del command in Redis.
+   *
+   * @param key The key of the database entity.
+   */
+  public void remove(String key) {
+    doRedis(
+        resource -> resource.del(key)
+    );
+  }
+
+  /**
    * Implements hmset command in Redis.
    *
    * @param key The key of the database entity.

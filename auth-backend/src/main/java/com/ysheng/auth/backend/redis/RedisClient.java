@@ -48,6 +48,13 @@ public interface RedisClient {
   String get(String key);
 
   /**
+   * Implements del command in Redis.
+   *
+   * @param key The key of the database entity.
+   */
+  void remove(String key);
+
+  /**
    * Implements hmset command in Redis.
    *
    * @param key The key of the database entity.
