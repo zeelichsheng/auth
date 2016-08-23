@@ -17,6 +17,7 @@ import com.ysheng.auth.backend.Database;
 import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.core.ClientService;
 import com.ysheng.auth.frontend.configuration.ApiConfiguration;
+import com.ysheng.auth.frontend.mapper.InternalExceptionMapper;
 import com.ysheng.auth.frontend.resource.client.ClientsResource;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -77,6 +78,7 @@ public class ApiService extends Application<ApiConfiguration> {
       ApiConfiguration configuration,
       Environment environment) throws Exception {
     produceServices();
+    registerMappers(environment);
     registerResources(environment);
   }
 
@@ -88,6 +90,10 @@ public class ApiService extends Application<ApiConfiguration> {
 
     authCodeGrantService = factoryBuilder.getAuthCodeGrantServiceFactory().produce(
         database, configuration.getCoreConfiguration());
+  }
+
+  private void registerMappers(Environment environment) {
+    environment.jersey().register(new InternalExceptionMapper());
   }
 
   private void registerResources(Environment environment) {
