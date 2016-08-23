@@ -34,15 +34,11 @@
       <groupId>com.ysheng.auth</groupId>
       <artifactId>ysheng-auth-model</artifactId>
       <version>${parent.version}</version>
-      <type>jar</type>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.ysheng.auth</groupId>
       <artifactId>ysheng-auth-backend</artifactId>
       <version>${parent.version}</version>
-      <type>jar</type>
-      <scope>compile</scope>
     </dependency>
   </dependencies>
 </project>

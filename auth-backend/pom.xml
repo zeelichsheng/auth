@@ -29,39 +29,36 @@
 
   <name>ysheng-auth-backend</name>
 
-  <properties>
-    <jedis.version>2.9.0</jedis.version>
-    <jackson-core.version>2.0.6</jackson-core.version>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>com.ysheng.auth</groupId>
       <artifactId>ysheng-auth-model</artifactId>
       <version>${parent.version}</version>
-      <type>jar</type>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.ysheng.auth</groupId>
       <artifactId>ysheng-auth-common</artifactId>
       <version>${parent.version}</version>
-      <type>jar</type>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>redis.clients</groupId>
       <artifactId>jedis</artifactId>
-      <version>${jedis.version}</version>
-      <type>jar</type>
-      <scope>compile</scope>
+      <version>2.9.0</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <version>${jackson-core.version}</version>
-      <type>jar</type>
-      <scope>compile</scope>
+      <version>2.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.8.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>2.8.1</version>
     </dependency>
   </dependencies>
 </project>

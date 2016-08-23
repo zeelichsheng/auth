@@ -29,17 +29,31 @@
 
   <name>ysheng-auth-frontend</name>
 
-  <properties>
-    <dropwizard-core.version>2.9.0</dropwizard-core.version>
-  </properties>
-
   <dependencies>
+    <dependency>
+      <groupId>com.ysheng.auth</groupId>
+      <artifactId>ysheng-auth-model</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ysheng.auth</groupId>
+      <artifactId>ysheng-auth-core</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
     <dependency>
       <groupId>io.dropwizard</groupId>
       <artifactId>dropwizard-core</artifactId>
-      <version>${dropwizard-core.version}</version>
-      <type>jar</type>
-      <scope>compile</scope>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.test-framework</groupId>
+      <artifactId>jersey-test-framework-core</artifactId>
+      <version>2.23.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+      <artifactId>jersey-test-framework-provider-inmemory</artifactId>
+      <version>2.23.2</version>
     </dependency>
   </dependencies>
 </project>
