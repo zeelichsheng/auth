@@ -15,10 +15,18 @@ package com.ysheng.auth.model.client;
 
 import com.ysheng.auth.model.InternalException;
 
+import javax.ws.rs.core.Response;
+
 /**
  * Defines the data structure of client registration error response.
  */
 public class ClientRegistrationError extends InternalException {
+
+  // Client registration error code.
+  private ClientRegistrationErrorType error;
+
+  // Human-readable ASCII text providing additional information.
+  private String errorDescription;
 
   /**
    * Constructs a ClientRegistrationError object.
@@ -29,16 +37,31 @@ public class ClientRegistrationError extends InternalException {
   public ClientRegistrationError(
       ClientRegistrationErrorType error,
       String errorDescription) {
-    super(error.toString(), errorDescription);
+    super(errorDescription);
     this.error = error;
     this.errorDescription = errorDescription;
   }
 
-  // Client registration error code.
-  private ClientRegistrationErrorType error;
+  @Override
+  public Response.Status getHttpStatusCode() {
+    switch (error) {
+      case INVALID_REQUEST:
+      case ALREADY_REGISTERED:
+        return Response.Status.BAD_REQUEST;
+    }
 
-  // Human-readable ASCII text providing additional information.
-  private String errorDescription;
+    return Response.Status.INTERNAL_SERVER_ERROR;
+  }
+
+  @Override
+  public String getInternalErrorCode() {
+    return error.toString();
+  }
+
+  @Override
+  public String getInternalErrorDescription() {
+    return errorDescription;
+  }
 
   ///
   /// Getters and Setters.

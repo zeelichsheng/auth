@@ -13,7 +13,6 @@
 
 package com.ysheng.auth.frontend.mapper;
 
-import ch.qos.logback.core.status.Status;
 import com.ysheng.auth.model.ExternalException;
 import com.ysheng.auth.model.InternalException;
 
@@ -40,7 +39,7 @@ public class InternalExceptionMapper implements ExceptionMapper<InternalExceptio
         ex.getInternalErrorDescription());
 
     Response.ResponseBuilder builder = Response
-        .status(Status.ERROR)
+        .status(ex.getHttpStatusCode())
         .entity(externalException)
         .type(MediaType.APPLICATION_JSON);
 

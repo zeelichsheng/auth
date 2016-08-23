@@ -15,24 +15,12 @@ package com.ysheng.auth.model.authcode;
 
 import com.ysheng.auth.model.InternalException;
 
+import javax.ws.rs.core.Response;
+
 /**
  * Defines the data structure of access token error for Authorization Code Grant.
  */
 public class AccessTokenError extends InternalException {
-
-  /**
-   * Constructs an AccessTokenError object.
-   *
-   * @param error The error code.
-   * @param errorDescription The error message.
-   */
-  public AccessTokenError(
-      AccessTokenErrorType error,
-      String errorDescription) {
-    super(error.toString(), errorDescription);
-    this.error = error;
-    this.errorDescription = errorDescription;
-  }
 
   // REQUIRED. A single ASCII error code.
   private AccessTokenErrorType error;
@@ -44,6 +32,47 @@ public class AccessTokenError extends InternalException {
   // OPTIONAL. A URI identifying a human-readable web page with
   // information about the error.
   private String errorUri;
+
+  /**
+   * Constructs an AccessTokenError object.
+   *
+   * @param error The error code.
+   * @param errorDescription The error message.
+   */
+  public AccessTokenError(
+      AccessTokenErrorType error,
+      String errorDescription) {
+    super(errorDescription);
+    this.error = error;
+    this.errorDescription = errorDescription;
+  }
+
+  @Override
+  public Response.Status getHttpStatusCode() {
+    switch (error) {
+      case INVALID_REQUEST:
+      case INVALID_GRANT:
+      case UNSUPPORTED_GRANT_TYPE:
+        return Response.Status.BAD_REQUEST;
+      case INVALID_CLIENT:
+        return Response.Status.NOT_FOUND;
+      case UNAUTHORIZED_CLIENT:
+      case INVALID_SCOPE:
+        return Response.Status.UNAUTHORIZED;
+    }
+
+    return Response.Status.INTERNAL_SERVER_ERROR;
+  }
+
+  @Override
+  public String getInternalErrorCode() {
+    return error.toString();
+  }
+
+  @Override
+  public String getInternalErrorDescription() {
+    return errorDescription;
+  }
 
   ///
   /// Getters and Setters.

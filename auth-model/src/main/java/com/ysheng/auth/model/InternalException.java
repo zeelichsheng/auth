@@ -13,48 +13,26 @@
 
 package com.ysheng.auth.model;
 
+import javax.ws.rs.core.Response;
+
 /**
  * Defines the data structure that represents an API exception.
  */
-public class InternalException extends Exception {
-
-  // The error code.
-  private String internalErrorCode;
-
-  // The error description.
-  private String internalErrorDescription;
+public abstract class InternalException extends Exception {
 
   /**
    * Constructs an InternalException object.
    *
-   * @param errorCode The error code.
    * @param errorDescription The error detail.
    */
   public InternalException(
-      String errorCode,
       String errorDescription) {
     super(errorDescription);
-    this.internalErrorCode = errorCode;
-    this.internalErrorDescription = errorDescription;
   }
 
-  ///
-  /// Getters and Setters.
-  ///
+  public abstract Response.Status getHttpStatusCode();
 
-  public String getInternalErrorCode() {
-    return internalErrorCode;
-  }
+  public abstract String getInternalErrorCode();
 
-  public void setInternalErrorCode(String internalErrorCode) {
-    this.internalErrorCode = internalErrorCode;
-  }
-
-  public String getInternalErrorDescription() {
-    return internalErrorDescription;
-  }
-
-  public void setInternalErrorDescription(String internalErrorDescription) {
-    this.internalErrorDescription = internalErrorDescription;
-  }
+  public abstract String getInternalErrorDescription();
 }

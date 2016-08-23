@@ -15,24 +15,12 @@ package com.ysheng.auth.model.authcode;
 
 import com.ysheng.auth.model.InternalException;
 
+import javax.ws.rs.core.Response;
+
 /**
  * Defines the data structure of authorization error for Authorization Code Grant.
  */
 public class AuthorizationError extends InternalException {
-
-  /**
-   * Constructs an AuthorizationError object.
-   *
-   * @param error The error code.
-   * @param errorDescription The error message.
-   */
-  public AuthorizationError(
-      AuthorizationErrorType error,
-      String errorDescription) {
-    super(error.toString(), errorDescription);
-    this.error = error;
-    this.errorDescription = errorDescription;
-  }
 
   // REQUIRED. A single ASCII error code.
   private AuthorizationErrorType error;
@@ -48,6 +36,49 @@ public class AuthorizationError extends InternalException {
   // REQUIRED if a "state" parameter was present in the client
   // authorization request.
   private String state;
+
+  /**
+   * Constructs an AuthorizationError object.
+   *
+   * @param error The error code.
+   * @param errorDescription The error message.
+   */
+  public AuthorizationError(
+      AuthorizationErrorType error,
+      String errorDescription) {
+    super(errorDescription);
+    this.error = error;
+    this.errorDescription = errorDescription;
+  }
+
+  @Override
+  public Response.Status getHttpStatusCode() {
+    switch (error) {
+      case INVALID_REQUEST:
+      case UNSUPPORTED_RESPONSE_TYPE:
+        return Response.Status.BAD_REQUEST;
+      case UNAUTHORIZED_CLIENT:
+      case ACCESS_DENIDED:
+      case INVALID_SCOPE:
+        return Response.Status.UNAUTHORIZED;
+      case SERVER_ERROR:
+        return Response.Status.INTERNAL_SERVER_ERROR;
+      case TEMPORARILY_UNAVAILABLE:
+        return Response.Status.SERVICE_UNAVAILABLE;
+    }
+
+    return Response.Status.INTERNAL_SERVER_ERROR;
+  }
+
+  @Override
+  public String getInternalErrorCode() {
+    return error.toString();
+  }
+
+  @Override
+  public String getInternalErrorDescription() {
+    return errorDescription;
+  }
 
   ///
   /// Getters and Setters.

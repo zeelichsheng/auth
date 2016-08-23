@@ -15,10 +15,18 @@ package com.ysheng.auth.model.client;
 
 import com.ysheng.auth.model.InternalException;
 
+import javax.ws.rs.core.Response;
+
 /**
  * Defines the data structure of client unregistration error response.
  */
 public class ClientUnregistrationError extends InternalException {
+
+  // Client unregistration error code.
+  private ClientUnregistrationErrorType error;
+
+  // Human-readable ASCII text providing additional information.
+  private String errorDescription;
 
   /**
    * Constructs a ClientUnregistrationError object.
@@ -29,16 +37,34 @@ public class ClientUnregistrationError extends InternalException {
   public ClientUnregistrationError(
       ClientUnregistrationErrorType error,
       String errorDescription) {
-    super(error.toString(), errorDescription);
+    super(errorDescription);
     this.error = error;
     this.errorDescription = errorDescription;
   }
 
-  // Client unregistration error code.
-  private ClientUnregistrationErrorType error;
+  @Override
+  public Response.Status getHttpStatusCode() {
+    switch (error) {
+      case INVALID_REQUEST:
+        return Response.Status.BAD_REQUEST;
+      case CLIENT_NOT_FOUND:
+        return Response.Status.NOT_FOUND;
+      case UNAUTHOURIZED_CLIENT:
+        return Response.Status.UNAUTHORIZED;
+    }
 
-  // Human-readable ASCII text providing additional information.
-  private String errorDescription;
+    return Response.Status.INTERNAL_SERVER_ERROR;
+  }
+
+  @Override
+  public String getInternalErrorCode() {
+    return error.toString();
+  }
+
+  @Override
+  public String getInternalErrorDescription() {
+    return errorDescription;
+  }
 
   ///
   /// Getters and Setters.
