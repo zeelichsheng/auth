@@ -14,10 +14,11 @@
 package com.ysheng.auth.core;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.common.utility.UriUtil;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
+import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.ClientType;
+import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
@@ -26,6 +27,8 @@ import com.ysheng.auth.model.api.client.ClientUnregistrationError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientUnregistrationRequest;
 import com.ysheng.auth.model.api.client.ClientUnregistrationResponse;
+
+import java.util.List;
 
 /**
  * Implements client related functions.
@@ -58,7 +61,7 @@ public class ClientServiceImpl implements ClientService {
    * @return The client registration response that contains the client identifier and secret.
    * @throws ClientRegistrationError The exception that contains error details.
    */
-  public ClientRegistrationResponse registerClient(ClientRegistrationRequest request)
+  public ClientRegistrationResponse register(ClientRegistrationRequest request)
       throws ClientRegistrationError {
     // Validate the request.
     if (request.getRedirectUri() == null) {
@@ -100,7 +103,7 @@ public class ClientServiceImpl implements ClientService {
    * @return The client unregistration response.
    * @throws ClientUnregistrationError The exception that contains error details.
    */
-  public ClientUnregistrationResponse unregisterClient(ClientUnregistrationRequest request)
+  public ClientUnregistrationResponse unregister(ClientUnregistrationRequest request)
       throws ClientUnregistrationError {
     // Validate the request.
     if (request.getClientId() == null) {
@@ -130,5 +133,16 @@ public class ClientServiceImpl implements ClientService {
     ClientUnregistrationResponse response = new ClientUnregistrationResponse();
 
     return response;
+  }
+
+  /**
+   * Gets a list of all clients.
+   *
+   * @return The list of all clients.
+   */
+  public ApiList<Client> list() {
+    List<Client> clients = database.listClients();
+
+    return new ApiList<>(clients);
   }
 }

@@ -48,6 +48,7 @@ public class ClientsResource {
   @POST
   public ClientRegistrationResponse register(
       ClientRegistrationRequest request) throws ClientRegistrationError {
-    return clientService.registerClient(request);
+    return clientService.register(request);
+  }
   }
 }

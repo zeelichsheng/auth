@@ -49,6 +49,6 @@ public class ClientResource {
   @Path(ClientRoute.CLIENT_UNREGISTER_ACTION)
   public ClientUnregistrationResponse unregister(
       ClientUnregistrationRequest request) throws ClientUnregistrationError {
-    return clientService.unregisterClient(request);
+    return clientService.unregister(request);
   }
 }

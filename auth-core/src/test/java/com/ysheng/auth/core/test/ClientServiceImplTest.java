@@ -14,10 +14,11 @@
 package com.ysheng.auth.core.test;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.core.ClientServiceImpl;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
+import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.ClientType;
+import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
@@ -37,6 +38,9 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.testng.Assert.fail;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Tests for {@link com.ysheng.auth.core.ClientServiceImpl}.
  */
@@ -47,9 +51,9 @@ public class ClientServiceImplTest {
   }
 
   /**
-   * Tests for {@link com.ysheng.auth.core.ClientServiceImpl#registerClient}.
+   * Tests for {@link com.ysheng.auth.core.ClientServiceImpl#register}.
    */
-  public static class RegisterClientTest {
+  public static class RegisterTest {
 
     @Test
     public void failsWithNullRedirectUri() {
@@ -60,7 +64,7 @@ public class ClientServiceImplTest {
       ClientServiceImpl service = new ClientServiceImpl(null, null);
 
       try {
-        service.registerClient(request);
+        service.register(request);
         fail("Client registration should fail with null redirect URI");
       } catch (ClientRegistrationError ex) {
         assertThat(ex.getError(), is(ClientRegistrationErrorType.INVALID_REQUEST));
@@ -77,7 +81,7 @@ public class ClientServiceImplTest {
       ClientServiceImpl service = new ClientServiceImpl(null, null);
 
       try {
-        service.registerClient(request);
+        service.register(request);
         fail("Client registration should fail with invalid redirect URI");
       } catch (ClientRegistrationError ex) {
         assertThat(ex.getError(), is(ClientRegistrationErrorType.INVALID_REQUEST));
@@ -100,16 +104,16 @@ public class ClientServiceImplTest {
 
       ClientServiceImpl service = new ClientServiceImpl(database, authValueGenerator);
 
-      ClientRegistrationResponse response = service.registerClient(request);
+      ClientRegistrationResponse response = service.register(request);
       assertThat(response.getClientId(), equalTo("clientId"));
       assertThat(response.getClientSecret(), equalTo("clientSecret"));
     }
   }
 
   /**
-   * Tests for {@link com.ysheng.auth.core.ClientServiceImpl#unregisterClient}.
+   * Tests for {@link com.ysheng.auth.core.ClientServiceImpl#unregister}.
    */
-  public static class UnregisterClientTest {
+  public static class UnregisterTest {
 
     @Test
     public void failsWithNullClientId() {
@@ -119,7 +123,7 @@ public class ClientServiceImplTest {
       ClientServiceImpl service = new ClientServiceImpl(null, null);
 
       try {
-        service.unregisterClient(request);
+        service.unregister(request);
         fail("Client unregistration should fail with null client ID");
       } catch (ClientUnregistrationError ex) {
         assertThat(ex.getError(), is(ClientUnregistrationErrorType.INVALID_REQUEST));
@@ -138,7 +142,7 @@ public class ClientServiceImplTest {
       ClientServiceImpl service = new ClientServiceImpl(database, null);
 
       try {
-        service.unregisterClient(request);
+        service.unregister(request);
         fail("Client unregistration should fail with non-exist client ID");
       } catch (ClientUnregistrationError ex) {
         assertThat(ex.getError(), is(ClientUnregistrationErrorType.CLIENT_NOT_FOUND));
@@ -161,7 +165,7 @@ public class ClientServiceImplTest {
       ClientServiceImpl service = new ClientServiceImpl(database, null);
 
       try {
-        service.unregisterClient(request);
+        service.unregister(request);
         fail("Client unregistration should fail with unauthorized client");
       } catch (ClientUnregistrationError ex) {
         assertThat(ex.getError(), is(ClientUnregistrationErrorType.UNAUTHOURIZED_CLIENT));
@@ -183,7 +187,32 @@ public class ClientServiceImplTest {
       request.setClientSecret("clientSecret");
 
       ClientServiceImpl service = new ClientServiceImpl(database, null);
-      ClientUnregistrationResponse response = service.unregisterClient(request);
+      ClientUnregistrationResponse response = service.unregister(request);
+    }
+  }
+
+  /**
+   * Tests for {@link com.ysheng.auth.core.ClientServiceImpl#list}.
+   */
+  public static class ListTest {
+
+    @Test
+    public void succeedsToList() {
+      Client client1 = new Client();
+      client1.setId("clientId1");
+      Client client2 = new Client();
+      client2.setId("clientId2");
+      List<Client> clients = Arrays.asList(client1, client2);
+
+      Database database = mock(Database.class);
+      doReturn(clients).when(database).listClients();
+
+      ClientServiceImpl service = new ClientServiceImpl(database, null);
+      ApiList<Client> clientApiList = service.list();
+
+      assertThat(clientApiList.getItems().size(), is(2));
+      assertThat(clientApiList.getItems().get(0).getId(), equalTo(client1.getId()));
+      assertThat(clientApiList.getItems().get(1).getId(), equalTo(client2.getId()));
     }
   }
 }

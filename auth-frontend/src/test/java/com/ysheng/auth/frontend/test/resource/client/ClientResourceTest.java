@@ -75,7 +75,7 @@ public class ClientResourceTest {
     request.setClientSecret("clientSecret");
     ClientUnregistrationResponse response = new ClientUnregistrationResponse();
 
-    doReturn(response).when(clientService).unregisterClient(any(ClientUnregistrationRequest.class));
+    doReturn(response).when(clientService).unregister(any(ClientUnregistrationRequest.class));
 
     ClientUnregistrationResponse actualResponse = testHelper.getClient()
         .target(clientRoute)
@@ -93,7 +93,7 @@ public class ClientResourceTest {
         ClientUnregistrationErrorType.INVALID_REQUEST,
         "Invalid request");
 
-    doThrow(error).when(clientService).unregisterClient(any(ClientUnregistrationRequest.class));
+    doThrow(error).when(clientService).unregister(any(ClientUnregistrationRequest.class));
 
     ExternalException actualError = testHelper.getClient()
         .target(clientRoute)

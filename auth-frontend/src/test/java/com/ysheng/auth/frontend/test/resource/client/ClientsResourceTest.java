@@ -68,7 +68,7 @@ public class ClientsResourceTest {
     ClientRegistrationResponse response = new ClientRegistrationResponse();
     response.setClientId("clientId");
 
-    doReturn(response).when(clientService).registerClient(any(ClientRegistrationRequest.class));
+    doReturn(response).when(clientService).register(any(ClientRegistrationRequest.class));
 
     ClientRegistrationResponse actualResponse = testHelper.getClient()
         .target(ClientRoute.API)
@@ -87,7 +87,7 @@ public class ClientsResourceTest {
         ClientRegistrationErrorType.INVALID_REQUEST,
         "Invalid request");
 
-    doThrow(error).when(clientService).registerClient(any(ClientRegistrationRequest.class));
+    doThrow(error).when(clientService).register(any(ClientRegistrationRequest.class));
 
     ExternalException actualError = testHelper.getClient()
         .target(ClientRoute.API)

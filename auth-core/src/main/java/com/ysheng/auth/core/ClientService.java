@@ -13,6 +13,8 @@
 
 package com.ysheng.auth.core;
 
+import com.ysheng.auth.model.api.ApiList;
+import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
 import com.ysheng.auth.model.api.client.ClientRegistrationResponse;
@@ -32,7 +34,7 @@ public interface ClientService {
    * @return The client registration response that contains the client identifier and secret.
    * @throws ClientRegistrationError The exception that contains error details.
    */
-  ClientRegistrationResponse registerClient(ClientRegistrationRequest request) throws ClientRegistrationError;
+  ClientRegistrationResponse register(ClientRegistrationRequest request) throws ClientRegistrationError;
 
   /**
    * Unregisters a client with the authorization server.
@@ -41,5 +43,12 @@ public interface ClientService {
    * @return The client unregistration response.
    * @throws ClientUnregistrationError The exception that contains error details.
    */
-  ClientUnregistrationResponse unregisterClient(ClientUnregistrationRequest request) throws ClientUnregistrationError;
+  ClientUnregistrationResponse unregister(ClientUnregistrationRequest request) throws ClientUnregistrationError;
+
+  /**
+   * Gets a list of all clients.
+   *
+   * @return The list of all clients.
+   */
+  ApiList<Client> list();
 }
