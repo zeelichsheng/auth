@@ -33,9 +33,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-
 /**
  * Tests for {@link com.ysheng.auth.frontend.resource.client.ClientsResource}.
  */
@@ -70,11 +67,10 @@ public class ClientsResourceTest {
 
     doReturn(response).when(clientService).register(any(ClientRegistrationRequest.class));
 
-    ClientRegistrationResponse actualResponse = testHelper.getClient()
-        .target(ClientRoute.API)
-        .request()
-        .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE))
-        .readEntity(ClientRegistrationResponse.class);
+    ClientRegistrationResponse actualResponse = testHelper.post(
+        ClientRoute.API,
+        request,
+        ClientRegistrationResponse.class);
 
     assertThat(actualResponse.getClientId(), equalTo(response.getClientId()));
   }
@@ -89,11 +85,10 @@ public class ClientsResourceTest {
 
     doThrow(error).when(clientService).register(any(ClientRegistrationRequest.class));
 
-    ExternalException actualError = testHelper.getClient()
-        .target(ClientRoute.API)
-        .request()
-        .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE))
-        .readEntity(ExternalException.class);
+    ExternalException actualError = testHelper.post(
+        ClientRoute.API,
+        request,
+        ExternalException.class);
 
     assertThat(actualError.getErrorCode(), equalTo(error.getError().toString()));
     assertThat(actualError.getErrorDescription(), equalTo(error.getErrorDescription()));

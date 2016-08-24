@@ -27,6 +27,8 @@ import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -97,5 +99,16 @@ public class ResourceTestHelper {
     if (test != null) {
       test.tearDown();
     }
+  }
+
+  public <R, T> T post(
+      String path,
+      R request,
+      Class<T> requestType) {
+    return getClient()
+        .target(path)
+        .request()
+        .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE))
+        .readEntity(requestType);
   }
 }

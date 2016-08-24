@@ -32,8 +32,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 
 /**
@@ -50,9 +48,9 @@ public class ClientResourceTest {
   // The client identifier.
   private String clientId = "clientId";
 
-  // The client route.
-  private String clientRoute =
-      UriBuilder.fromPath(ClientRoute.CLIENT_PATH).build(clientId).toString();
+  // The client unregisteration route.
+  private String clientUnregistrationRoute =
+      UriBuilder.fromPath(ClientRoute.CLIENT_PATH + ClientRoute.CLIENT_UNREGISTER_ACTION).build(clientId).toString();
 
   @BeforeMethod
   public void setUpTest() throws Throwable {
@@ -77,11 +75,10 @@ public class ClientResourceTest {
 
     doReturn(response).when(clientService).unregister(any(ClientUnregistrationRequest.class));
 
-    ClientUnregistrationResponse actualResponse = testHelper.getClient()
-        .target(clientRoute)
-        .request()
-        .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE))
-        .readEntity(ClientUnregistrationResponse.class);
+    ClientUnregistrationResponse actualResponse = testHelper.post(
+        clientUnregistrationRoute,
+        request,
+        ClientUnregistrationResponse.class);
   }
 
   @Test
@@ -95,11 +92,10 @@ public class ClientResourceTest {
 
     doThrow(error).when(clientService).unregister(any(ClientUnregistrationRequest.class));
 
-    ExternalException actualError = testHelper.getClient()
-        .target(clientRoute)
-        .request()
-        .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE))
-        .readEntity(ExternalException.class);
+    ExternalException actualError = testHelper.post(
+        clientUnregistrationRoute,
+        request,
+        ExternalException.class);
 
     assertThat(actualError.getErrorCode(), equalTo(error.getError().toString()));
     assertThat(actualError.getErrorDescription(), equalTo(error.getErrorDescription()));
