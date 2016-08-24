@@ -28,6 +28,7 @@ import org.glassfish.jersey.test.spi.TestContainerFactory;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
 import java.util.HashSet;
@@ -104,11 +105,31 @@ public class ResourceTestHelper {
   public <R, T> T post(
       String path,
       R request,
-      Class<T> requestType) {
+      Class<T> responseType) {
     return getClient()
         .target(path)
         .request()
         .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE))
-        .readEntity(requestType);
+        .readEntity(responseType);
+  }
+
+  public <T> T get(
+      String path,
+      Class<T> responseType) {
+    return getClient()
+        .target(path)
+        .request()
+        .get()
+        .readEntity(responseType);
+  }
+
+  public <T> T get(
+      String path,
+      GenericType<T> responseType) {
+    return getClient()
+        .target(path)
+        .request()
+        .get()
+        .readEntity(responseType);
   }
 }

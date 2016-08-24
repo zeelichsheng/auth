@@ -17,8 +17,10 @@ import com.ysheng.auth.core.ClientService;
 import com.ysheng.auth.frontend.resource.client.ClientsResource;
 import com.ysheng.auth.frontend.resource.route.ClientRoute;
 import com.ysheng.auth.frontend.test.resource.ResourceTestHelper;
+import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.ClientType;
 import com.ysheng.auth.model.api.ExternalException;
+import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
@@ -32,6 +34,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+
+import javax.ws.rs.core.GenericType;
+
+import java.util.Arrays;
 
 /**
  * Tests for {@link com.ysheng.auth.frontend.resource.client.ClientsResource}.
@@ -92,5 +98,26 @@ public class ClientsResourceTest {
 
     assertThat(actualError.getErrorCode(), equalTo(error.getError().toString()));
     assertThat(actualError.getErrorDescription(), equalTo(error.getErrorDescription()));
+  }
+
+  @Test
+  public void succeedsToList() throws Throwable {
+    Client client1 = new Client();
+    client1.setId("clientId1");
+    Client client2 = new Client();
+    client2.setId("clientId2");
+    ApiList<Client> clientList = new ApiList<>(Arrays.asList(client1, client2));
+
+    doReturn(clientList).when(clientService).list();
+
+    ApiList<Client> actualClientList = testHelper.get(
+        ClientRoute.API,
+        new GenericType<ApiList<Client>>(){});
+
+    assertThat(actualClientList.getItems().size(), equalTo(clientList.getItems().size()));
+    assertThat(actualClientList.getItems().get(0).getId(),
+        equalTo(clientList.getItems().get(0).getId()));
+    assertThat(actualClientList.getItems().get(1).getId(),
+        equalTo(clientList.getItems().get(1).getId()));
   }
 }

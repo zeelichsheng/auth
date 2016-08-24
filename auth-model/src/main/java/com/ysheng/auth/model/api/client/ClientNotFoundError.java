@@ -14,6 +14,7 @@
 package com.ysheng.auth.model.api.client;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ysheng.auth.model.api.InternalException;
 
 import javax.ws.rs.core.Response;
@@ -25,6 +26,7 @@ import javax.ws.rs.core.Response;
 public class ClientNotFoundError extends InternalException {
 
   // The client identifier.
+  @JsonProperty
   private String clientId;
 
   /**

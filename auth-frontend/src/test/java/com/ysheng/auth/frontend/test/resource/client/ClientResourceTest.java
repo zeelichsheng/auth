@@ -18,6 +18,8 @@ import com.ysheng.auth.frontend.resource.client.ClientResource;
 import com.ysheng.auth.frontend.resource.route.ClientRoute;
 import com.ysheng.auth.frontend.test.resource.ResourceTestHelper;
 import com.ysheng.auth.model.api.ExternalException;
+import com.ysheng.auth.model.api.client.Client;
+import com.ysheng.auth.model.api.client.ClientNotFoundError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientUnregistrationRequest;
@@ -49,6 +51,10 @@ public class ClientResourceTest {
   // The client identifier.
   private String clientId = "clientId";
 
+  // The client route.
+  private String clientRoute =
+      UriBuilder.fromPath(ClientRoute.CLIENT_PATH).build(clientId).toString();
+
   // The client unregisteration route.
   private String clientUnregistrationRoute =
       UriBuilder.fromPath(ClientRoute.CLIENT_PATH + ClientRoute.CLIENT_UNREGISTER_ACTION).build(clientId).toString();
@@ -65,6 +71,33 @@ public class ClientResourceTest {
   @AfterMethod
   public void tearDownTest() throws Throwable {
     testHelper.destroy();
+  }
+
+  @Test
+  public void succeedsToGet() throws Throwable {
+    Client client = new Client();
+    client.setId("clientId");
+
+    doReturn(client).when(clientService).get(anyString());
+
+    Client actualClient = testHelper.get(
+        clientRoute,
+        Client.class);
+
+    assertThat(actualClient.getId(), equalTo(client.getId()));
+  }
+
+  @Test
+  public void failsToGet() throws Throwable {
+    ClientNotFoundError error = new ClientNotFoundError("clientId");
+
+    doThrow(error).when(clientService).get(anyString());
+
+    ExternalException actualError = testHelper.get(
+        clientRoute,
+        ExternalException.class);
+
+    assertThat(actualError.getErrorDescription(), equalTo(error.getInternalErrorDescription()));
   }
 
   @Test
@@ -96,7 +129,7 @@ public class ClientResourceTest {
         request,
         ExternalException.class);
 
-    assertThat(actualError.getErrorCode(), equalTo(error.getError().toString()));
-    assertThat(actualError.getErrorDescription(), equalTo(error.getErrorDescription()));
+    assertThat(actualError.getErrorCode(), equalTo(error.getInternalErrorCode()));
+    assertThat(actualError.getErrorDescription(), equalTo(error.getInternalErrorDescription()));
   }
 }
