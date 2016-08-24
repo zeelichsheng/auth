@@ -16,6 +16,8 @@ package com.ysheng.auth.backend;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
 
+import java.util.List;
+
 /**
  * Defines the interface of backend database related functions.
  */
@@ -42,6 +44,13 @@ public interface Database {
    * @return A client object that matches the client identifier.
    */
   Client findClientById(String clientId);
+
+  /**
+   * Gets a list of all clients in database.
+   *
+   * @return A list of all clients in database.
+   */
+  List<Client> listClients();
 
   /**
    * Stores an authorization ticket object in database.

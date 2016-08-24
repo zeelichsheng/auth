@@ -68,6 +68,24 @@ public class RedisClientImpl implements RedisClient {
   }
 
   /**
+   * Implements mget command in Redis.
+   *
+   * @param keys The set of keys of the database entities.
+   * @return The list of database entites.
+   */
+  public List<String> mget(Set<String> keys) {
+    final List<List<String>> hashes = new ArrayList<>();
+    doRedis(
+        resource -> {
+          String[] keysArray = new String[keys.size()];
+          hashes.add(resource.mget(keys.toArray(keysArray)));
+        }
+    );
+
+    return hashes.iterator().next();
+  }
+
+  /**
    * Implements del command in Redis.
    *
    * @param key The key of the database entity.

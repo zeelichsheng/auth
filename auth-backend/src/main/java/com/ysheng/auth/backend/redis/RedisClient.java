@@ -13,6 +13,7 @@
 
 package com.ysheng.auth.backend.redis;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,6 +37,14 @@ public interface RedisClient {
    * @return The value of the database entity.
    */
   String get(String key);
+
+  /**
+   * Implements mget command in Redis.
+   *
+   * @param keys The set of keys of the database entities.
+   * @return The list of database entites.
+   */
+  List<String> mget(Set<String> keys);
 
   /**
    * Implements del command in Redis.

@@ -13,19 +13,22 @@
 
 package com.ysheng.auth.backend.redis.test;
 
-import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
-import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.backend.redis.RedisClient;
 import com.ysheng.auth.backend.redis.RedisDatabase;
 import com.ysheng.auth.model.api.ClientType;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
+import com.ysheng.auth.model.api.client.Client;
 import org.testng.annotations.Test;
+import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -64,19 +67,40 @@ public class RedisDatabaseTest {
   @Test
   public void succeedsToFindClientById() {
     RedisClient redisClient = mock(RedisClient.class);
-    Set<String> keys = new HashSet<>();
-    keys.add("key");
     String hash =
         "{\"type\":\"CONFIDENTIAL\",\"id\":\"clientId\",\"secret\":\"clientSecret\"," +
             "\"redirectUri\":\"http://1.2.3.4\"}";
 
-    doReturn(keys).when(redisClient).keys(anyString());
     doReturn(hash).when(redisClient).get(anyString());
 
     RedisDatabase database = new RedisDatabase(redisClient);
     database.findClientById("clientId");
 
     verify(redisClient).get(anyString());
+  }
+
+  @Test
+  public void succeedsToListClients() {
+    RedisClient redisClient = mock(RedisClient.class);
+    Set<String> keys = new HashSet<>();
+    keys.add("key1");
+    keys.add("key2");
+    String hash1 =
+        "{\"type\":\"CONFIDENTIAL\",\"id\":\"clientId1\",\"secret\":\"clientSecret1\"," +
+            "\"redirectUri\":\"http://1.2.3.4\"}";
+    String hash2 =
+        "{\"type\":\"CONFIDENTIAL\",\"id\":\"clientId2\",\"secret\":\"clientSecret2\"," +
+        "\"redirectUri\":\"http://5.6.7.8\"}";
+    List<String> hashes = Arrays.asList(hash1, hash2);
+
+    doReturn(keys).when(redisClient).keys(anyString());
+    doReturn(hashes).when(redisClient).mget(anySet());
+
+    RedisDatabase database = new RedisDatabase(redisClient);
+    database.listClients();
+
+    verify(redisClient).keys(anyString());
+    verify(redisClient).mget(anySet());
   }
 
   @Test

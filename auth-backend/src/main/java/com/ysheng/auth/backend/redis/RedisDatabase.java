@@ -14,10 +14,13 @@
 package com.ysheng.auth.backend.redis;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
-import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.backend.redis.adapter.AuthorizationTicketAdapter;
 import com.ysheng.auth.backend.redis.adapter.ClientAdapter;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
+import com.ysheng.auth.model.api.client.Client;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of the backend database based on Redis.
@@ -66,6 +69,19 @@ public class RedisDatabase implements Database {
   public Client findClientById(String clientId) {
     return ClientAdapter.fromHash(
         redisClient.get(ClientAdapter.getKey(clientId)));
+  }
+
+  /**
+   * Gets a list of all clients in database.
+   *
+   * @return A list of all clients in database.
+   */
+  public List<Client> listClients() {
+    return redisClient
+        .mget(redisClient.keys(ClientAdapter.getKey(null)))
+        .stream()
+        .map(ClientAdapter::fromHash)
+        .collect(Collectors.toList());
   }
 
   /**
