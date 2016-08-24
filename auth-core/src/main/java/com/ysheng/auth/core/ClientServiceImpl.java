@@ -99,24 +99,27 @@ public class ClientServiceImpl implements ClientService {
   /**
    * Unregisters a client with the authorization server.
    *
+   * @param clientId The client identifier.
    * @param request The client unregistration request that contains required information.
    * @return The client unregistration response.
    * @throws ClientUnregistrationError The exception that contains error details.
    */
-  public ClientUnregistrationResponse unregister(ClientUnregistrationRequest request)
+  public ClientUnregistrationResponse unregister(
+      String clientId,
+      ClientUnregistrationRequest request)
       throws ClientUnregistrationError {
     // Validate the request.
-    if (request.getClientId() == null) {
+    if (clientId == null) {
       throw new ClientUnregistrationError(
           ClientUnregistrationErrorType.INVALID_REQUEST,
           "Client ID cannot be null");
     }
 
-    Client client = database.findClientById(request.getClientId());
+    Client client = database.findClientById(clientId);
     if (client == null) {
       throw new ClientUnregistrationError(
           ClientUnregistrationErrorType.CLIENT_NOT_FOUND,
-          "Unable to find client with ID: " + request.getClientId());
+          "Unable to find client with ID: " + clientId);
     }
 
     if (client.getSecret() != null &&
@@ -127,7 +130,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     // Remove client from database.
-    database.removeClient(request.getClientId());
+    database.removeClient(clientId);
 
     // Build the response.
     ClientUnregistrationResponse response = new ClientUnregistrationResponse();

@@ -39,11 +39,14 @@ public interface ClientService {
   /**
    * Unregisters a client with the authorization server.
    *
+   * @param clientId The client identifier.
    * @param request The client unregistration request that contains required information.
    * @return The client unregistration response.
    * @throws ClientUnregistrationError The exception that contains error details.
    */
-  ClientUnregistrationResponse unregister(ClientUnregistrationRequest request) throws ClientUnregistrationError;
+  ClientUnregistrationResponse unregister(
+      String clientId,
+      ClientUnregistrationRequest request) throws ClientUnregistrationError;
 
   /**
    * Gets a list of all clients.

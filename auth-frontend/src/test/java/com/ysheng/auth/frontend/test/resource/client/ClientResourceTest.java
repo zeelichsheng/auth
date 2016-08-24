@@ -28,6 +28,7 @@ import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -69,11 +70,10 @@ public class ClientResourceTest {
   @Test
   public void succeedsToUnregister() throws Throwable {
     ClientUnregistrationRequest request = new ClientUnregistrationRequest();
-    request.setClientId("clientId");
     request.setClientSecret("clientSecret");
     ClientUnregistrationResponse response = new ClientUnregistrationResponse();
 
-    doReturn(response).when(clientService).unregister(any(ClientUnregistrationRequest.class));
+    doReturn(response).when(clientService).unregister(anyString(), any(ClientUnregistrationRequest.class));
 
     ClientUnregistrationResponse actualResponse = testHelper.post(
         clientUnregistrationRoute,
@@ -84,13 +84,12 @@ public class ClientResourceTest {
   @Test
   public void failsToUnregister() throws Throwable {
     ClientUnregistrationRequest request = new ClientUnregistrationRequest();
-    request.setClientId("clientId");
     request.setClientSecret("clientSecret");
     ClientUnregistrationError error = new ClientUnregistrationError(
         ClientUnregistrationErrorType.INVALID_REQUEST,
         "Invalid request");
 
-    doThrow(error).when(clientService).unregister(any(ClientUnregistrationRequest.class));
+    doThrow(error).when(clientService).unregister(anyString(), any(ClientUnregistrationRequest.class));
 
     ExternalException actualError = testHelper.post(
         clientUnregistrationRoute,

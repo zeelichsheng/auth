@@ -22,10 +22,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientUnregistrationRequest {
 
-  // The client identifier.
-  @JsonProperty
-  private String clientId;
-
   // The client secret.
   @JsonProperty
   private String clientSecret;
@@ -33,14 +29,6 @@ public class ClientUnregistrationRequest {
   ///
   /// Getters and Setters.
   ///
-
-  public String getClientId() {
-    return clientId;
-  }
-
-  public void setClientId(String clientId) {
-    this.clientId = clientId;
-  }
 
   public String getClientSecret() {
     return clientSecret;

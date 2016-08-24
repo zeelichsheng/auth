@@ -22,6 +22,7 @@ import com.ysheng.auth.model.api.client.ClientUnregistrationResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -48,7 +49,8 @@ public class ClientResource {
   @POST
   @Path(ClientRoute.CLIENT_UNREGISTER_ACTION)
   public ClientUnregistrationResponse unregister(
+      @PathParam("id") String clientId,
       ClientUnregistrationRequest request) throws ClientUnregistrationError {
-    return clientService.unregister(request);
+    return clientService.unregister(clientId, request);
   }
 }

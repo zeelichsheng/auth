@@ -118,12 +118,11 @@ public class ClientServiceImplTest {
     @Test
     public void failsWithNullClientId() {
       ClientUnregistrationRequest request = new ClientUnregistrationRequest();
-      request.setClientId(null);
 
       ClientServiceImpl service = new ClientServiceImpl(null, null);
 
       try {
-        service.unregister(request);
+        service.unregister(null, request);
         fail("Client unregistration should fail with null client ID");
       } catch (ClientUnregistrationError ex) {
         assertThat(ex.getError(), is(ClientUnregistrationErrorType.INVALID_REQUEST));
@@ -137,12 +136,11 @@ public class ClientServiceImplTest {
       doReturn(null).when(database).findClientById(anyString());
 
       ClientUnregistrationRequest request = new ClientUnregistrationRequest();
-      request.setClientId("clientId");
 
       ClientServiceImpl service = new ClientServiceImpl(database, null);
 
       try {
-        service.unregister(request);
+        service.unregister("clientId", request);
         fail("Client unregistration should fail with non-exist client ID");
       } catch (ClientUnregistrationError ex) {
         assertThat(ex.getError(), is(ClientUnregistrationErrorType.CLIENT_NOT_FOUND));
@@ -159,13 +157,12 @@ public class ClientServiceImplTest {
       doReturn(client).when(database).findClientById(anyString());
 
       ClientUnregistrationRequest request = new ClientUnregistrationRequest();
-      request.setClientId("clientId");
       request.setClientSecret("clientSecret2");
 
       ClientServiceImpl service = new ClientServiceImpl(database, null);
 
       try {
-        service.unregister(request);
+        service.unregister("clientId", request);
         fail("Client unregistration should fail with unauthorized client");
       } catch (ClientUnregistrationError ex) {
         assertThat(ex.getError(), is(ClientUnregistrationErrorType.UNAUTHOURIZED_CLIENT));
@@ -183,11 +180,10 @@ public class ClientServiceImplTest {
       doReturn(client).when(database).findClientById(anyString());
 
       ClientUnregistrationRequest request = new ClientUnregistrationRequest();
-      request.setClientId("clientId");
       request.setClientSecret("clientSecret");
 
       ClientServiceImpl service = new ClientServiceImpl(database, null);
-      ClientUnregistrationResponse response = service.unregister(request);
+      ClientUnregistrationResponse response = service.unregister("clientId", request);
     }
   }
 
