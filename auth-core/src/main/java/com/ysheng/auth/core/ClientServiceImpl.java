@@ -19,6 +19,7 @@ import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.ClientType;
 import com.ysheng.auth.model.api.client.Client;
+import com.ysheng.auth.model.api.client.ClientNotFoundError;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
@@ -147,5 +148,22 @@ public class ClientServiceImpl implements ClientService {
     List<Client> clients = database.listClients();
 
     return new ApiList<>(clients);
+  }
+
+  /**
+   * Gets a client with the given identifier.
+   *
+   * @param clientId The client identifier.
+   * @return A client object with the give identifier.
+   * @throws ClientNotFoundError The error that contains detail information.
+   */
+  public Client get(String clientId) throws ClientNotFoundError {
+    Client client = database.findClientById(clientId);
+
+    if (client == null) {
+      throw new ClientNotFoundError(clientId);
+    }
+
+    return client;
   }
 }

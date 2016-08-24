@@ -15,11 +15,14 @@ package com.ysheng.auth.frontend.resource.client;
 
 import com.ysheng.auth.core.ClientService;
 import com.ysheng.auth.frontend.resource.route.ClientRoute;
+import com.ysheng.auth.model.api.client.Client;
+import com.ysheng.auth.model.api.client.ClientNotFoundError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationRequest;
 import com.ysheng.auth.model.api.client.ClientUnregistrationResponse;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -46,10 +49,16 @@ public class ClientResource {
     this.clientService = clientService;
   }
 
+  @GET
+  public Client get(
+      @PathParam(ClientRoute.CLIENT_ID_PATH_PARAM) String clientId) throws ClientNotFoundError {
+    return clientService.get(clientId);
+  }
+
   @POST
   @Path(ClientRoute.CLIENT_UNREGISTER_ACTION)
   public ClientUnregistrationResponse unregister(
-      @PathParam("id") String clientId,
+      @PathParam(ClientRoute.CLIENT_ID_PATH_PARAM) String clientId,
       ClientUnregistrationRequest request) throws ClientUnregistrationError {
     return clientService.unregister(clientId, request);
   }

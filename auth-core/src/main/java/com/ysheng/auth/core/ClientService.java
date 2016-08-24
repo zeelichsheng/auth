@@ -15,6 +15,7 @@ package com.ysheng.auth.core;
 
 import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.client.Client;
+import com.ysheng.auth.model.api.client.ClientNotFoundError;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
 import com.ysheng.auth.model.api.client.ClientRegistrationResponse;
@@ -54,4 +55,13 @@ public interface ClientService {
    * @return The list of all clients.
    */
   ApiList<Client> list();
+
+  /**
+   * Gets a client with the given identifier.
+   *
+   * @param clientId The client identifier.
+   * @return A client object with the give identifier.
+   * @throws ClientNotFoundError The error that contains detail information.
+   */
+  Client get(String clientId) throws ClientNotFoundError;
 }

@@ -19,6 +19,7 @@ import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.ClientType;
 import com.ysheng.auth.model.api.client.Client;
+import com.ysheng.auth.model.api.client.ClientNotFoundError;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
@@ -209,6 +210,43 @@ public class ClientServiceImplTest {
       assertThat(clientApiList.getItems().size(), is(2));
       assertThat(clientApiList.getItems().get(0).getId(), equalTo(client1.getId()));
       assertThat(clientApiList.getItems().get(1).getId(), equalTo(client2.getId()));
+    }
+  }
+
+  /**
+   * Tests for {@link com.ysheng.auth.core.ClientServiceImpl#get}.
+   */
+  public static class GetTest {
+
+    @Test
+    public void failsToGet() throws Throwable {
+
+      Database database = mock(Database.class);
+      doReturn(null).when(database).findClientById(anyString());
+
+      ClientServiceImpl service = new ClientServiceImpl(database, null);
+
+      try {
+        service.get("clientId");
+        fail("Get client should fail with non-exist client");
+      } catch (ClientNotFoundError ex) {
+        assertThat(ex.getInternalErrorCode(), equalTo("ClientNotFound"));
+        assertThat(ex.getInternalErrorDescription(), equalTo("Client not found with ID: clientId"));
+      }
+    }
+
+    @Test
+    public void succeedsToGet() throws Throwable {
+      Client client = new Client();
+      client.setId("clientId");
+
+      Database database = mock(Database.class);
+      doReturn(client).when(database).findClientById(anyString());
+
+      ClientServiceImpl service = new ClientServiceImpl(database, null);
+      Client actualClient = service.get("clientId");
+
+      assertThat(actualClient.getId(), equalTo(client.getId()));
     }
   }
 }

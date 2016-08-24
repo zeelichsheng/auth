@@ -18,9 +18,11 @@ package com.ysheng.auth.frontend.resource.route;
  */
 public class ClientRoute {
 
+  public static final String CLIENT_ID_PATH_PARAM = "id";
+
   public static final String API = "/clients";
 
-  public static final String CLIENT_PATH = API + "/{id}";
+  public static final String CLIENT_PATH = API + "/{" + CLIENT_ID_PATH_PARAM + "}";
 
   public static final String CLIENT_UNREGISTER_ACTION = "/unregister";
 }
