@@ -18,6 +18,7 @@ import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.core.ClientService;
 import com.ysheng.auth.frontend.configuration.ApiConfiguration;
 import com.ysheng.auth.frontend.mapper.InternalExceptionMapper;
+import com.ysheng.auth.frontend.resource.authcode.AuthCodesResource;
 import com.ysheng.auth.frontend.resource.client.ClientResource;
 import com.ysheng.auth.frontend.resource.client.ClientsResource;
 import io.dropwizard.Application;
@@ -100,5 +101,6 @@ public class ApiService extends Application<ApiConfiguration> {
   private void registerResources(Environment environment) {
     environment.jersey().register(new ClientsResource(clientService));
     environment.jersey().register(new ClientResource(clientService));
+    environment.jersey().register(new AuthCodesResource(authCodeGrantService));
   }
 }
