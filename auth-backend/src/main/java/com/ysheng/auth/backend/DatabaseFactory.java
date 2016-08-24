@@ -15,7 +15,11 @@ package com.ysheng.auth.backend;
 
 import com.ysheng.auth.backend.redis.RedisClientImpl;
 import com.ysheng.auth.backend.redis.RedisDatabase;
+import com.ysheng.auth.backend.redis.connection.RedisConnection;
+import com.ysheng.auth.backend.redis.connection.RedisSentinelConnection;
+import com.ysheng.auth.backend.redis.connection.RedisSimpleConnection;
 import com.ysheng.auth.model.configuration.backend.BackendConfiguration;
+import com.ysheng.auth.model.configuration.backend.RedisConfiguration;
 
 /**
  * Defines a database factory that produces database object.
@@ -37,9 +41,22 @@ public class DatabaseFactory {
     String databaseType = backendConfiguration.getDatabaseType().trim();
 
     if (databaseType.equalsIgnoreCase("redis")) {
-      return new RedisDatabase(new RedisClientImpl(backendConfiguration.getRedisConfiguration()));
+      return produceRedisDatabase(backendConfiguration.getRedisConfiguration());
     }
 
     throw new IllegalArgumentException("Unknown database type: " + databaseType);
+  }
+
+  private Database produceRedisDatabase(RedisConfiguration redisConfiguration) {
+    RedisConnection connection;
+    if (redisConfiguration.getConnectionType().equalsIgnoreCase("simple")) {
+      connection = new RedisSimpleConnection(redisConfiguration);
+    } else if (redisConfiguration.getConnectionType().equalsIgnoreCase("sentinel")) {
+      connection = new RedisSentinelConnection(redisConfiguration);
+    } else {
+      throw new IllegalArgumentException("Unknown Redis connection type: " + redisConfiguration.getConnectionType());
+    }
+
+    return new RedisDatabase(new RedisClientImpl(connection));
   }
 }

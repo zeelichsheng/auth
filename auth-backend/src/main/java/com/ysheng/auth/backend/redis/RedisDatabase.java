@@ -19,8 +19,6 @@ import com.ysheng.auth.backend.model.Client;
 import com.ysheng.auth.backend.redis.adapter.AuthorizationTicketAdapter;
 import com.ysheng.auth.backend.redis.adapter.ClientAdapter;
 
-import java.util.Set;
-
 /**
  * Implementation of the backend database based on Redis.
  */

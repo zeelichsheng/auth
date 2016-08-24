@@ -13,10 +13,8 @@
 
 package com.ysheng.auth.backend.redis;
 
-import com.ysheng.auth.model.configuration.backend.RedisConfiguration;
+import com.ysheng.auth.backend.redis.connection.RedisConnection;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.JedisSentinelPool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,44 +27,17 @@ import java.util.function.Consumer;
  */
 public class RedisClientImpl implements RedisClient {
 
-  // The configuration of Redis.
-  private RedisConfiguration configuration;
-
-  // The connection pool.
-  private JedisSentinelPool connectionPool;
+  // The Redis connection object.
+  private RedisConnection connection;
 
   /**
    * Constructs a RedisConnectorImpl object.
    *
-   * @param configuration The configuration of Redis.
+   * @param connection The Redis connection object.
    */
   public RedisClientImpl(
-      RedisConfiguration configuration) {
-    this.configuration = configuration;
-    this.connectionPool = null;
-  }
-
-  /**
-   * Opens a Redis connection.
-   */
-  public void openConnection() {
-    if (connectionPool == null) {
-      JedisPoolConfig config = new JedisPoolConfig();
-      config.setMaxTotal(configuration.getMaxConnections());
-      config.setBlockWhenExhausted(configuration.isBlockWhenExhausted());
-
-      connectionPool = new JedisSentinelPool(
-          configuration.getMasterAddress(),
-          configuration.getSentinels(),
-          config);
-    }
-  }
-
-  /**
-   * Closes a Redis connection.
-   */
-  public void closeConnection() {
-    connectionPool.close();
+      RedisConnection connection) {
+    this.connection = connection;
   }
 
   /**
@@ -155,12 +126,8 @@ public class RedisClientImpl implements RedisClient {
    * @param consumer The Redis command that consumes the connection resource.
    */
   private void doRedis(Consumer<Jedis> consumer) {
-    Jedis resource = connectionPool.getResource();
-
-    try {
-      consumer.accept(resource);
-    } finally {
-      resource.close();
-    }
+    connection.open();
+    Jedis resource = connection.getResource();
+    consumer.accept(resource);
   }
 }

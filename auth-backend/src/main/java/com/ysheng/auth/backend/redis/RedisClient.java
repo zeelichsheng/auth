@@ -22,16 +22,6 @@ import java.util.Set;
 public interface RedisClient {
 
   /**
-   * Opens a Redis connection.
-   */
-  void openConnection();
-
-  /**
-   * Closes a Redis connection.
-   */
-  void closeConnection();
-
-  /**
    * Implements set command in Redis.
    *
    * @param key The key of the database entity.

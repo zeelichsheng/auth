@@ -58,6 +58,7 @@ public class DatabaseFactoryTest {
   @Test(dataProvider = "RedisDatabaseType")
   public void succeedsToProduceRedisDatabase(String databaseType) throws Throwable {
     RedisConfiguration redisConfiguration = new RedisConfiguration();
+    redisConfiguration.setConnectionType("simple");
     BackendConfiguration backendConfiguration = new BackendConfiguration();
     backendConfiguration.setDatabaseType(databaseType);
     backendConfiguration.setRedisConfiguration(redisConfiguration);

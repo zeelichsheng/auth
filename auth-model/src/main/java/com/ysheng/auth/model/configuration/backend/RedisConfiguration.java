@@ -20,6 +20,9 @@ import java.util.Set;
  */
 public class RedisConfiguration {
 
+  // The Redis connection type.
+  private String connectionType;
+
   // The address of the master node.
   private String masterAddress;
 
@@ -35,6 +38,14 @@ public class RedisConfiguration {
   ///
   /// Getters and Setters.
   ///
+
+  public String getConnectionType() {
+    return connectionType;
+  }
+
+  public void setConnectionType(String connectionType) {
+    this.connectionType = connectionType;
+  }
 
   public String getMasterAddress() {
     return masterAddress;
