@@ -14,8 +14,8 @@
 package com.ysheng.auth.core;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.backend.model.AuthorizationTicket;
-import com.ysheng.auth.backend.model.Client;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
+import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.api.AccessTokenType;
 import com.ysheng.auth.model.api.authcode.AccessTokenError;

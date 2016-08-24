@@ -13,8 +13,8 @@
 
 package com.ysheng.auth.backend;
 
-import com.ysheng.auth.backend.model.AuthorizationTicket;
-import com.ysheng.auth.backend.model.Client;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
+import com.ysheng.auth.model.api.client.Client;
 
 /**
  * Defines the interface of backend database related functions.

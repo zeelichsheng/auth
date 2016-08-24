@@ -14,7 +14,7 @@
 package com.ysheng.auth.core;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.backend.model.Client;
+import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.common.utility.UriUtil;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.api.ClientType;

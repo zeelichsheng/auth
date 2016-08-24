@@ -13,7 +13,7 @@
 
 package com.ysheng.auth.backend.redis.test.adapter;
 
-import com.ysheng.auth.backend.model.AuthorizationTicket;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.backend.redis.adapter.AuthorizationTicketAdapter;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

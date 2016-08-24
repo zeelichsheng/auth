@@ -15,7 +15,7 @@ package com.ysheng.auth.backend.redis.adapter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ysheng.auth.backend.model.AuthorizationTicket;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 
 import java.io.IOException;
 

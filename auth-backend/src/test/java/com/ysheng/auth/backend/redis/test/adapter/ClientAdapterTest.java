@@ -13,7 +13,7 @@
 
 package com.ysheng.auth.backend.redis.test.adapter;
 
-import com.ysheng.auth.backend.model.Client;
+import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.backend.redis.adapter.ClientAdapter;
 import com.ysheng.auth.model.api.ClientType;
 import org.testng.annotations.DataProvider;

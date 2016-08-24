@@ -14,8 +14,8 @@
 package com.ysheng.auth.backend.redis;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.backend.model.AuthorizationTicket;
-import com.ysheng.auth.backend.model.Client;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
+import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.backend.redis.adapter.AuthorizationTicketAdapter;
 import com.ysheng.auth.backend.redis.adapter.ClientAdapter;
 
