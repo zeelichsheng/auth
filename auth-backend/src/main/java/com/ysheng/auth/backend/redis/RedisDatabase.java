@@ -96,6 +96,16 @@ public class RedisDatabase implements Database {
   }
 
   /**
+   * removes an authorization ticket object from databsae.
+   *
+   * @param clientId  The client identifier.
+   * @param code The authorization code.
+   */
+  public void removeAuthorizationTicket(String clientId, String code) {
+    redisClient.remove(AuthorizationTicketAdapter.getKey(clientId, code));
+  }
+
+  /**
    * Finds an authorization ticket object by authorization code.
    *
    * @param code The authorization code to be matched.

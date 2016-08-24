@@ -122,6 +122,17 @@ public class RedisDatabaseTest {
   }
 
   @Test
+  public void succeedsToRemoveAuthorizationTicket() {
+    RedisClient redisClient = mock(RedisClient.class);
+    doNothing().when(redisClient).remove(anyString());
+
+    RedisDatabase database = new RedisDatabase(redisClient);
+    database.removeAuthorizationTicket("clientId", "code");
+
+    verify(redisClient).remove(anyString());
+  }
+
+  @Test
   public void succeedsToFindAuthorizationTicketByCodeAndClientId() {
     RedisClient redisClient = mock(RedisClient.class);
     String hash = "{\"code\":\"code\",\"clientId\":\"clientId\",\"redirectUri\":\"http://1.2.3.4\"," +

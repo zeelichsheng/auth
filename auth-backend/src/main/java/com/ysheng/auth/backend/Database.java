@@ -60,6 +60,14 @@ public interface Database {
   void storeAuthorizationTicket(AuthorizationTicket authorizationTicket);
 
   /**
+   * removes an authorization ticket object from databsae.
+   *
+   * @param clientId  The client identifier.
+   * @param code The authorization code.
+   */
+  void removeAuthorizationTicket(String clientId, String code);
+
+  /**
    * Finds an authorization ticket object by authorization code.
    *
    * @param code The authorization code to be matched.
