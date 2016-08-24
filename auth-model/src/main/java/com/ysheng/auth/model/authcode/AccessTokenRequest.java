@@ -13,28 +13,35 @@
 
 package com.ysheng.auth.model.authcode;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ysheng.auth.model.GrantType;
 
 /**
  * Defines the data structure of access token request for Authorization Code Grant.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AccessTokenRequest {
 
   // Valid grant type.
   public static final GrantType VALID_GRANT_TYPE = GrantType.AUTHORIZATION_CODE;
 
   // REQUIRED. Value must be set to "authorization_code".
+  @JsonProperty
   private GrantType grantType;
 
   // REQUIRED. The authorization code received from the authorization server.
+  @JsonProperty
   private String code;
 
   // REQUIRED if the "redirect_uri" parameter was included in the
   // authorization request, and their value must be identical.
+  @JsonProperty
   private String redirectUri;
 
   // REQUIRED to prevent the server from accepting a code intended for a client
   // with a different client ID.
+  @JsonProperty
   private String clientId;
 
   ///

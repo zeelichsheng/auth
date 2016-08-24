@@ -13,25 +13,78 @@
 
 package com.ysheng.auth.model.implicit;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ysheng.auth.model.InternalException;
+
+import javax.ws.rs.core.Response;
+
 /**
  * Defines the data structure of access token error response for Implicit Grant.
  */
-public class AccessTokenErrorResponse {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class AccessTokenError extends InternalException {
 
   // REQUIRED. A single ASCII error code.
+  @JsonProperty
   private AccessTokenErrorType error;
 
   // OPTIONAL. Human-readable ASCII text providing additional
   // information.
+  @JsonProperty
   private String errorDescription;
 
   // OPTIONAL. A URI identifying a human-readable web page with
   // information about the error.
+  @JsonProperty
   private String errorUri;
 
   // REQUIRED if the "state" parameter was present in the client
   // authorization request.
+  @JsonProperty
   private String state;
+
+  /**
+   * Constructs an AccessTokenError object.
+   *
+   * @param error The error code.
+   * @param errorDescription The error message.
+   */
+  public AccessTokenError(
+      AccessTokenErrorType error,
+      String errorDescription) {
+    super(errorDescription);
+    this.error = error;
+    this.errorDescription = errorDescription;
+  }
+
+  @Override
+  public Response.Status getHttpStatusCode() {
+    switch (error) {
+      case INVALID_REQUEST:
+      case UNSUPPORTED_RESPONSE_TYPE:
+        return Response.Status.BAD_REQUEST;
+      case UNAUTHORIZED_CLIENT:
+      case INVALID_SCOPE:
+      case ACCESS_DENIED:
+        return Response.Status.UNAUTHORIZED;
+      case SERVER_ERROR:
+      case TEMPORARILY_UNAVAILABLE:
+        return Response.Status.INTERNAL_SERVER_ERROR;
+    }
+
+    return Response.Status.INTERNAL_SERVER_ERROR;
+  }
+
+  @Override
+  public String getInternalErrorCode() {
+    return error.toString();
+  }
+
+  @Override
+  public String getInternalErrorDescription() {
+    return errorDescription;
+  }
 
   ///
   /// Getters and Setters.

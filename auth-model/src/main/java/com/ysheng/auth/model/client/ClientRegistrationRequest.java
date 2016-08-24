@@ -13,17 +13,22 @@
 
 package com.ysheng.auth.model.client;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ysheng.auth.model.ClientType;
 
 /**
  * Defines the data structure of client registration request.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientRegistrationRequest {
 
   // Type of the client.
+  @JsonProperty
   private ClientType type;
 
   // Redirect URI of the client.
+  @JsonProperty
   private String redirectUri;
 
   ///

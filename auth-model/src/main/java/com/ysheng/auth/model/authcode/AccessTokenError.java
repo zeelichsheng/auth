@@ -13,6 +13,8 @@
 
 package com.ysheng.auth.model.authcode;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ysheng.auth.model.InternalException;
 
 import javax.ws.rs.core.Response;
@@ -20,17 +22,21 @@ import javax.ws.rs.core.Response;
 /**
  * Defines the data structure of access token error for Authorization Code Grant.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AccessTokenError extends InternalException {
 
   // REQUIRED. A single ASCII error code.
+  @JsonProperty
   private AccessTokenErrorType error;
 
   // OPTIONAL. Human-readable ASCII text providing additional
   // information.
+  @JsonProperty
   private String errorDescription;
 
   // OPTIONAL. A URI identifying a human-readable web page with
   // information about the error.
+  @JsonProperty
   private String errorUri;
 
   /**

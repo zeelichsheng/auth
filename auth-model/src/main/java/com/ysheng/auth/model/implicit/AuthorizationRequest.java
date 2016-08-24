@@ -13,32 +13,39 @@
 
 package com.ysheng.auth.model.implicit;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ysheng.auth.model.ResponseType;
 
 /**
  * Defines the data structure of authorization request for Implicit Grant.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthorizationRequest {
 
   // Valid response type.
   public static final ResponseType VALID_RESPONSE_TYPE = ResponseType.TOKEN;
 
   // REQUIRED. Value must be set to "token".
-
+  @JsonProperty
   private ResponseType responseType;
 
   // REQUIRED. The client identifier.
+  @JsonProperty
   private String clientId;
 
   // OPTIONAL. The URI the resource owner is redirected to after the request
   // is fulfilled.
+  @JsonProperty
   private String redirectUri;
 
   // OPTIONAL. The scope of the access request.
+  @JsonProperty
   private String scope;
 
   // RECOMMENDED. An opaque value used by the client to maintain state between
   // the request and callback.
+  @JsonProperty
   private String state;
 
   ///

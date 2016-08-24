@@ -13,15 +13,21 @@
 
 package com.ysheng.auth.model.client;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Defines the data structure of client unregistration request.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientUnregistrationRequest {
 
   // The client identifier.
+  @JsonProperty
   private String clientId;
 
   // The client secret.
+  @JsonProperty
   private String clientSecret;
 
   ///

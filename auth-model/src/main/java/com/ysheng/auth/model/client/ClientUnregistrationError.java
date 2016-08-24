@@ -13,6 +13,8 @@
 
 package com.ysheng.auth.model.client;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ysheng.auth.model.InternalException;
 
 import javax.ws.rs.core.Response;
@@ -20,12 +22,15 @@ import javax.ws.rs.core.Response;
 /**
  * Defines the data structure of client unregistration error response.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientUnregistrationError extends InternalException {
 
   // Client unregistration error code.
+  @JsonProperty
   private ClientUnregistrationErrorType error;
 
   // Human-readable ASCII text providing additional information.
+  @JsonProperty
   private String errorDescription;
 
   /**

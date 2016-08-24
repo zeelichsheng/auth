@@ -13,28 +13,36 @@
 
 package com.ysheng.auth.model.authcode;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ysheng.auth.model.AccessTokenType;
 
 /**
  * Defines the data structure of access token response for Authorization Code Grant.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AccessTokenResponse {
 
   // REQUIRED. The access token issued by the authorization server.
+  @JsonProperty
   private String accessToken;
 
   // REQUIRED. The type of the token.
+  @JsonProperty
   private AccessTokenType tokenType;
 
   // RECOMMENDED. The lifetime in seconds of the access token.
+  @JsonProperty
   private Long expiresIn;
 
   // OPTIONAL. The refresh token can be used to obtain new access tokens
   // using the same authorization grant.
+  @JsonProperty
   private String refreshToken;
 
   // OPTIONAL if identical to the scope requested by the client. Otherwise
   // REQUIRED.
+  @JsonProperty
   private String scope;
 
   ///

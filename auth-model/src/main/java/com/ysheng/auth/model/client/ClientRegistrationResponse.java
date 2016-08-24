@@ -13,15 +13,21 @@
 
 package com.ysheng.auth.model.client;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Defines the data structure of client registration response.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientRegistrationResponse {
 
   // The ID of the client.
+  @JsonProperty
   private String clientId;
 
   // The secret of the client.
+  @JsonProperty
   private String clientSecret;
 
   ///

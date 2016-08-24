@@ -12,28 +12,36 @@
  */
 package com.ysheng.auth.model.implicit;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ysheng.auth.model.AccessTokenType;
 
 /**
  * Defines the data structure of access token response for Implicit Grant.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AccessTokenResponse {
 
   // REQUIRED. The access token issued by the authorization server.
+  @JsonProperty
   private String accessToken;
 
   // REQUIRED. The type of the token.
+  @JsonProperty
   private AccessTokenType tokenType;
 
   // RECOMMENDED. The lifetime in seconds of the access token.
+  @JsonProperty
   private Long expiresIn;
 
   // OPTIONAL if identical to the scope requested by the client. Otherwise
   // REQUIRED.
+  @JsonProperty
   private String scope;
 
   // REQUIRED if the "state" parameter was present in the client
   // authorization request.
+  @JsonProperty
   private String state;
 
   ///
