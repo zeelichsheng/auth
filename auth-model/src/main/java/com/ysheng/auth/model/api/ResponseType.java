@@ -11,17 +11,12 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.authcode;
+package com.ysheng.auth.model.api;
 
 /**
- * Defines the error types used in the authorization error response.
+ * Defines the response types.
  */
-public enum AuthorizationErrorType {
-  INVALID_REQUEST,
-  UNAUTHORIZED_CLIENT,
-  ACCESS_DENIDED,
-  UNSUPPORTED_RESPONSE_TYPE,
-  INVALID_SCOPE,
-  SERVER_ERROR,
-  TEMPORARILY_UNAVAILABLE
+public enum ResponseType {
+  CODE,
+  TOKEN,
 }

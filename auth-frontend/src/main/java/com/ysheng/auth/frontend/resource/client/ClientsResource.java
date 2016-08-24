@@ -15,9 +15,9 @@ package com.ysheng.auth.frontend.resource.client;
 
 import com.ysheng.auth.core.ClientService;
 import com.ysheng.auth.frontend.resource.route.ClientRoute;
-import com.ysheng.auth.model.client.ClientRegistrationError;
-import com.ysheng.auth.model.client.ClientRegistrationRequest;
-import com.ysheng.auth.model.client.ClientRegistrationResponse;
+import com.ysheng.auth.model.api.client.ClientRegistrationError;
+import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
+import com.ysheng.auth.model.api.client.ClientRegistrationResponse;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;

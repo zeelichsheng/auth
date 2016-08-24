@@ -11,42 +11,43 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.client;
+package com.ysheng.auth.model.api.client;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ysheng.auth.model.api.ClientType;
 
 /**
- * Defines the data structure of client registration response.
+ * Defines the data structure of client registration request.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ClientRegistrationResponse {
+public class ClientRegistrationRequest {
 
-  // The ID of the client.
+  // Type of the client.
   @JsonProperty
-  private String clientId;
+  private ClientType type;
 
-  // The secret of the client.
+  // Redirect URI of the client.
   @JsonProperty
-  private String clientSecret;
+  private String redirectUri;
 
   ///
   /// Getters and Setters.
   ///
 
-  public String getClientId() {
-    return clientId;
+  public ClientType getType() {
+    return type;
   }
 
-  public void setClientId(String clientId) {
-    this.clientId = clientId;
+  public void setType(ClientType type) {
+    this.type = type;
   }
 
-  public String getClientSecret() {
-    return clientSecret;
+  public String getRedirectUri() {
+    return redirectUri;
   }
 
-  public void setClientSecret(String clientSecret) {
-    this.clientSecret = clientSecret;
+  public void setRedirectUri(String redirectUri) {
+    this.redirectUri = redirectUri;
   }
 }

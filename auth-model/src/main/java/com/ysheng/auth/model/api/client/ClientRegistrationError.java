@@ -11,47 +11,36 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.implicit;
+package com.ysheng.auth.model.api.client;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ysheng.auth.model.InternalException;
+import com.ysheng.auth.model.api.InternalException;
 
 import javax.ws.rs.core.Response;
 
 /**
- * Defines the data structure of access token error response for Implicit Grant.
+ * Defines the data structure of client registration error response.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AccessTokenError extends InternalException {
+public class ClientRegistrationError extends InternalException {
 
-  // REQUIRED. A single ASCII error code.
+  // Client registration error code.
   @JsonProperty
-  private AccessTokenErrorType error;
+  private ClientRegistrationErrorType error;
 
-  // OPTIONAL. Human-readable ASCII text providing additional
-  // information.
+  // Human-readable ASCII text providing additional information.
   @JsonProperty
   private String errorDescription;
 
-  // OPTIONAL. A URI identifying a human-readable web page with
-  // information about the error.
-  @JsonProperty
-  private String errorUri;
-
-  // REQUIRED if the "state" parameter was present in the client
-  // authorization request.
-  @JsonProperty
-  private String state;
-
   /**
-   * Constructs an AccessTokenError object.
+   * Constructs a ClientRegistrationError object.
    *
    * @param error The error code.
    * @param errorDescription The error message.
    */
-  public AccessTokenError(
-      AccessTokenErrorType error,
+  public ClientRegistrationError(
+      ClientRegistrationErrorType error,
       String errorDescription) {
     super(errorDescription);
     this.error = error;
@@ -62,15 +51,8 @@ public class AccessTokenError extends InternalException {
   public Response.Status getHttpStatusCode() {
     switch (error) {
       case INVALID_REQUEST:
-      case UNSUPPORTED_RESPONSE_TYPE:
+      case ALREADY_REGISTERED:
         return Response.Status.BAD_REQUEST;
-      case UNAUTHORIZED_CLIENT:
-      case INVALID_SCOPE:
-      case ACCESS_DENIED:
-        return Response.Status.UNAUTHORIZED;
-      case SERVER_ERROR:
-      case TEMPORARILY_UNAVAILABLE:
-        return Response.Status.INTERNAL_SERVER_ERROR;
     }
 
     return Response.Status.INTERNAL_SERVER_ERROR;
@@ -90,11 +72,11 @@ public class AccessTokenError extends InternalException {
   /// Getters and Setters.
   ///
 
-  public AccessTokenErrorType getError() {
+  public ClientRegistrationErrorType getError() {
     return error;
   }
 
-  public void setError(AccessTokenErrorType error) {
+  public void setError(ClientRegistrationErrorType error) {
     this.error = error;
   }
 
@@ -104,21 +86,5 @@ public class AccessTokenError extends InternalException {
 
   public void setErrorDescription(String errorDescription) {
     this.errorDescription = errorDescription;
-  }
-
-  public String getErrorUri() {
-    return errorUri;
-  }
-
-  public void setErrorUri(String errorUri) {
-    this.errorUri = errorUri;
-  }
-
-  public String getState() {
-    return state;
-  }
-
-  public void setState(String state) {
-    this.state = state;
   }
 }

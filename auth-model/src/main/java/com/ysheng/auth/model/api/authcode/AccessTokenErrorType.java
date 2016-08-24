@@ -11,13 +11,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.client;
+package com.ysheng.auth.model.api.authcode;
 
 /**
- * Defines the error types used in the client unregistration error response.
+ * Defines the error types used in the access token error response.
  */
-public enum ClientUnregistrationErrorType {
+public enum AccessTokenErrorType {
   INVALID_REQUEST,
-  CLIENT_NOT_FOUND,
-  UNAUTHOURIZED_CLIENT
+  INVALID_CLIENT,
+  INVALID_GRANT,
+  UNAUTHORIZED_CLIENT,
+  UNSUPPORTED_GRANT_TYPE,
+  INVALID_SCOPE
 }

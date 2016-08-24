@@ -11,13 +11,12 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.client;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+package com.ysheng.auth.model.api.client;
 
 /**
- * Defines the data structure of client unregistration response.
+ * Defines the error types used in the client registration error response.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class ClientUnregistrationResponse {
+public enum ClientRegistrationErrorType {
+  INVALID_REQUEST,
+  ALREADY_REGISTERED
 }

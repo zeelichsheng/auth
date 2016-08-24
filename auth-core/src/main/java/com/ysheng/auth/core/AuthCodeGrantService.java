@@ -13,12 +13,12 @@
 
 package com.ysheng.auth.core;
 
-import com.ysheng.auth.model.authcode.AccessTokenError;
-import com.ysheng.auth.model.authcode.AccessTokenRequest;
-import com.ysheng.auth.model.authcode.AccessTokenResponse;
-import com.ysheng.auth.model.authcode.AuthorizationError;
-import com.ysheng.auth.model.authcode.AuthorizationRequest;
-import com.ysheng.auth.model.authcode.AuthorizationResponse;
+import com.ysheng.auth.model.api.authcode.AccessTokenError;
+import com.ysheng.auth.model.api.authcode.AccessTokenRequest;
+import com.ysheng.auth.model.api.authcode.AccessTokenResponse;
+import com.ysheng.auth.model.api.authcode.AuthorizationError;
+import com.ysheng.auth.model.api.authcode.AuthorizationRequest;
+import com.ysheng.auth.model.api.authcode.AuthorizationResponse;
 
 /**
  * Defines the interface of authorization code grant related functions.

@@ -11,11 +11,17 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model;
+package com.ysheng.auth.model.api.implicit;
 
 /**
- * Defines the access token type.
+ * Defines the error types used in the access token error response.
  */
-public enum AccessTokenType {
-  BEARER
+public enum AccessTokenErrorType {
+  INVALID_REQUEST,
+  UNAUTHORIZED_CLIENT,
+  ACCESS_DENIED,
+  UNSUPPORTED_RESPONSE_TYPE,
+  INVALID_SCOPE,
+  SERVER_ERROR,
+  TEMPORARILY_UNAVAILABLE
 }

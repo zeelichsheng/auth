@@ -17,7 +17,7 @@ import com.ysheng.auth.backend.model.AuthorizationTicket;
 import com.ysheng.auth.backend.model.Client;
 import com.ysheng.auth.backend.redis.RedisClient;
 import com.ysheng.auth.backend.redis.RedisDatabase;
-import com.ysheng.auth.model.ClientType;
+import com.ysheng.auth.model.api.ClientType;
 import org.testng.annotations.Test;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;

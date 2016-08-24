@@ -15,7 +15,7 @@ package com.ysheng.auth.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ysheng.auth.model.ClientType;
+import com.ysheng.auth.model.api.ClientType;
 
 /**
  * Defines the data structure of auth client.

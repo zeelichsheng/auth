@@ -11,11 +11,11 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.authcode;
+package com.ysheng.auth.model.api.authcode;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ysheng.auth.model.GrantType;
+import com.ysheng.auth.model.api.GrantType;
 
 /**
  * Defines the data structure of access token request for Authorization Code Grant.

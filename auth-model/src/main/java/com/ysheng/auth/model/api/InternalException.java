@@ -11,16 +11,28 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.authcode;
+package com.ysheng.auth.model.api;
+
+import javax.ws.rs.core.Response;
 
 /**
- * Defines the error types used in the access token error response.
+ * Defines the data structure that represents an API exception.
  */
-public enum AccessTokenErrorType {
-  INVALID_REQUEST,
-  INVALID_CLIENT,
-  INVALID_GRANT,
-  UNAUTHORIZED_CLIENT,
-  UNSUPPORTED_GRANT_TYPE,
-  INVALID_SCOPE
+public abstract class InternalException extends Exception {
+
+  /**
+   * Constructs an InternalException object.
+   *
+   * @param errorDescription The error detail.
+   */
+  public InternalException(
+      String errorDescription) {
+    super(errorDescription);
+  }
+
+  public abstract Response.Status getHttpStatusCode();
+
+  public abstract String getInternalErrorCode();
+
+  public abstract String getInternalErrorDescription();
 }

@@ -11,28 +11,17 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model;
-
-import javax.ws.rs.core.Response;
+package com.ysheng.auth.model.api.authcode;
 
 /**
- * Defines the data structure that represents an API exception.
+ * Defines the error types used in the authorization error response.
  */
-public abstract class InternalException extends Exception {
-
-  /**
-   * Constructs an InternalException object.
-   *
-   * @param errorDescription The error detail.
-   */
-  public InternalException(
-      String errorDescription) {
-    super(errorDescription);
-  }
-
-  public abstract Response.Status getHttpStatusCode();
-
-  public abstract String getInternalErrorCode();
-
-  public abstract String getInternalErrorDescription();
+public enum AuthorizationErrorType {
+  INVALID_REQUEST,
+  UNAUTHORIZED_CLIENT,
+  ACCESS_DENIDED,
+  UNSUPPORTED_RESPONSE_TYPE,
+  INVALID_SCOPE,
+  SERVER_ERROR,
+  TEMPORARILY_UNAVAILABLE
 }

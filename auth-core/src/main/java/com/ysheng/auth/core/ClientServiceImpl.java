@@ -17,15 +17,15 @@ import com.ysheng.auth.backend.Database;
 import com.ysheng.auth.backend.model.Client;
 import com.ysheng.auth.common.utility.UriUtil;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
-import com.ysheng.auth.model.ClientType;
-import com.ysheng.auth.model.client.ClientRegistrationError;
-import com.ysheng.auth.model.client.ClientRegistrationErrorType;
-import com.ysheng.auth.model.client.ClientRegistrationRequest;
-import com.ysheng.auth.model.client.ClientRegistrationResponse;
-import com.ysheng.auth.model.client.ClientUnregistrationError;
-import com.ysheng.auth.model.client.ClientUnregistrationErrorType;
-import com.ysheng.auth.model.client.ClientUnregistrationRequest;
-import com.ysheng.auth.model.client.ClientUnregistrationResponse;
+import com.ysheng.auth.model.api.ClientType;
+import com.ysheng.auth.model.api.client.ClientRegistrationError;
+import com.ysheng.auth.model.api.client.ClientRegistrationErrorType;
+import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
+import com.ysheng.auth.model.api.client.ClientRegistrationResponse;
+import com.ysheng.auth.model.api.client.ClientUnregistrationError;
+import com.ysheng.auth.model.api.client.ClientUnregistrationErrorType;
+import com.ysheng.auth.model.api.client.ClientUnregistrationRequest;
+import com.ysheng.auth.model.api.client.ClientUnregistrationResponse;
 
 /**
  * Implements client related functions.

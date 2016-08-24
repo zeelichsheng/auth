@@ -13,8 +13,8 @@
 
 package com.ysheng.auth.frontend.mapper;
 
-import com.ysheng.auth.model.ExternalException;
-import com.ysheng.auth.model.InternalException;
+import com.ysheng.auth.model.api.ExternalException;
+import com.ysheng.auth.model.api.InternalException;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;

@@ -11,14 +11,11 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model;
+package com.ysheng.auth.model.api;
 
 /**
- * Defines the grant types.
+ * Defines the access token type.
  */
-public enum GrantType {
-  AUTHORIZATION_CODE,
-  IMPLICIT,
-  PASSWORD,
-  CLIENT_CREDENTIALS
+public enum AccessTokenType {
+  BEARER
 }

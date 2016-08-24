@@ -17,15 +17,15 @@ import com.ysheng.auth.backend.Database;
 import com.ysheng.auth.backend.model.AuthorizationTicket;
 import com.ysheng.auth.backend.model.Client;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
-import com.ysheng.auth.model.AccessTokenType;
-import com.ysheng.auth.model.authcode.AccessTokenError;
-import com.ysheng.auth.model.authcode.AccessTokenErrorType;
-import com.ysheng.auth.model.authcode.AccessTokenRequest;
-import com.ysheng.auth.model.authcode.AccessTokenResponse;
-import com.ysheng.auth.model.authcode.AuthorizationError;
-import com.ysheng.auth.model.authcode.AuthorizationErrorType;
-import com.ysheng.auth.model.authcode.AuthorizationRequest;
-import com.ysheng.auth.model.authcode.AuthorizationResponse;
+import com.ysheng.auth.model.api.AccessTokenType;
+import com.ysheng.auth.model.api.authcode.AccessTokenError;
+import com.ysheng.auth.model.api.authcode.AccessTokenErrorType;
+import com.ysheng.auth.model.api.authcode.AccessTokenRequest;
+import com.ysheng.auth.model.api.authcode.AccessTokenResponse;
+import com.ysheng.auth.model.api.authcode.AuthorizationError;
+import com.ysheng.auth.model.api.authcode.AuthorizationErrorType;
+import com.ysheng.auth.model.api.authcode.AuthorizationRequest;
+import com.ysheng.auth.model.api.authcode.AuthorizationResponse;
 
 /**
  * Implements authorization code grant related functions.

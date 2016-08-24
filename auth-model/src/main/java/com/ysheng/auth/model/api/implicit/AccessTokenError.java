@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 VMware, Inc. All Rights Reserved.
+ * Copyright 2016 Yu Sheng. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy of
@@ -11,16 +11,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.authcode;
+package com.ysheng.auth.model.api.implicit;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ysheng.auth.model.InternalException;
+import com.ysheng.auth.model.api.InternalException;
 
 import javax.ws.rs.core.Response;
 
 /**
- * Defines the data structure of access token error for Authorization Code Grant.
+ * Defines the data structure of access token error response for Implicit Grant.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccessTokenError extends InternalException {
@@ -38,6 +38,11 @@ public class AccessTokenError extends InternalException {
   // information about the error.
   @JsonProperty
   private String errorUri;
+
+  // REQUIRED if the "state" parameter was present in the client
+  // authorization request.
+  @JsonProperty
+  private String state;
 
   /**
    * Constructs an AccessTokenError object.
@@ -57,14 +62,15 @@ public class AccessTokenError extends InternalException {
   public Response.Status getHttpStatusCode() {
     switch (error) {
       case INVALID_REQUEST:
-      case INVALID_GRANT:
-      case UNSUPPORTED_GRANT_TYPE:
+      case UNSUPPORTED_RESPONSE_TYPE:
         return Response.Status.BAD_REQUEST;
-      case INVALID_CLIENT:
-        return Response.Status.NOT_FOUND;
       case UNAUTHORIZED_CLIENT:
       case INVALID_SCOPE:
+      case ACCESS_DENIED:
         return Response.Status.UNAUTHORIZED;
+      case SERVER_ERROR:
+      case TEMPORARILY_UNAVAILABLE:
+        return Response.Status.INTERNAL_SERVER_ERROR;
     }
 
     return Response.Status.INTERNAL_SERVER_ERROR;
@@ -106,5 +112,13 @@ public class AccessTokenError extends InternalException {
 
   public void setErrorUri(String errorUri) {
     this.errorUri = errorUri;
+  }
+
+  public String getState() {
+    return state;
+  }
+
+  public void setState(String state) {
+    this.state = state;
   }
 }
