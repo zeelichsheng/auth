@@ -17,27 +17,27 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>ysheng-auth-backend</artifactId>
+  <artifactId>auth-backend</artifactId>
   <packaging>jar</packaging>
 
   <parent>
     <groupId>com.ysheng.auth</groupId>
-    <artifactId>ysheng-auth-parent</artifactId>
+    <artifactId>auth-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <relativePath>../</relativePath>
   </parent>
 
-  <name>ysheng-auth-backend</name>
+  <name>auth-backend</name>
 
   <dependencies>
     <dependency>
       <groupId>com.ysheng.auth</groupId>
-      <artifactId>ysheng-auth-model</artifactId>
+      <artifactId>auth-model</artifactId>
       <version>${parent.version}</version>
     </dependency>
     <dependency>
       <groupId>com.ysheng.auth</groupId>
-      <artifactId>ysheng-auth-common</artifactId>
+      <artifactId>auth-common</artifactId>
       <version>${parent.version}</version>
     </dependency>
     <dependency>

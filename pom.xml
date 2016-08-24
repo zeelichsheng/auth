@@ -18,11 +18,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.ysheng.auth</groupId>
-  <artifactId>ysheng-auth-parent</artifactId>
+  <artifactId>auth-parent</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
   <packaging>pom</packaging>
-  <name>ysheng-auth-parent</name>
+  <name>auth-parent</name>
 
   <modules>
     <module>./auth-backend</module>
