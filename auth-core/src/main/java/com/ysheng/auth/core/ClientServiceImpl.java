@@ -22,6 +22,10 @@ import com.ysheng.auth.model.client.ClientRegistrationError;
 import com.ysheng.auth.model.client.ClientRegistrationErrorType;
 import com.ysheng.auth.model.client.ClientRegistrationRequest;
 import com.ysheng.auth.model.client.ClientRegistrationResponse;
+import com.ysheng.auth.model.client.ClientUnregistrationError;
+import com.ysheng.auth.model.client.ClientUnregistrationErrorType;
+import com.ysheng.auth.model.client.ClientUnregistrationRequest;
+import com.ysheng.auth.model.client.ClientUnregistrationResponse;
 
 /**
  * Implements client related functions.
@@ -85,6 +89,45 @@ public class ClientServiceImpl implements ClientService {
     ClientRegistrationResponse response = new ClientRegistrationResponse();
     response.setClientId(clientId);
     response.setClientSecret(clientSecret);
+
+    return response;
+  }
+
+  /**
+   * Unregisters a client with the authorization server.
+   *
+   * @param request The client unregistration request that contains required information.
+   * @return The client unregistration response.
+   * @throws ClientUnregistrationError The exception that contains error details.
+   */
+  public ClientUnregistrationResponse unregisterClient(ClientUnregistrationRequest request)
+      throws ClientUnregistrationError {
+    // Validate the request.
+    if (request.getClientId() == null) {
+      throw new ClientUnregistrationError(
+          ClientUnregistrationErrorType.INVALID_REQUEST,
+          "Client ID cannot be null");
+    }
+
+    Client client = database.findClientById(request.getClientId());
+    if (client == null) {
+      throw new ClientUnregistrationError(
+          ClientUnregistrationErrorType.CLIENT_NOT_FOUND,
+          "Unable to find client with ID: " + request.getClientId());
+    }
+
+    if (client.getSecret() != null &&
+        !client.getSecret().equals(request.getClientSecret())) {
+      throw new ClientUnregistrationError(
+          ClientUnregistrationErrorType.UNAUTHOURIZED_CLIENT,
+          "Unauthorized client unregistration with invalid client secret: " + request.getClientSecret());
+    }
+
+    // Remove client from database.
+    database.removeClient(request.getClientId());
+
+    // Build the response.
+    ClientUnregistrationResponse response = new ClientUnregistrationResponse();
 
     return response;
   }

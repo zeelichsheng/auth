@@ -22,11 +22,16 @@ import com.ysheng.auth.model.client.ClientRegistrationError;
 import com.ysheng.auth.model.client.ClientRegistrationErrorType;
 import com.ysheng.auth.model.client.ClientRegistrationRequest;
 import com.ysheng.auth.model.client.ClientRegistrationResponse;
+import com.ysheng.auth.model.client.ClientUnregistrationError;
+import com.ysheng.auth.model.client.ClientUnregistrationErrorType;
+import com.ysheng.auth.model.client.ClientUnregistrationRequest;
+import com.ysheng.auth.model.client.ClientUnregistrationResponse;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -59,7 +64,7 @@ public class ClientServiceImplTest {
         fail("Client registration should fail with null redirect URI");
       } catch (ClientRegistrationError ex) {
         assertThat(ex.getError(), is(ClientRegistrationErrorType.INVALID_REQUEST));
-        assertThat(ex.getMessage(), equalTo("Redirect URI cannot be null"));
+        assertThat(ex.getErrorDescription(), equalTo("Redirect URI cannot be null"));
       }
     }
 
@@ -76,7 +81,7 @@ public class ClientServiceImplTest {
         fail("Client registration should fail with invalid redirect URI");
       } catch (ClientRegistrationError ex) {
         assertThat(ex.getError(), is(ClientRegistrationErrorType.INVALID_REQUEST));
-        assertThat(ex.getMessage(), equalTo("Invalid redirect URI: invalidUri"));
+        assertThat(ex.getErrorDescription(), equalTo("Invalid redirect URI: invalidUri"));
       }
     }
 
@@ -98,6 +103,87 @@ public class ClientServiceImplTest {
       ClientRegistrationResponse response = service.registerClient(request);
       assertThat(response.getClientId(), equalTo("clientId"));
       assertThat(response.getClientSecret(), equalTo("clientSecret"));
+    }
+  }
+
+  /**
+   * Tests for {@link com.ysheng.auth.core.ClientServiceImpl#unregisterClient}.
+   */
+  public static class UnregisterClientTest {
+
+    @Test
+    public void failsWithNullClientId() {
+      ClientUnregistrationRequest request = new ClientUnregistrationRequest();
+      request.setClientId(null);
+
+      ClientServiceImpl service = new ClientServiceImpl(null, null);
+
+      try {
+        service.unregisterClient(request);
+        fail("Client unregistration should fail with null client ID");
+      } catch (ClientUnregistrationError ex) {
+        assertThat(ex.getError(), is(ClientUnregistrationErrorType.INVALID_REQUEST));
+        assertThat(ex.getErrorDescription(), equalTo("Client ID cannot be null"));
+      }
+    }
+
+    @Test
+    public void failsWithNonExistClient() {
+      Database database = mock(Database.class);
+      doReturn(null).when(database).findClientById(anyString());
+
+      ClientUnregistrationRequest request = new ClientUnregistrationRequest();
+      request.setClientId("clientId");
+
+      ClientServiceImpl service = new ClientServiceImpl(database, null);
+
+      try {
+        service.unregisterClient(request);
+        fail("Client unregistration should fail with non-exist client ID");
+      } catch (ClientUnregistrationError ex) {
+        assertThat(ex.getError(), is(ClientUnregistrationErrorType.CLIENT_NOT_FOUND));
+        assertThat(ex.getErrorDescription(), equalTo("Unable to find client with ID: clientId"));
+      }
+    }
+
+    @Test
+    public void failsWithUnauthorizedClient() {
+      Client client = new Client();
+      client.setSecret("clientSecret1");
+
+      Database database = mock(Database.class);
+      doReturn(client).when(database).findClientById(anyString());
+
+      ClientUnregistrationRequest request = new ClientUnregistrationRequest();
+      request.setClientId("clientId");
+      request.setClientSecret("clientSecret2");
+
+      ClientServiceImpl service = new ClientServiceImpl(database, null);
+
+      try {
+        service.unregisterClient(request);
+        fail("Client unregistration should fail with unauthorized client");
+      } catch (ClientUnregistrationError ex) {
+        assertThat(ex.getError(), is(ClientUnregistrationErrorType.UNAUTHOURIZED_CLIENT));
+        assertThat(ex.getErrorDescription(),
+            equalTo("Unauthorized client unregistration with invalid client secret: clientSecret2"));
+      }
+    }
+
+    @Test
+    public void succeedsToUnregister() throws Throwable {
+      Client client = new Client();
+      client.setSecret("clientSecret");
+
+      Database database = mock(Database.class);
+      doReturn(client).when(database).findClientById(anyString());
+
+      ClientUnregistrationRequest request = new ClientUnregistrationRequest();
+      request.setClientId("clientId");
+      request.setClientSecret("clientSecret");
+
+      ClientServiceImpl service = new ClientServiceImpl(database, null);
+      ClientUnregistrationResponse response = service.unregisterClient(request);
     }
   }
 }

@@ -21,8 +21,8 @@ public class ClientUnregistrationRequest {
   // The client identifier.
   private String clientId;
 
-  // Redirect URI of the client.
-  private String redirectUri;
+  // The client secret.
+  private String clientSecret;
 
   ///
   /// Getters and Setters.
@@ -36,11 +36,11 @@ public class ClientUnregistrationRequest {
     this.clientId = clientId;
   }
 
-  public String getRedirectUri() {
-    return redirectUri;
+  public String getClientSecret() {
+    return clientSecret;
   }
 
-  public void setRedirectUri(String redirectUri) {
-    this.redirectUri = redirectUri;
+  public void setClientSecret(String clientSecret) {
+    this.clientSecret = clientSecret;
   }
 }
