@@ -15,11 +15,14 @@ package com.ysheng.auth.frontend.resource.client;
 
 import com.ysheng.auth.core.ClientService;
 import com.ysheng.auth.frontend.resource.route.ClientRoute;
+import com.ysheng.auth.model.api.ApiList;
+import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
 import com.ysheng.auth.model.api.client.ClientRegistrationResponse;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -50,5 +53,9 @@ public class ClientsResource {
       ClientRegistrationRequest request) throws ClientRegistrationError {
     return clientService.register(request);
   }
+
+  @GET
+  public ApiList<Client> list() {
+    return clientService.list();
   }
 }
