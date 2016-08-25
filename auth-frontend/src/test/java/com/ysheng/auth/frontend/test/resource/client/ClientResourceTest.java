@@ -23,7 +23,6 @@ import com.ysheng.auth.model.api.client.ClientNotFoundError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientUnregistrationRequest;
-import com.ysheng.auth.model.api.client.ClientUnregistrationResponse;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -31,6 +30,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -104,14 +104,12 @@ public class ClientResourceTest {
   public void succeedsToUnregister() throws Throwable {
     ClientUnregistrationRequest request = new ClientUnregistrationRequest();
     request.setClientSecret("clientSecret");
-    ClientUnregistrationResponse response = new ClientUnregistrationResponse();
 
-    doReturn(response).when(clientService).unregister(anyString(), any(ClientUnregistrationRequest.class));
+    doNothing().when(clientService).unregister(anyString(), any(ClientUnregistrationRequest.class));
 
-    ClientUnregistrationResponse actualResponse = testHelper.post(
+    testHelper.post(
         clientUnregistrationRoute,
-        request,
-        ClientUnregistrationResponse.class);
+        request);
   }
 
   @Test

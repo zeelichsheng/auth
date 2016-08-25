@@ -113,6 +113,15 @@ public class ResourceTestHelper {
         .readEntity(responseType);
   }
 
+  public <R> void post(
+      String path,
+      R request) {
+    getClient()
+        .target(path)
+        .request()
+        .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE));
+  }
+
   public <T> T get(
       String path,
       Class<T> responseType) {

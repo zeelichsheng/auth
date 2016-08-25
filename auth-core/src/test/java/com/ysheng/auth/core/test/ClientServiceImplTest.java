@@ -23,11 +23,9 @@ import com.ysheng.auth.model.api.client.ClientNotFoundError;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
-import com.ysheng.auth.model.api.client.ClientRegistrationResponse;
 import com.ysheng.auth.model.api.client.ClientUnregistrationError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientUnregistrationRequest;
-import com.ysheng.auth.model.api.client.ClientUnregistrationResponse;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -105,9 +103,9 @@ public class ClientServiceImplTest {
 
       ClientServiceImpl service = new ClientServiceImpl(database, authValueGenerator);
 
-      ClientRegistrationResponse response = service.register(request);
-      assertThat(response.getClientId(), equalTo("clientId"));
-      assertThat(response.getClientSecret(), equalTo("clientSecret"));
+      Client response = service.register(request);
+      assertThat(response.getId(), equalTo("clientId"));
+      assertThat(response.getSecret(), equalTo("clientSecret"));
     }
   }
 
@@ -184,7 +182,7 @@ public class ClientServiceImplTest {
       request.setClientSecret("clientSecret");
 
       ClientServiceImpl service = new ClientServiceImpl(database, null);
-      ClientUnregistrationResponse response = service.unregister("clientId", request);
+      service.unregister("clientId", request);
     }
   }
 

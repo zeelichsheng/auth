@@ -24,7 +24,6 @@ import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
-import com.ysheng.auth.model.api.client.ClientRegistrationResponse;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -68,17 +67,17 @@ public class ClientsResourceTest {
   public void succeedsToRegister() throws Throwable {
     ClientRegistrationRequest request = new ClientRegistrationRequest();
     request.setType(ClientType.CONFIDENTIAL);
-    ClientRegistrationResponse response = new ClientRegistrationResponse();
-    response.setClientId("clientId");
+    Client response = new Client();
+    response.setId("clientId");
 
     doReturn(response).when(clientService).register(any(ClientRegistrationRequest.class));
 
-    ClientRegistrationResponse actualResponse = testHelper.post(
+    Client actualResponse = testHelper.post(
         ClientRoute.API,
         request,
-        ClientRegistrationResponse.class);
+        Client.class);
 
-    assertThat(actualResponse.getClientId(), equalTo(response.getClientId()));
+    assertThat(actualResponse.getId(), equalTo(response.getId()));
   }
 
   @Test

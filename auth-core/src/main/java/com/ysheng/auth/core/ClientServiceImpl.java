@@ -23,11 +23,9 @@ import com.ysheng.auth.model.api.client.ClientNotFoundError;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
-import com.ysheng.auth.model.api.client.ClientRegistrationResponse;
 import com.ysheng.auth.model.api.client.ClientUnregistrationError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientUnregistrationRequest;
-import com.ysheng.auth.model.api.client.ClientUnregistrationResponse;
 
 import java.util.List;
 
@@ -59,10 +57,10 @@ public class ClientServiceImpl implements ClientService {
    * Registers a client with the authentication server.
    *
    * @param request The client registration request that contains required information.
-   * @return The client registration response that contains the client identifier and secret.
+   * @return The client object.
    * @throws ClientRegistrationError The exception that contains error details.
    */
-  public ClientRegistrationResponse register(ClientRegistrationRequest request)
+  public Client register(ClientRegistrationRequest request)
       throws ClientRegistrationError {
     // Validate the request.
     if (request.getRedirectUri() == null) {
@@ -89,12 +87,7 @@ public class ClientServiceImpl implements ClientService {
     client.setRedirectUri(request.getRedirectUri());
     database.storeClient(client);
 
-    // Build the response.
-    ClientRegistrationResponse response = new ClientRegistrationResponse();
-    response.setClientId(clientId);
-    response.setClientSecret(clientSecret);
-
-    return response;
+    return client;
   }
 
   /**
@@ -102,10 +95,9 @@ public class ClientServiceImpl implements ClientService {
    *
    * @param clientId The client identifier.
    * @param request The client unregistration request that contains required information.
-   * @return The client unregistration response.
    * @throws ClientUnregistrationError The exception that contains error details.
    */
-  public ClientUnregistrationResponse unregister(
+  public void unregister(
       String clientId,
       ClientUnregistrationRequest request)
       throws ClientUnregistrationError {
@@ -132,11 +124,6 @@ public class ClientServiceImpl implements ClientService {
 
     // Remove client from database.
     database.removeClient(clientId);
-
-    // Build the response.
-    ClientUnregistrationResponse response = new ClientUnregistrationResponse();
-
-    return response;
   }
 
   /**
