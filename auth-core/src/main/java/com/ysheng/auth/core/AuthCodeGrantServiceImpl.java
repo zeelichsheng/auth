@@ -16,15 +16,19 @@ package com.ysheng.auth.core;
 import com.ysheng.auth.backend.Database;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.api.AccessTokenType;
+import com.ysheng.auth.model.api.ApiList;
+import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AccessTokenError;
 import com.ysheng.auth.model.api.authcode.AccessTokenErrorType;
 import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
-import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AuthorizationError;
 import com.ysheng.auth.model.api.authcode.AuthorizationErrorType;
 import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
+import com.ysheng.auth.model.api.client.ClientNotFoundError;
+
+import java.util.Optional;
 
 /**
  * Implements authorization code grant related functions.
@@ -84,6 +88,27 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
     database.storeAuthorizationTicket(authorizationTicket);
 
     return authorizationTicket;
+  }
+
+  /**
+   * Gets a list of authorization tickets. If client identifier is given, then return
+   * all authorization tickets granted to that particular client.
+   *
+   * @param clientId The client identifier for which the authorization ticket was granted to.
+   * @return A list of authorization tickets.
+   * @throws ClientNotFoundError The error that contains detail information.
+   */
+  public ApiList<AuthorizationTicket> listAuthorizationTicket(Optional<String> clientId) throws ClientNotFoundError {
+    String clientIdStr = null;
+    if (clientId.isPresent()) {
+      clientIdStr = clientId.get();
+      Client client = database.findClientById(clientIdStr);
+      if (client == null) {
+        throw new ClientNotFoundError(clientIdStr);
+      }
+    }
+
+    return new ApiList<>(database.listAuthorizationTickets(clientIdStr));
   }
 
   /**
