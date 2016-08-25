@@ -14,11 +14,11 @@
 package com.ysheng.auth.core;
 
 import com.ysheng.auth.model.api.authcode.AccessTokenError;
-import com.ysheng.auth.model.api.authcode.AccessTokenRequest;
-import com.ysheng.auth.model.api.authcode.AccessTokenResponse;
+import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
+import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AuthorizationError;
-import com.ysheng.auth.model.api.authcode.AuthorizationRequest;
-import com.ysheng.auth.model.api.authcode.AuthorizationResponse;
+import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 
 /**
  * Defines the interface of authorization code grant related functions.
@@ -29,10 +29,10 @@ public interface AuthCodeGrantService {
    * Authorizes an authorization request of Authorization Code Grant type.
    *
    * @param request The authorization request that contains required information.
-   * @return The authorization response that contains the authorization code.
+   * @return The authorization ticket object.
    * @throws AuthorizationError The exception that contains error details.
    */
-  AuthorizationResponse authorize(AuthorizationRequest request) throws AuthorizationError;
+  AuthorizationTicket authorize(AuthorizationSpec request) throws AuthorizationError;
 
   /**
    * Issues an access token for a client with an auth code received from authorization of
@@ -42,5 +42,5 @@ public interface AuthCodeGrantService {
    * @return The access token response that contains the access token.
    * @throws AccessTokenError The exception that contains error details.
    */
-  AccessTokenResponse issueAccessToken(AccessTokenRequest request) throws AccessTokenError;
+  AccessToken issueAccessToken(AccessTokenSpec request) throws AccessTokenError;
 }

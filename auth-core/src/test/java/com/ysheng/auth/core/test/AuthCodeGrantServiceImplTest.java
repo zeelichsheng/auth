@@ -14,8 +14,6 @@
 package com.ysheng.auth.core.test;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
-import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.core.AuthCodeGrantServiceImpl;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.api.AccessTokenType;
@@ -23,12 +21,13 @@ import com.ysheng.auth.model.api.GrantType;
 import com.ysheng.auth.model.api.ResponseType;
 import com.ysheng.auth.model.api.authcode.AccessTokenError;
 import com.ysheng.auth.model.api.authcode.AccessTokenErrorType;
-import com.ysheng.auth.model.api.authcode.AccessTokenRequest;
-import com.ysheng.auth.model.api.authcode.AccessTokenResponse;
+import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
+import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AuthorizationError;
 import com.ysheng.auth.model.api.authcode.AuthorizationErrorType;
-import com.ysheng.auth.model.api.authcode.AuthorizationRequest;
-import com.ysheng.auth.model.api.authcode.AuthorizationResponse;
+import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
+import com.ysheng.auth.model.api.client.Client;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -54,7 +53,7 @@ public class AuthCodeGrantServiceImplTest {
 
     @Test
     public void failsWithUnsupportedResponseType() {
-      AuthorizationRequest request = new AuthorizationRequest();
+      AuthorizationSpec request = new AuthorizationSpec();
       request.setResponseType(ResponseType.TOKEN);
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(null, null);
@@ -73,7 +72,7 @@ public class AuthCodeGrantServiceImplTest {
       Database database = mock(Database.class);
       doReturn(null).when(database).findClientById(anyString());
 
-      AuthorizationRequest request = new AuthorizationRequest();
+      AuthorizationSpec request = new AuthorizationSpec();
       request.setResponseType(ResponseType.CODE);
       request.setClientId("clientId");
 
@@ -96,16 +95,14 @@ public class AuthCodeGrantServiceImplTest {
       AuthValueGenerator authValueGenerator = mock(AuthValueGenerator.class);
       doReturn("authCode").when(authValueGenerator).generateAuthCode();
 
-      AuthorizationRequest request = new AuthorizationRequest();
+      AuthorizationSpec request = new AuthorizationSpec();
       request.setResponseType(ResponseType.CODE);
       request.setClientId("clientId");
-      request.setState("state");
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, authValueGenerator);
 
-      AuthorizationResponse response = service.authorize(request);
+      AuthorizationTicket response = service.authorize(request);
       assertThat(response.getCode(), equalTo("authCode"));
-      assertThat(response.getState(), equalTo("state"));
     }
   }
 
@@ -116,7 +113,7 @@ public class AuthCodeGrantServiceImplTest {
 
     @Test
     public void failsWithUnsupportedGrantType() {
-      AccessTokenRequest request = new AccessTokenRequest();
+      AccessTokenSpec request = new AccessTokenSpec();
       request.setGrantType(GrantType.IMPLICIT);
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(null, null);
@@ -135,7 +132,7 @@ public class AuthCodeGrantServiceImplTest {
       Database database = mock(Database.class);
       doReturn(null).when(database).findClientById(anyString());
 
-      AccessTokenRequest request = new AccessTokenRequest();
+      AccessTokenSpec request = new AccessTokenSpec();
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
       request.setClientId("clientId");
 
@@ -156,7 +153,7 @@ public class AuthCodeGrantServiceImplTest {
       doReturn(new Client()).when(database).findClientById(anyString());
       doReturn(null).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
 
-      AccessTokenRequest request = new AccessTokenRequest();
+      AccessTokenSpec request = new AccessTokenSpec();
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
       request.setClientId("clientId");
       request.setCode("code");
@@ -180,7 +177,7 @@ public class AuthCodeGrantServiceImplTest {
       doReturn(new Client()).when(database).findClientById(anyString());
       doReturn(authorizationTicket).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
 
-      AccessTokenRequest request = new AccessTokenRequest();
+      AccessTokenSpec request = new AccessTokenSpec();
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
       request.setClientId("clientId");
       request.setCode("code");
@@ -208,7 +205,7 @@ public class AuthCodeGrantServiceImplTest {
       doReturn(client).when(database).findClientById(anyString());
       doReturn(authorizationTicket).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
 
-      AccessTokenRequest request = new AccessTokenRequest();
+      AccessTokenSpec request = new AccessTokenSpec();
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
       request.setClientId("clientId2");
       request.setCode("code");
@@ -239,7 +236,7 @@ public class AuthCodeGrantServiceImplTest {
       AuthValueGenerator authValueGenerator = mock(AuthValueGenerator.class);
       doReturn("accessToken").when(authValueGenerator).generateAccessToken();
 
-      AccessTokenRequest request = new AccessTokenRequest();
+      AccessTokenSpec request = new AccessTokenSpec();
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
       request.setClientId("clientId");
       request.setCode("code");
@@ -247,7 +244,7 @@ public class AuthCodeGrantServiceImplTest {
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, authValueGenerator);
 
-      AccessTokenResponse response = service.issueAccessToken(request);
+      AccessToken response = service.issueAccessToken(request);
       assertThat(response.getAccessToken(), equalTo("accessToken"));
       assertThat(response.getTokenType(), is(AccessTokenType.BEARER));
       assertThat(response.getExpiresIn(), equalTo((long) Integer.MAX_VALUE));

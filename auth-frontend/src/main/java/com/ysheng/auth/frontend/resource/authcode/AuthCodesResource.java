@@ -16,8 +16,8 @@ package com.ysheng.auth.frontend.resource.authcode;
 import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.model.api.authcode.AuthorizationError;
-import com.ysheng.auth.model.api.authcode.AuthorizationRequest;
-import com.ysheng.auth.model.api.authcode.AuthorizationResponse;
+import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -46,8 +46,8 @@ public class AuthCodesResource {
   }
 
   @POST
-  public AuthorizationResponse authorize(
-      AuthorizationRequest request) throws AuthorizationError {
+  public AuthorizationTicket authorize(
+      AuthorizationSpec request) throws AuthorizationError {
     return authCodeGrantService.authorize(request);
   }
 }

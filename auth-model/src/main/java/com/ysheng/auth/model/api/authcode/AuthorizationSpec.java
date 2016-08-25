@@ -21,7 +21,7 @@ import com.ysheng.auth.model.api.ResponseType;
  * Defines the data structure of authorization request for Authorization Code Grant.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AuthorizationRequest {
+public class AuthorizationSpec {
 
   // Valid response type.
   public static final ResponseType VALID_RESPONSE_TYPE = ResponseType.CODE;

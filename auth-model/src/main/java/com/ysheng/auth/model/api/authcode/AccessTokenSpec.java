@@ -21,7 +21,7 @@ import com.ysheng.auth.model.api.GrantType;
  * Defines the data structure of access token request for Authorization Code Grant.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AccessTokenRequest {
+public class AccessTokenSpec {
 
   // Valid grant type.
   public static final GrantType VALID_GRANT_TYPE = GrantType.AUTHORIZATION_CODE;

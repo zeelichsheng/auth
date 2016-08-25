@@ -18,10 +18,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ysheng.auth.model.api.AccessTokenType;
 
 /**
- * Defines the data structure of access token response for Authorization Code Grant.
+ * Defines the data structure of access token.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AccessTokenResponse {
+public class AccessToken {
 
   // REQUIRED. The access token issued by the authorization server.
   @JsonProperty

@@ -14,18 +14,17 @@
 package com.ysheng.auth.core;
 
 import com.ysheng.auth.backend.Database;
-import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
-import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.api.AccessTokenType;
 import com.ysheng.auth.model.api.authcode.AccessTokenError;
 import com.ysheng.auth.model.api.authcode.AccessTokenErrorType;
-import com.ysheng.auth.model.api.authcode.AccessTokenRequest;
-import com.ysheng.auth.model.api.authcode.AccessTokenResponse;
+import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
+import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AuthorizationError;
 import com.ysheng.auth.model.api.authcode.AuthorizationErrorType;
-import com.ysheng.auth.model.api.authcode.AuthorizationRequest;
-import com.ysheng.auth.model.api.authcode.AuthorizationResponse;
+import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
+import com.ysheng.auth.model.api.client.Client;
 
 /**
  * Implements authorization code grant related functions.
@@ -55,12 +54,12 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
    * Authorizes an authorization request of Authorization Code Grant type.
    *
    * @param request The authorization request that contains required information.
-   * @return The authorization response that contains the authorization code.
+   * @return The authorization ticket object.
    * @throws AuthorizationError The exception contains error details.
    */
-  public AuthorizationResponse authorize(AuthorizationRequest request) throws AuthorizationError {
+  public AuthorizationTicket authorize(AuthorizationSpec request) throws AuthorizationError {
     // Validate the request.
-    if (!AuthorizationRequest.VALID_RESPONSE_TYPE.equals(request.getResponseType())) {
+    if (!AuthorizationSpec.VALID_RESPONSE_TYPE.equals(request.getResponseType())) {
       throw new AuthorizationError(
           AuthorizationErrorType.UNSUPPORTED_RESPONSE_TYPE,
           "Unsupported response type in request: " + request.getResponseType().toString());
@@ -84,14 +83,7 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
     authorizationTicket.setState(request.getState());
     database.storeAuthorizationTicket(authorizationTicket);
 
-    // Build the response.
-    AuthorizationResponse response = new AuthorizationResponse();
-    response.setCode(authCode);
-    if (request.getState() != null) {
-      response.setState(request.getState());
-    }
-
-    return response;
+    return authorizationTicket;
   }
 
   /**
@@ -102,9 +94,9 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
    * @return The access token response that contains the access token.
    * @throws AccessTokenError The exception contains error details.
    */
-  public AccessTokenResponse issueAccessToken(AccessTokenRequest request) throws AccessTokenError {
+  public AccessToken issueAccessToken(AccessTokenSpec request) throws AccessTokenError {
     // Validate the request.
-    if (!AccessTokenRequest.VALID_GRANT_TYPE.equals(request.getGrantType())) {
+    if (!AccessTokenSpec.VALID_GRANT_TYPE.equals(request.getGrantType())) {
       throw new AccessTokenError(
           AccessTokenErrorType.UNSUPPORTED_GRANT_TYPE,
           "Unsupported grant type in request: " + request.getGrantType().toString());
@@ -140,7 +132,7 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
     }
 
     // Build the response.
-    AccessTokenResponse response = new AccessTokenResponse();
+    AccessToken response = new AccessToken();
     response.setAccessToken(authValueGenerator.generateAccessToken());
     response.setTokenType(AccessTokenType.BEARER);
     // TODO: change how we calculate the token expiration.

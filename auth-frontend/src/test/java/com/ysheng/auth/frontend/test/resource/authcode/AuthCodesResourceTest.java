@@ -20,8 +20,8 @@ import com.ysheng.auth.frontend.test.resource.ResourceTestHelper;
 import com.ysheng.auth.model.api.ExternalException;
 import com.ysheng.auth.model.api.authcode.AuthorizationError;
 import com.ysheng.auth.model.api.authcode.AuthorizationErrorType;
-import com.ysheng.auth.model.api.authcode.AuthorizationRequest;
-import com.ysheng.auth.model.api.authcode.AuthorizationResponse;
+import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -59,30 +59,30 @@ public class AuthCodesResourceTest {
 
   @Test
   public void succeedsToAuthorize() throws Throwable {
-    AuthorizationRequest request = new AuthorizationRequest();
+    AuthorizationSpec request = new AuthorizationSpec();
     request.setClientId("clientId");
-    AuthorizationResponse response = new AuthorizationResponse();
+    AuthorizationTicket response = new AuthorizationTicket();
     response.setCode("code");
 
-    doReturn(response).when(authCodeGrantService).authorize(any(AuthorizationRequest.class));
+    doReturn(response).when(authCodeGrantService).authorize(any(AuthorizationSpec.class));
 
-    AuthorizationResponse actualResponse = testHelper.post(
+    AuthorizationTicket actualResponse = testHelper.post(
         AuthCodeRoute.API,
         request,
-        AuthorizationResponse.class);
+        AuthorizationTicket.class);
 
     assertThat(actualResponse.getCode(), equalTo("code"));
   }
 
   @Test
   public void failsToAuthorize() throws Throwable {
-    AuthorizationRequest request = new AuthorizationRequest();
+    AuthorizationSpec request = new AuthorizationSpec();
     request.setClientId("clientId");
     AuthorizationError error = new AuthorizationError(
         AuthorizationErrorType.INVALID_REQUEST,
         "Invalid request");
 
-    doThrow(error).when(authCodeGrantService).authorize(any(AuthorizationRequest.class));
+    doThrow(error).when(authCodeGrantService).authorize(any(AuthorizationSpec.class));
 
     ExternalException actualError = testHelper.post(
         AuthCodeRoute.API,
