@@ -18,6 +18,7 @@ import com.ysheng.auth.backend.redis.RedisDatabase;
 import com.ysheng.auth.model.api.ClientType;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -119,6 +120,36 @@ public class RedisDatabaseTest {
     database.storeAuthorizationTicket(authorizationTicket);
 
     verify(redisClient).set(anyString(), anyString());
+  }
+
+  @Test(dataProvider = "ClientIdForListAuthorizationTicket")
+  public void succeedsToListAuthorizationTicket(String clientId) {
+    RedisClient redisClient = mock(RedisClient.class);
+    Set<String> keys = new HashSet<>();
+    keys.add("key1");
+    keys.add("key2");
+    String hash1 = "{\"code\":\"code1\",\"clientId\":\"clientId1\",\"redirectUri\":\"http://1.2.3.4\"," +
+        "\"scope\":\"scope\",\"state\":\"state\"}";
+    String hash2 = "{\"code\":\"code2\",\"clientId\":\"clientId2\",\"redirectUri\":\"http://1.2.3.4\"," +
+        "\"scope\":\"scope\",\"state\":\"state\"}";
+    List<String> hashes = Arrays.asList(hash1, hash2);
+
+    doReturn(keys).when(redisClient).keys(anyString());
+    doReturn(hashes).when(redisClient).mget(anySet());
+
+    RedisDatabase database = new RedisDatabase(redisClient);
+    database.listAuthorizationTickets(clientId);
+
+    verify(redisClient).keys(anyString());
+    verify(redisClient).mget(anySet());
+  }
+
+  @DataProvider(name = "ClientIdForListAuthorizationTicket")
+  public Object[][] provideClientIdForListAuthorizationTicket() {
+    return new Object[][] {
+        { null },
+        { "clientId1" }
+    };
   }
 
   @Test

@@ -96,6 +96,21 @@ public class RedisDatabase implements Database {
   }
 
   /**
+   * Gets a list of authorization tickets. If client identifier is present,
+   * then return authorization tickets belong to that client.
+   *
+   * @param clientId The client identifier.
+   * @return A list of authorization tickets.
+   */
+  public List<AuthorizationTicket> listAuthorizationTickets(String clientId) {
+    return redisClient
+        .mget(redisClient.keys(AuthorizationTicketAdapter.getKey(clientId, null)))
+        .stream()
+        .map(AuthorizationTicketAdapter::fromHash)
+        .collect(Collectors.toList());
+  }
+
+  /**
    * removes an authorization ticket object from databsae.
    *
    * @param clientId  The client identifier.

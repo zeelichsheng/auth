@@ -60,6 +60,15 @@ public interface Database {
   void storeAuthorizationTicket(AuthorizationTicket authorizationTicket);
 
   /**
+   * Gets a list of authorization tickets. If client identifier is present,
+   * then return authorization tickets belong to that client.
+   *
+   * @param clientId The client identifier.
+   * @return A list of authorization tickets.
+   */
+  List<AuthorizationTicket> listAuthorizationTickets(String clientId);
+
+  /**
    * removes an authorization ticket object from databsae.
    *
    * @param clientId  The client identifier.
