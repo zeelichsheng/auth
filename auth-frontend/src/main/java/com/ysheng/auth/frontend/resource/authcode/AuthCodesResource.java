@@ -15,15 +15,21 @@ package com.ysheng.auth.frontend.resource.authcode;
 
 import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
+import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.authcode.AuthorizationError;
 import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
+import com.ysheng.auth.model.api.client.ClientNotFoundError;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+
+import java.util.Optional;
 
 /**
  * Defines the RESTful endpoints related to auth code grant operations.
@@ -49,5 +55,11 @@ public class AuthCodesResource {
   public AuthorizationTicket authorize(
       AuthorizationSpec request) throws AuthorizationError {
     return authCodeGrantService.authorize(request);
+  }
+
+  @GET
+  public ApiList<AuthorizationTicket> list(
+      @QueryParam("clientId")Optional<String> clientId) throws ClientNotFoundError {
+    return authCodeGrantService.listAuthorizationTicket(clientId);
   }
 }

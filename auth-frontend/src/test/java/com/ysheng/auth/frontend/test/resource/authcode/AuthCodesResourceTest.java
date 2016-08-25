@@ -17,20 +17,28 @@ import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.frontend.resource.authcode.AuthCodesResource;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.frontend.test.resource.ResourceTestHelper;
+import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.ExternalException;
 import com.ysheng.auth.model.api.authcode.AuthorizationError;
 import com.ysheng.auth.model.api.authcode.AuthorizationErrorType;
 import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
+import com.ysheng.auth.model.api.client.ClientNotFoundError;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+
+import javax.ws.rs.core.GenericType;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * Tests for {@link com.ysheng.auth.frontend.resource.authcode.AuthCodesResource}.
@@ -87,6 +95,46 @@ public class AuthCodesResourceTest {
     ExternalException actualError = testHelper.post(
         AuthCodeRoute.API,
         request,
+        ExternalException.class);
+
+    assertThat(actualError.getErrorCode(), equalTo(error.getInternalErrorCode()));
+    assertThat(actualError.getErrorDescription(), equalTo(error.getInternalErrorDescription()));
+  }
+
+  @Test
+  public void succeedsToListWithClientId() throws Throwable {
+    ApiList<AuthorizationTicket> response = new ApiList<>(Arrays.asList(new AuthorizationTicket()));
+
+    doReturn(response).when(authCodeGrantService).listAuthorizationTicket(any(Optional.class));
+
+    ApiList<AuthorizationTicket> actualResponse = testHelper.get(
+        AuthCodeRoute.API + "?clientId=foo",
+        new GenericType<ApiList<AuthorizationTicket>>() {});
+
+    assertThat(actualResponse.getItems().size(), is(1));
+  }
+
+  @Test
+  public void succeedsToListWithoutClientId() throws Throwable {
+    ApiList<AuthorizationTicket> response = new ApiList<>(Arrays.asList(new AuthorizationTicket()));
+
+    doReturn(response).when(authCodeGrantService).listAuthorizationTicket(any(Optional.class));
+
+    ApiList<AuthorizationTicket> actualResponse = testHelper.get(
+        AuthCodeRoute.API,
+        new GenericType<ApiList<AuthorizationTicket>>() {});
+
+    assertThat(actualResponse.getItems().size(), is(1));
+  }
+
+  @Test
+  public void failsToList() throws Throwable {
+    ClientNotFoundError error = new ClientNotFoundError("clientId");
+
+    doThrow(error).when(authCodeGrantService).listAuthorizationTicket(any(Optional.class));
+
+    ExternalException actualError = testHelper.get(
+        AuthCodeRoute.API + "?clientId=foo",
         ExternalException.class);
 
     assertThat(actualError.getErrorCode(), equalTo(error.getInternalErrorCode()));
