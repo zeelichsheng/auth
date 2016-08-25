@@ -18,7 +18,7 @@ import com.ysheng.auth.frontend.resource.route.ClientRoute;
 import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
-import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
+import com.ysheng.auth.model.api.client.ClientRegistrationSpec;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -49,7 +49,7 @@ public class ClientsResource {
 
   @POST
   public Client register(
-      ClientRegistrationRequest request) throws ClientRegistrationError {
+      ClientRegistrationSpec request) throws ClientRegistrationError {
     return clientService.register(request);
   }
 

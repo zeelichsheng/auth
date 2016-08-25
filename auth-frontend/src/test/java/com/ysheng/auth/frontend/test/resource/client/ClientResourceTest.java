@@ -22,7 +22,7 @@ import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientNotFoundError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationErrorType;
-import com.ysheng.auth.model.api.client.ClientUnregistrationRequest;
+import com.ysheng.auth.model.api.client.ClientUnregistrationSpec;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -102,10 +102,10 @@ public class ClientResourceTest {
 
   @Test
   public void succeedsToUnregister() throws Throwable {
-    ClientUnregistrationRequest request = new ClientUnregistrationRequest();
+    ClientUnregistrationSpec request = new ClientUnregistrationSpec();
     request.setClientSecret("clientSecret");
 
-    doNothing().when(clientService).unregister(anyString(), any(ClientUnregistrationRequest.class));
+    doNothing().when(clientService).unregister(anyString(), any(ClientUnregistrationSpec.class));
 
     testHelper.post(
         clientUnregistrationRoute,
@@ -114,13 +114,13 @@ public class ClientResourceTest {
 
   @Test
   public void failsToUnregister() throws Throwable {
-    ClientUnregistrationRequest request = new ClientUnregistrationRequest();
+    ClientUnregistrationSpec request = new ClientUnregistrationSpec();
     request.setClientSecret("clientSecret");
     ClientUnregistrationError error = new ClientUnregistrationError(
         ClientUnregistrationErrorType.INVALID_REQUEST,
         "Invalid request");
 
-    doThrow(error).when(clientService).unregister(anyString(), any(ClientUnregistrationRequest.class));
+    doThrow(error).when(clientService).unregister(anyString(), any(ClientUnregistrationSpec.class));
 
     ExternalException actualError = testHelper.post(
         clientUnregistrationRoute,

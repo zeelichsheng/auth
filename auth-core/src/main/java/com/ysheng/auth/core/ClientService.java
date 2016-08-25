@@ -17,9 +17,9 @@ import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientNotFoundError;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
-import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
+import com.ysheng.auth.model.api.client.ClientRegistrationSpec;
 import com.ysheng.auth.model.api.client.ClientUnregistrationError;
-import com.ysheng.auth.model.api.client.ClientUnregistrationRequest;
+import com.ysheng.auth.model.api.client.ClientUnregistrationSpec;
 
 /**
  * Defines the interface of client related functions.
@@ -33,7 +33,7 @@ public interface ClientService {
    * @return The client object.
    * @throws ClientRegistrationError The exception that contains error details.
    */
-  Client register(ClientRegistrationRequest request) throws ClientRegistrationError;
+  Client register(ClientRegistrationSpec request) throws ClientRegistrationError;
 
   /**
    * Unregisters a client with the authorization server.
@@ -44,7 +44,7 @@ public interface ClientService {
    */
   void unregister(
       String clientId,
-      ClientUnregistrationRequest request) throws ClientUnregistrationError;
+      ClientUnregistrationSpec request) throws ClientUnregistrationError;
 
   /**
    * Gets a list of all clients.

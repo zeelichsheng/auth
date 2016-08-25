@@ -23,7 +23,7 @@ import com.ysheng.auth.model.api.ExternalException;
 import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationErrorType;
-import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
+import com.ysheng.auth.model.api.client.ClientRegistrationSpec;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -65,12 +65,12 @@ public class ClientsResourceTest {
 
   @Test
   public void succeedsToRegister() throws Throwable {
-    ClientRegistrationRequest request = new ClientRegistrationRequest();
+    ClientRegistrationSpec request = new ClientRegistrationSpec();
     request.setType(ClientType.CONFIDENTIAL);
     Client response = new Client();
     response.setId("clientId");
 
-    doReturn(response).when(clientService).register(any(ClientRegistrationRequest.class));
+    doReturn(response).when(clientService).register(any(ClientRegistrationSpec.class));
 
     Client actualResponse = testHelper.post(
         ClientRoute.API,
@@ -82,13 +82,13 @@ public class ClientsResourceTest {
 
   @Test
   public void failsToRegister() throws Throwable {
-    ClientRegistrationRequest request = new ClientRegistrationRequest();
+    ClientRegistrationSpec request = new ClientRegistrationSpec();
     request.setType(ClientType.CONFIDENTIAL);
     ClientRegistrationError error = new ClientRegistrationError(
         ClientRegistrationErrorType.INVALID_REQUEST,
         "Invalid request");
 
-    doThrow(error).when(clientService).register(any(ClientRegistrationRequest.class));
+    doThrow(error).when(clientService).register(any(ClientRegistrationSpec.class));
 
     ExternalException actualError = testHelper.post(
         ClientRoute.API,

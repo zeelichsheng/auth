@@ -22,10 +22,10 @@ import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientNotFoundError;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationErrorType;
-import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
+import com.ysheng.auth.model.api.client.ClientRegistrationSpec;
 import com.ysheng.auth.model.api.client.ClientUnregistrationError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationErrorType;
-import com.ysheng.auth.model.api.client.ClientUnregistrationRequest;
+import com.ysheng.auth.model.api.client.ClientUnregistrationSpec;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -56,7 +56,7 @@ public class ClientServiceImplTest {
 
     @Test
     public void failsWithNullRedirectUri() {
-      ClientRegistrationRequest request = new ClientRegistrationRequest();
+      ClientRegistrationSpec request = new ClientRegistrationSpec();
       request.setType(ClientType.CONFIDENTIAL);
       request.setRedirectUri(null);
 
@@ -73,7 +73,7 @@ public class ClientServiceImplTest {
 
     @Test
     public void failsWithInvalidRedirectUri() {
-      ClientRegistrationRequest request = new ClientRegistrationRequest();
+      ClientRegistrationSpec request = new ClientRegistrationSpec();
       request.setType(ClientType.CONFIDENTIAL);
       request.setRedirectUri("invalidUri");
 
@@ -97,7 +97,7 @@ public class ClientServiceImplTest {
       doReturn("clientId").when(authValueGenerator).generateClientId();
       doReturn("clientSecret").when(authValueGenerator).generateClientSecret();
 
-      ClientRegistrationRequest request = new ClientRegistrationRequest();
+      ClientRegistrationSpec request = new ClientRegistrationSpec();
       request.setType(ClientType.CONFIDENTIAL);
       request.setRedirectUri("http://1.2.3.4");
 
@@ -116,7 +116,7 @@ public class ClientServiceImplTest {
 
     @Test
     public void failsWithNullClientId() {
-      ClientUnregistrationRequest request = new ClientUnregistrationRequest();
+      ClientUnregistrationSpec request = new ClientUnregistrationSpec();
 
       ClientServiceImpl service = new ClientServiceImpl(null, null);
 
@@ -134,7 +134,7 @@ public class ClientServiceImplTest {
       Database database = mock(Database.class);
       doReturn(null).when(database).findClientById(anyString());
 
-      ClientUnregistrationRequest request = new ClientUnregistrationRequest();
+      ClientUnregistrationSpec request = new ClientUnregistrationSpec();
 
       ClientServiceImpl service = new ClientServiceImpl(database, null);
 
@@ -155,7 +155,7 @@ public class ClientServiceImplTest {
       Database database = mock(Database.class);
       doReturn(client).when(database).findClientById(anyString());
 
-      ClientUnregistrationRequest request = new ClientUnregistrationRequest();
+      ClientUnregistrationSpec request = new ClientUnregistrationSpec();
       request.setClientSecret("clientSecret2");
 
       ClientServiceImpl service = new ClientServiceImpl(database, null);
@@ -178,7 +178,7 @@ public class ClientServiceImplTest {
       Database database = mock(Database.class);
       doReturn(client).when(database).findClientById(anyString());
 
-      ClientUnregistrationRequest request = new ClientUnregistrationRequest();
+      ClientUnregistrationSpec request = new ClientUnregistrationSpec();
       request.setClientSecret("clientSecret");
 
       ClientServiceImpl service = new ClientServiceImpl(database, null);

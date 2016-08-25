@@ -15,26 +15,39 @@ package com.ysheng.auth.model.api.client;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ysheng.auth.model.api.ClientType;
 
 /**
- * Defines the data structure of client unregistration request.
+ * Defines the data structure of client registration request.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ClientUnregistrationRequest {
+public class ClientRegistrationSpec {
 
-  // The client secret.
+  // Type of the client.
   @JsonProperty
-  private String clientSecret;
+  private ClientType type;
+
+  // Redirect URI of the client.
+  @JsonProperty
+  private String redirectUri;
 
   ///
   /// Getters and Setters.
   ///
 
-  public String getClientSecret() {
-    return clientSecret;
+  public ClientType getType() {
+    return type;
   }
 
-  public void setClientSecret(String clientSecret) {
-    this.clientSecret = clientSecret;
+  public void setType(ClientType type) {
+    this.type = type;
+  }
+
+  public String getRedirectUri() {
+    return redirectUri;
+  }
+
+  public void setRedirectUri(String redirectUri) {
+    this.redirectUri = redirectUri;
   }
 }

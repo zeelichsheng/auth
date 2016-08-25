@@ -22,10 +22,10 @@ import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientNotFoundError;
 import com.ysheng.auth.model.api.client.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationErrorType;
-import com.ysheng.auth.model.api.client.ClientRegistrationRequest;
+import com.ysheng.auth.model.api.client.ClientRegistrationSpec;
 import com.ysheng.auth.model.api.client.ClientUnregistrationError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationErrorType;
-import com.ysheng.auth.model.api.client.ClientUnregistrationRequest;
+import com.ysheng.auth.model.api.client.ClientUnregistrationSpec;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class ClientServiceImpl implements ClientService {
    * @return The client object.
    * @throws ClientRegistrationError The exception that contains error details.
    */
-  public Client register(ClientRegistrationRequest request)
+  public Client register(ClientRegistrationSpec request)
       throws ClientRegistrationError {
     // Validate the request.
     if (request.getRedirectUri() == null) {
@@ -99,7 +99,7 @@ public class ClientServiceImpl implements ClientService {
    */
   public void unregister(
       String clientId,
-      ClientUnregistrationRequest request)
+      ClientUnregistrationSpec request)
       throws ClientUnregistrationError {
     // Validate the request.
     if (clientId == null) {
