@@ -22,7 +22,7 @@ import com.ysheng.auth.model.api.exception.ClientUnauthorizedException;
 import com.ysheng.auth.model.api.exception.InternalException;
 import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
-import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
+import com.ysheng.auth.model.api.authcode.AuthorizationGrantSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.exception.AuthorizationTicketNotFoundError;
@@ -66,9 +66,9 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
    */
   public AuthorizationTicket authorize(
       String clientId,
-      AuthorizationSpec request) throws InternalException {
+      AuthorizationGrantSpec request) throws InternalException {
     // Validate the request.
-    if (!AuthorizationSpec.VALID_RESPONSE_TYPE.equals(request.getResponseType())) {
+    if (!AuthorizationGrantSpec.VALID_RESPONSE_TYPE.equals(request.getResponseType())) {
       throw new ResponseTypeUnsupportedException(request.getResponseType());
     }
 

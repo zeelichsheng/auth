@@ -16,7 +16,7 @@ package com.ysheng.auth.frontend.resource.authcode;
 import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.model.api.ApiList;
-import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
+import com.ysheng.auth.model.api.authcode.AuthorizationGrantSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.exception.InternalException;
 
@@ -51,7 +51,7 @@ public class AuthCodesResource {
   @POST
   public AuthorizationTicket authorize(
       @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
-      AuthorizationSpec request) throws InternalException {
+      AuthorizationGrantSpec request) throws InternalException {
     return authCodeGrantService.authorize(clientId, request);
   }
 

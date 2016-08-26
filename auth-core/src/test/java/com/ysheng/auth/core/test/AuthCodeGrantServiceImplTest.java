@@ -23,7 +23,7 @@ import com.ysheng.auth.model.api.ResponseType;
 import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationRevocationSpec;
-import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
+import com.ysheng.auth.model.api.authcode.AuthorizationGrantSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.exception.AuthorizationTicketNotFoundError;
@@ -62,7 +62,7 @@ public class AuthCodeGrantServiceImplTest {
 
     @Test
     public void failsWithUnsupportedResponseType() {
-      AuthorizationSpec request = new AuthorizationSpec();
+      AuthorizationGrantSpec request = new AuthorizationGrantSpec();
       request.setResponseType(ResponseType.TOKEN);
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(null, null);
@@ -81,7 +81,7 @@ public class AuthCodeGrantServiceImplTest {
       Database database = mock(Database.class);
       doReturn(null).when(database).findClientById(anyString());
 
-      AuthorizationSpec request = new AuthorizationSpec();
+      AuthorizationGrantSpec request = new AuthorizationGrantSpec();
       request.setResponseType(ResponseType.CODE);
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
@@ -103,7 +103,7 @@ public class AuthCodeGrantServiceImplTest {
       AuthValueGenerator authValueGenerator = mock(AuthValueGenerator.class);
       doReturn("authCode").when(authValueGenerator).generateAuthCode();
 
-      AuthorizationSpec request = new AuthorizationSpec();
+      AuthorizationGrantSpec request = new AuthorizationGrantSpec();
       request.setResponseType(ResponseType.CODE);
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, authValueGenerator);

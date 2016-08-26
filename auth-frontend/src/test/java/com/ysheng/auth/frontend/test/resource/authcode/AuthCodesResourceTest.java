@@ -19,7 +19,7 @@ import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.frontend.test.resource.ResourceTestHelper;
 import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.ExternalException;
-import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
+import com.ysheng.auth.model.api.authcode.AuthorizationGrantSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.exception.ClientNotFoundException;
 import com.ysheng.auth.model.api.exception.InvalidRequestException;
@@ -74,11 +74,11 @@ public class AuthCodesResourceTest {
 
   @Test
   public void succeedsToAuthorize() throws Throwable {
-    AuthorizationSpec request = new AuthorizationSpec();
+    AuthorizationGrantSpec request = new AuthorizationGrantSpec();
     AuthorizationTicket response = new AuthorizationTicket();
     response.setCode("code");
 
-    doReturn(response).when(authCodeGrantService).authorize(anyString(), any(AuthorizationSpec.class));
+    doReturn(response).when(authCodeGrantService).authorize(anyString(), any(AuthorizationGrantSpec.class));
 
     AuthorizationTicket actualResponse = testHelper.post(
         authorizationRoute,
@@ -90,10 +90,10 @@ public class AuthCodesResourceTest {
 
   @Test
   public void failsToAuthorize() throws Throwable {
-    AuthorizationSpec request = new AuthorizationSpec();
+    AuthorizationGrantSpec request = new AuthorizationGrantSpec();
     InvalidRequestException error = new InvalidRequestException("Invalid request");
 
-    doThrow(error).when(authCodeGrantService).authorize(anyString(), any(AuthorizationSpec.class));
+    doThrow(error).when(authCodeGrantService).authorize(anyString(), any(AuthorizationGrantSpec.class));
 
     ExternalException actualError = testHelper.post(
         authorizationRoute,
