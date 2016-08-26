@@ -13,6 +13,7 @@
 
 package com.ysheng.auth.backend;
 
+import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
 
@@ -86,4 +87,11 @@ public interface Database {
   AuthorizationTicket findAuthorizationTicketByCodeAndClientId(
       String code,
       String clientId);
+
+  /**
+   * Stores an access token object in database.
+   *
+   * @param accessToken The access token object to be stored.
+   */
+  void storeAccessToken(AccessToken accessToken);
 }

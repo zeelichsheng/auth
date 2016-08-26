@@ -14,8 +14,10 @@
 package com.ysheng.auth.backend.redis;
 
 import com.ysheng.auth.backend.Database;
+import com.ysheng.auth.backend.redis.adapter.AccessTokenAdapter;
 import com.ysheng.auth.backend.redis.adapter.AuthorizationTicketAdapter;
 import com.ysheng.auth.backend.redis.adapter.ClientAdapter;
+import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
 
@@ -132,5 +134,16 @@ public class RedisDatabase implements Database {
       String clientId) {
     return AuthorizationTicketAdapter.fromHash(
         redisClient.get(AuthorizationTicketAdapter.getKey(clientId, code)));
+  }
+
+  /**
+   * Stores an access token object in database.
+   *
+   * @param accessToken The access token object to be stored.
+   */
+  public void storeAccessToken(AccessToken accessToken) {
+    redisClient.set(
+        AccessTokenAdapter.getKey(accessToken.getClientId(), accessToken.getAccessToken()),
+        AccessTokenAdapter.toHash(accessToken));
   }
 }
