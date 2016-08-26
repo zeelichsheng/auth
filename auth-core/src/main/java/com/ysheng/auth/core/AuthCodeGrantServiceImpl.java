@@ -215,6 +215,8 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
     // Also consider how to set refresh token and scope.
     response.setExpiresIn((long) Integer.MAX_VALUE);
 
+    database.storeAccessToken(response);
+
     return response;
   }
 }

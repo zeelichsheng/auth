@@ -38,7 +38,9 @@ import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.testng.Assert.fail;
@@ -421,6 +423,7 @@ public class AuthCodeGrantServiceImplTest {
       Database database = mock(Database.class);
       doReturn(client).when(database).findClientById(anyString());
       doReturn(authorizationTicket).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
+      doNothing().when(database).storeAccessToken(any(AccessToken.class));
 
       AuthValueGenerator authValueGenerator = mock(AuthValueGenerator.class);
       doReturn("accessToken").when(authValueGenerator).generateAccessToken();
