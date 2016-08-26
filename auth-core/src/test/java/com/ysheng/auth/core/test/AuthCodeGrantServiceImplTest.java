@@ -28,6 +28,7 @@ import com.ysheng.auth.model.api.authcode.AuthorizationError;
 import com.ysheng.auth.model.api.authcode.AuthorizationErrorType;
 import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicketNotFoundError;
 import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientNotFoundError;
 import org.testng.annotations.Test;
@@ -149,6 +150,64 @@ public class AuthCodeGrantServiceImplTest {
       assertThat(ticketApiList.getItems().size(), is(2));
       assertThat(ticketApiList.getItems().get(0).getCode(), equalTo(ticket1.getCode()));
       assertThat(ticketApiList.getItems().get(1).getCode(), equalTo(ticket2.getCode()));
+    }
+  }
+
+  /**
+   * Tests for {@link com.ysheng.auth.core.AuthCodeGrantServiceImpl#getAuthorizationTicket}.
+   */
+  public static class GetAuthorizationTicketTest {
+
+    @Test
+    public void failsWithNonExistClient() {
+      Database database = mock(Database.class);
+      doReturn(null).when(database).findClientById(anyString());
+
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
+
+      try {
+        service.getAuthorizationTicket("clientId", "code");
+        fail("Getting authorization ticket should fail with non-exist client");
+      } catch (ClientNotFoundError ex) {
+        assertThat(ex.getMessage(), containsString("clientId"));
+      } catch (AuthorizationTicketNotFoundError ex) {
+        fail("Getting authorization ticket should not fail with authorization ticket not found error");
+      }
+    }
+
+    @Test
+    public void failsWithNonExistTicket() {
+      Database database = mock(Database.class);
+      doReturn(new Client()).when(database).findClientById(anyString());
+      doReturn(null).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
+
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
+
+      try {
+        service.getAuthorizationTicket("clientId", "code");
+        fail("Getting authorization ticket should fail with non-exist ticket");
+      } catch (ClientNotFoundError ex) {
+        fail("Getting authorization ticket should not fail with client not found error");
+      } catch (AuthorizationTicketNotFoundError ex) {
+        assertThat(ex.getMessage(), containsString("clientId"));
+        assertThat(ex.getMessage(), containsString("code"));
+      }
+    }
+
+    @Test
+    public void succeedsToGet() throws Throwable {
+      AuthorizationTicket ticket = new AuthorizationTicket();
+      ticket.setClientId("clientId");
+      ticket.setCode("code");
+      Database database = mock(Database.class);
+      doReturn(new Client()).when(database).findClientById(anyString());
+      doReturn(ticket).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
+
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
+
+      AuthorizationTicket actualTicket = service.getAuthorizationTicket("clientId", "code");
+      assertThat(actualTicket.getClientId(), equalTo("clientId"));
+      assertThat(actualTicket.getCode(), equalTo("code"));
     }
   }
 

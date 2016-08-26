@@ -20,6 +20,7 @@ import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationError;
 import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicketNotFoundError;
 import com.ysheng.auth.model.api.client.ClientNotFoundError;
 
 /**
@@ -47,6 +48,19 @@ public interface AuthCodeGrantService {
    * @throws ClientNotFoundError The error that contains detail information.
    */
   ApiList<AuthorizationTicket> listAuthorizationTicket(String clientId) throws ClientNotFoundError;
+
+  /**
+   * Gets an authorization ticket with the given client identifier and code.
+   *
+   * @param clientId The client identifier.
+   * @param code The authorization code.
+   * @return An authorization ticket that matches the criteria.
+   * @throws ClientNotFoundError The error that contains detail information.
+   * @throws AuthorizationTicketNotFoundError The error that contains detail information.
+   */
+  AuthorizationTicket getAuthorizationTicket(
+      String clientId,
+      String code) throws ClientNotFoundError, AuthorizationTicketNotFoundError;
 
   /**
    * Issues an access token for a client with an auth code received from authorization of

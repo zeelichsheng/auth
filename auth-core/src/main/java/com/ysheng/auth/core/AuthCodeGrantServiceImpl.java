@@ -25,6 +25,7 @@ import com.ysheng.auth.model.api.authcode.AuthorizationError;
 import com.ysheng.auth.model.api.authcode.AuthorizationErrorType;
 import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicketNotFoundError;
 import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientNotFoundError;
 
@@ -105,6 +106,31 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
     }
 
     return new ApiList<>(database.listAuthorizationTickets(clientId));
+  }
+
+  /**
+   * Gets an authorization ticket with the given client identifier and code.
+   *
+   * @param clientId The client identifier.
+   * @param code The authorization code.
+   * @return An authorization ticket that matches the criteria.
+   * @throws ClientNotFoundError The error that contains detail information.
+   * @throws AuthorizationTicketNotFoundError The error that contains detail information.
+   */
+  public AuthorizationTicket getAuthorizationTicket(
+      String clientId,
+      String code) throws ClientNotFoundError, AuthorizationTicketNotFoundError {
+    Client client = database.findClientById(clientId);
+    if (client == null) {
+      throw new ClientNotFoundError(clientId);
+    }
+
+    AuthorizationTicket ticket = database.findAuthorizationTicketByCodeAndClientId(code, clientId);
+    if (ticket == null) {
+      throw new AuthorizationTicketNotFoundError(clientId, code);
+    }
+
+    return ticket;
   }
 
   /**
