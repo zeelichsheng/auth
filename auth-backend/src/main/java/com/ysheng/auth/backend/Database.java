@@ -61,8 +61,7 @@ public interface Database {
   void storeAuthorizationTicket(AuthorizationTicket authorizationTicket);
 
   /**
-   * Gets a list of authorization tickets. If client identifier is present,
-   * then return authorization tickets belong to that client.
+   * Gets a list of authorization tickets that belong to the client.
    *
    * @param clientId The client identifier.
    * @return A list of authorization tickets.
@@ -70,7 +69,7 @@ public interface Database {
   List<AuthorizationTicket> listAuthorizationTickets(String clientId);
 
   /**
-   * removes an authorization ticket object from databsae.
+   * removes an authorization ticket object from database.
    *
    * @param clientId  The client identifier.
    * @param code The authorization code.
@@ -94,4 +93,12 @@ public interface Database {
    * @param accessToken The access token object to be stored.
    */
   void storeAccessToken(AccessToken accessToken);
+
+  /**
+   * Gets a list of access tokens that belong to the client.
+   *
+   * @param clientId The clietn identifier.
+   * @return A list of access tokens.
+   */
+  List<AccessToken> listAccessTokens(String clientId);
 }

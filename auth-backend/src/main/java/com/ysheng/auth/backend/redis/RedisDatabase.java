@@ -98,8 +98,7 @@ public class RedisDatabase implements Database {
   }
 
   /**
-   * Gets a list of authorization tickets. If client identifier is present,
-   * then return authorization tickets belong to that client.
+   * Gets a list of authorization tickets that belong to that client.
    *
    * @param clientId The client identifier.
    * @return A list of authorization tickets.
@@ -113,7 +112,7 @@ public class RedisDatabase implements Database {
   }
 
   /**
-   * removes an authorization ticket object from databsae.
+   * removes an authorization ticket object from database.
    *
    * @param clientId  The client identifier.
    * @param code The authorization code.
@@ -145,5 +144,19 @@ public class RedisDatabase implements Database {
     redisClient.set(
         AccessTokenAdapter.getKey(accessToken.getClientId(), accessToken.getAccessToken()),
         AccessTokenAdapter.toHash(accessToken));
+  }
+
+  /**
+   * Gets a list of access tokens that belong to the client.
+   *
+   * @param clientId The clietn identifier.
+   * @return A list of access tokens.
+   */
+  public List<AccessToken> listAccessTokens(String clientId) {
+    return redisClient
+        .mget(redisClient.keys(AccessTokenAdapter.getKey(clientId, null)))
+        .stream()
+        .map(AccessTokenAdapter::fromHash)
+        .collect(Collectors.toList());
   }
 }
