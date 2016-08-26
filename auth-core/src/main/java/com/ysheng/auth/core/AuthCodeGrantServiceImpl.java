@@ -208,6 +208,7 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
 
     // Build the response.
     AccessToken response = new AccessToken();
+    response.setClientId(clientId);
     response.setAccessToken(authValueGenerator.generateAccessToken());
     response.setTokenType(AccessTokenType.BEARER);
     // TODO: change how we calculate the token expiration.

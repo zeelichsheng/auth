@@ -23,8 +23,12 @@ import com.ysheng.auth.model.api.AccessTokenType;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccessToken {
 
+  // The client identifier.
+  @JsonProperty(required = true)
+  private String clientId;
+
   // REQUIRED. The access token issued by the authorization server.
-  @JsonProperty
+  @JsonProperty(required = true)
   private String accessToken;
 
   // REQUIRED. The type of the token.
@@ -48,6 +52,14 @@ public class AccessToken {
   ///
   /// Getters and Setters.
   ///
+
+  public String getClientId() {
+    return clientId;
+  }
+
+  public void setClientId(String clientId) {
+    this.clientId = clientId;
+  }
 
   public String getAccessToken() {
     return accessToken;
