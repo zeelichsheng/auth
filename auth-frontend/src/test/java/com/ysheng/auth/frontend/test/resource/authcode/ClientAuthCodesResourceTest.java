@@ -14,7 +14,7 @@
 package com.ysheng.auth.frontend.test.resource.authcode;
 
 import com.ysheng.auth.core.AuthCodeGrantService;
-import com.ysheng.auth.frontend.resource.authcode.AuthCodesResource;
+import com.ysheng.auth.frontend.resource.authcode.ClientAuthCodesResource;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.frontend.test.resource.ResourceTestHelper;
 import com.ysheng.auth.model.api.ApiList;
@@ -41,9 +41,9 @@ import java.util.Arrays;
 import java.util.Optional;
 
 /**
- * Tests for {@link com.ysheng.auth.frontend.resource.authcode.AuthCodesResource}.
+ * Tests for {@link com.ysheng.auth.frontend.resource.authcode.ClientAuthCodesResource}.
  */
-public class AuthCodesResourceTest {
+public class ClientAuthCodesResourceTest {
 
   // The helper related to resource test.
   private ResourceTestHelper testHelper;
@@ -56,7 +56,7 @@ public class AuthCodesResourceTest {
     authCodeGrantService = mock(AuthCodeGrantService.class);
 
     testHelper = new ResourceTestHelper();
-    testHelper.addResource(new AuthCodesResource(authCodeGrantService));
+    testHelper.addResource(new ClientAuthCodesResource(authCodeGrantService));
     testHelper.setup();
   }
 

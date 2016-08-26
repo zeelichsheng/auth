@@ -32,12 +32,12 @@ import javax.ws.rs.core.MediaType;
 import java.util.Optional;
 
 /**
- * Defines the RESTful endpoints related to auth code grant operations.
+ * Defines the RESTful endpoints related to auth code grant operations for a specific client.
  */
 @Path(AuthCodeRoute.API)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class AuthCodesResource {
+public class ClientAuthCodesResource {
 
   // The auth code grant service that performs backend operation.
   private final AuthCodeGrantService authCodeGrantService;
@@ -47,7 +47,7 @@ public class AuthCodesResource {
    *
    * @param authCodeGrantService The auth code grant service that performs backend operation.
    */
-  public AuthCodesResource(AuthCodeGrantService authCodeGrantService) {
+  public ClientAuthCodesResource(AuthCodeGrantService authCodeGrantService) {
     this.authCodeGrantService = authCodeGrantService;
   }
 
