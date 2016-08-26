@@ -18,5 +18,7 @@ package com.ysheng.auth.frontend.resource.route;
  */
 public class AuthCodeRoute {
 
-  public static final String API = "/auth-codes";
+  public static final String CLIENT_ID_PATH_PARAM = "clientId";
+
+  public static final String API = "/auth-codes/{" + CLIENT_ID_PATH_PARAM + "}";
 }

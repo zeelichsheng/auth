@@ -28,8 +28,6 @@ import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientNotFoundError;
 
-import java.util.Optional;
-
 /**
  * Implements authorization code grant related functions.
  */
@@ -57,11 +55,14 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
   /**
    * Authorizes an authorization request of Authorization Code Grant type.
    *
+   * @param clientId The client identifier.
    * @param request The authorization request that contains required information.
    * @return The authorization ticket object.
    * @throws AuthorizationError The exception contains error details.
    */
-  public AuthorizationTicket authorize(AuthorizationSpec request) throws AuthorizationError {
+  public AuthorizationTicket authorize(
+      String clientId,
+      AuthorizationSpec request) throws AuthorizationError {
     // Validate the request.
     if (!AuthorizationSpec.VALID_RESPONSE_TYPE.equals(request.getResponseType())) {
       throw new AuthorizationError(
@@ -69,11 +70,11 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
           "Unsupported response type in request: " + request.getResponseType().toString());
     }
 
-    Client client = database.findClientById(request.getClientId());
+    Client client = database.findClientById(clientId);
     if (client == null) {
       throw new AuthorizationError(
           AuthorizationErrorType.UNAUTHORIZED_CLIENT,
-          "Unable to find client with ID: " + request.getClientId());
+          "Unable to find client with ID: " + clientId);
     }
 
     String authCode = authValueGenerator.generateAuthCode();
@@ -81,7 +82,7 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
     // Store authorization ticket in database.
     AuthorizationTicket authorizationTicket = new AuthorizationTicket();
     authorizationTicket.setCode(authCode);
-    authorizationTicket.setClientId(request.getClientId());
+    authorizationTicket.setClientId(clientId);
     authorizationTicket.setRedirectUri(request.getRedirectUri());
     authorizationTicket.setScope(request.getScope());
     authorizationTicket.setState(request.getState());
@@ -91,24 +92,19 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
   }
 
   /**
-   * Gets a list of authorization tickets. If client identifier is given, then return
-   * all authorization tickets granted to that particular client.
+   * Gets a list of authorization tickets granted to a particular client.
    *
    * @param clientId The client identifier for which the authorization ticket was granted to.
    * @return A list of authorization tickets.
    * @throws ClientNotFoundError The error that contains detail information.
    */
-  public ApiList<AuthorizationTicket> listAuthorizationTicket(Optional<String> clientId) throws ClientNotFoundError {
-    String clientIdStr = null;
-    if (clientId.isPresent()) {
-      clientIdStr = clientId.get();
-      Client client = database.findClientById(clientIdStr);
-      if (client == null) {
-        throw new ClientNotFoundError(clientIdStr);
-      }
+  public ApiList<AuthorizationTicket> listAuthorizationTicket(String clientId) throws ClientNotFoundError {
+    Client client = database.findClientById(clientId);
+    if (client == null) {
+      throw new ClientNotFoundError(clientId);
     }
 
-    return new ApiList<>(database.listAuthorizationTickets(clientIdStr));
+    return new ApiList<>(database.listAuthorizationTickets(clientId));
   }
 
   /**

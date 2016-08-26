@@ -30,7 +30,6 @@ import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientNotFoundError;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -43,7 +42,6 @@ import static org.testng.Assert.fail;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Tests {@link com.ysheng.auth.core.AuthCodeGrantServiceImpl}.
@@ -67,7 +65,7 @@ public class AuthCodeGrantServiceImplTest {
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(null, null);
 
       try {
-        service.authorize(request);
+        service.authorize("clientId", request);
         fail("Authorization should fail with unsupported response type");
       } catch (AuthorizationError ex) {
         assertThat(ex.getError(), is(AuthorizationErrorType.UNSUPPORTED_RESPONSE_TYPE));
@@ -82,12 +80,11 @@ public class AuthCodeGrantServiceImplTest {
 
       AuthorizationSpec request = new AuthorizationSpec();
       request.setResponseType(ResponseType.CODE);
-      request.setClientId("clientId");
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
       try {
-        service.authorize(request);
+        service.authorize("clientId", request);
         fail("Authorization should fail with non-exist client");
       } catch (AuthorizationError ex) {
         assertThat(ex.getError(), is(AuthorizationErrorType.UNAUTHORIZED_CLIENT));
@@ -105,11 +102,10 @@ public class AuthCodeGrantServiceImplTest {
 
       AuthorizationSpec request = new AuthorizationSpec();
       request.setResponseType(ResponseType.CODE);
-      request.setClientId("clientId");
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, authValueGenerator);
 
-      AuthorizationTicket response = service.authorize(request);
+      AuthorizationTicket response = service.authorize("clientId", request);
       assertThat(response.getCode(), equalTo("authCode"));
     }
   }
@@ -127,17 +123,15 @@ public class AuthCodeGrantServiceImplTest {
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
       try {
-        service.listAuthorizationTicket(Optional.of("clientId"));
+        service.listAuthorizationTicket("clientId");
         fail("Listing authorization tickets should fail with non-exist client");
       } catch (ClientNotFoundError ex) {
         assertThat(ex.getMessage(), containsString("clientId"));
       }
     }
 
-    @Test(dataProvider = "ClientForListAuthorizationTickets")
-    public void succeedsToListAuthorizationTickets(
-        Optional<String> clientId,
-        Client client) throws Throwable {
+    @Test
+    public void succeedsToListAuthorizationTickets() throws Throwable {
       AuthorizationTicket ticket1 = new AuthorizationTicket();
       ticket1.setCode("code1");
       AuthorizationTicket ticket2 = new AuthorizationTicket();
@@ -145,24 +139,16 @@ public class AuthCodeGrantServiceImplTest {
       List<AuthorizationTicket> tickets = Arrays.asList(ticket1, ticket2);
 
       Database database = mock(Database.class);
-      doReturn(client).when(database).findClientById(anyString());
-      doReturn(tickets).when(database).listAuthorizationTickets(clientId.isPresent() ? clientId.get() : null);
+      doReturn(new Client()).when(database).findClientById(anyString());
+      doReturn(tickets).when(database).listAuthorizationTickets(anyString());
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
-      ApiList<AuthorizationTicket> ticketApiList = service.listAuthorizationTicket(clientId);
+      ApiList<AuthorizationTicket> ticketApiList = service.listAuthorizationTicket("clientId");
 
       assertThat(ticketApiList.getItems().size(), is(2));
       assertThat(ticketApiList.getItems().get(0).getCode(), equalTo(ticket1.getCode()));
       assertThat(ticketApiList.getItems().get(1).getCode(), equalTo(ticket2.getCode()));
-    }
-
-    @DataProvider(name = "ClientForListAuthorizationTickets")
-    public Object[][] provideClientForListAuthorizationTickets() {
-      return new Object[][] {
-          { Optional.empty(), null },
-          { Optional.of("clientId"), new Client() }
-      };
     }
   }
 

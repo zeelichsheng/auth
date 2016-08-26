@@ -25,11 +25,9 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
-import java.util.Optional;
 
 /**
  * Defines the RESTful endpoints related to auth code grant operations for a specific client.
@@ -53,13 +51,14 @@ public class ClientAuthCodesResource {
 
   @POST
   public AuthorizationTicket authorize(
+      @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
       AuthorizationSpec request) throws AuthorizationError {
-    return authCodeGrantService.authorize(request);
+    return authCodeGrantService.authorize(clientId, request);
   }
 
   @GET
   public ApiList<AuthorizationTicket> list(
-      @QueryParam("clientId")Optional<String> clientId) throws ClientNotFoundError {
+      @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId) throws ClientNotFoundError {
     return authCodeGrantService.listAuthorizationTicket(clientId);
   }
 }

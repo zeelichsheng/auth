@@ -31,14 +31,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.UriBuilder;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 /**
  * Tests for {@link com.ysheng.auth.frontend.resource.authcode.ClientAuthCodesResource}.
@@ -50,6 +51,13 @@ public class ClientAuthCodesResourceTest {
 
   // The auth code grant service that performs authorization related operations.
   private AuthCodeGrantService authCodeGrantService;
+
+  // The client identifier.
+  private String clientId = "clientId";
+
+  // The authorization route.
+  private String authorizationRoute =
+      UriBuilder.fromPath(AuthCodeRoute.API).build(clientId).toString();
 
   @BeforeMethod
   public void setUpTest() throws Throwable {
@@ -68,14 +76,13 @@ public class ClientAuthCodesResourceTest {
   @Test
   public void succeedsToAuthorize() throws Throwable {
     AuthorizationSpec request = new AuthorizationSpec();
-    request.setClientId("clientId");
     AuthorizationTicket response = new AuthorizationTicket();
     response.setCode("code");
 
-    doReturn(response).when(authCodeGrantService).authorize(any(AuthorizationSpec.class));
+    doReturn(response).when(authCodeGrantService).authorize(anyString(), any(AuthorizationSpec.class));
 
     AuthorizationTicket actualResponse = testHelper.post(
-        AuthCodeRoute.API,
+        authorizationRoute,
         request,
         AuthorizationTicket.class);
 
@@ -85,15 +92,14 @@ public class ClientAuthCodesResourceTest {
   @Test
   public void failsToAuthorize() throws Throwable {
     AuthorizationSpec request = new AuthorizationSpec();
-    request.setClientId("clientId");
     AuthorizationError error = new AuthorizationError(
         AuthorizationErrorType.INVALID_REQUEST,
         "Invalid request");
 
-    doThrow(error).when(authCodeGrantService).authorize(any(AuthorizationSpec.class));
+    doThrow(error).when(authCodeGrantService).authorize(anyString(), any(AuthorizationSpec.class));
 
     ExternalException actualError = testHelper.post(
-        AuthCodeRoute.API,
+        authorizationRoute,
         request,
         ExternalException.class);
 
@@ -102,26 +108,13 @@ public class ClientAuthCodesResourceTest {
   }
 
   @Test
-  public void succeedsToListWithClientId() throws Throwable {
+  public void succeedsToList() throws Throwable {
     ApiList<AuthorizationTicket> response = new ApiList<>(Arrays.asList(new AuthorizationTicket()));
 
-    doReturn(response).when(authCodeGrantService).listAuthorizationTicket(any(Optional.class));
+    doReturn(response).when(authCodeGrantService).listAuthorizationTicket(anyString());
 
     ApiList<AuthorizationTicket> actualResponse = testHelper.get(
-        AuthCodeRoute.API + "?clientId=foo",
-        new GenericType<ApiList<AuthorizationTicket>>() {});
-
-    assertThat(actualResponse.getItems().size(), is(1));
-  }
-
-  @Test
-  public void succeedsToListWithoutClientId() throws Throwable {
-    ApiList<AuthorizationTicket> response = new ApiList<>(Arrays.asList(new AuthorizationTicket()));
-
-    doReturn(response).when(authCodeGrantService).listAuthorizationTicket(any(Optional.class));
-
-    ApiList<AuthorizationTicket> actualResponse = testHelper.get(
-        AuthCodeRoute.API,
+        authorizationRoute,
         new GenericType<ApiList<AuthorizationTicket>>() {});
 
     assertThat(actualResponse.getItems().size(), is(1));
@@ -131,10 +124,10 @@ public class ClientAuthCodesResourceTest {
   public void failsToList() throws Throwable {
     ClientNotFoundError error = new ClientNotFoundError("clientId");
 
-    doThrow(error).when(authCodeGrantService).listAuthorizationTicket(any(Optional.class));
+    doThrow(error).when(authCodeGrantService).listAuthorizationTicket(anyString());
 
     ExternalException actualError = testHelper.get(
-        AuthCodeRoute.API + "?clientId=foo",
+        authorizationRoute,
         ExternalException.class);
 
     assertThat(actualError.getErrorCode(), equalTo(error.getInternalErrorCode()));
