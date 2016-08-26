@@ -25,4 +25,6 @@ public class AuthCodeRoute {
   public static final String API = "/auth-codes/{" + CLIENT_ID_PATH_PARAM + "}";
 
   public static final String AUTHORIZATION_PATH = API + "/{" + CODE_PATH_PARAM + "}";
+
+  public static final String ACCESS_TOKEN_PATH = "/access-tokens";
 }
