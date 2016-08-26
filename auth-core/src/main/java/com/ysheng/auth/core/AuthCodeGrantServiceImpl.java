@@ -21,7 +21,7 @@ import com.ysheng.auth.model.api.authcode.AuthorizationRevocationSpec;
 import com.ysheng.auth.model.api.exception.ClientUnauthorizedException;
 import com.ysheng.auth.model.api.exception.InternalException;
 import com.ysheng.auth.model.api.authcode.AccessToken;
-import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
+import com.ysheng.auth.model.api.authcode.AccessTokenIssueSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationGrantSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
@@ -174,9 +174,9 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
   public AccessToken issueAccessToken(
       String clientId,
       String code,
-      AccessTokenSpec request) throws InternalException {
+      AccessTokenIssueSpec request) throws InternalException {
     // Validate the request.
-    if (!AccessTokenSpec.VALID_GRANT_TYPE.equals(request.getGrantType())) {
+    if (!AccessTokenIssueSpec.VALID_GRANT_TYPE.equals(request.getGrantType())) {
       throw new GrantTypeUnsupportedException(request.getGrantType());
     }
 

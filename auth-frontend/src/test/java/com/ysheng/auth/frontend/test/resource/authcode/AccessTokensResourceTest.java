@@ -19,7 +19,7 @@ import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.frontend.test.resource.ResourceTestHelper;
 import com.ysheng.auth.model.api.ExternalException;
 import com.ysheng.auth.model.api.authcode.AccessToken;
-import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
+import com.ysheng.auth.model.api.authcode.AccessTokenIssueSpec;
 import com.ysheng.auth.model.api.exception.InvalidRequestException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -71,12 +71,12 @@ public class AccessTokensResourceTest {
 
   @Test
   public void succeedsToIssueAccessToken() throws Throwable {
-    AccessTokenSpec request = new AccessTokenSpec();
+    AccessTokenIssueSpec request = new AccessTokenIssueSpec();
     AccessToken response = new AccessToken();
     response.setAccessToken("accessToken");
 
     doReturn(response).when(authCodeGrantService)
-        .issueAccessToken(anyString(), anyString(), any(AccessTokenSpec.class));
+        .issueAccessToken(anyString(), anyString(), any(AccessTokenIssueSpec.class));
 
     AccessToken actualResponse = testHelper.post(
         accessTokensRoute,
@@ -88,11 +88,11 @@ public class AccessTokensResourceTest {
 
   @Test
   public void failsToIssueAccessToken() throws Throwable {
-    AccessTokenSpec request = new AccessTokenSpec();
+    AccessTokenIssueSpec request = new AccessTokenIssueSpec();
     InvalidRequestException error = new InvalidRequestException("Invalid request");
 
     doThrow(error).when(authCodeGrantService)
-        .issueAccessToken(anyString(), anyString(), any(AccessTokenSpec.class));
+        .issueAccessToken(anyString(), anyString(), any(AccessTokenIssueSpec.class));
 
     ExternalException actualError = testHelper.post(
         accessTokensRoute,

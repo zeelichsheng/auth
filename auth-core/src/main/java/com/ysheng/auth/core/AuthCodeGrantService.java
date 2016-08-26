@@ -17,7 +17,7 @@ import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.authcode.AuthorizationRevocationSpec;
 import com.ysheng.auth.model.api.exception.InternalException;
 import com.ysheng.auth.model.api.authcode.AccessToken;
-import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
+import com.ysheng.auth.model.api.authcode.AccessTokenIssueSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationGrantSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 
@@ -85,5 +85,5 @@ public interface AuthCodeGrantService {
   AccessToken issueAccessToken(
       String clientId,
       String code,
-      AccessTokenSpec request) throws InternalException;
+      AccessTokenIssueSpec request) throws InternalException;
 }

@@ -16,7 +16,7 @@ package com.ysheng.auth.frontend.resource.authcode;
 import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.model.api.authcode.AccessToken;
-import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
+import com.ysheng.auth.model.api.authcode.AccessTokenIssueSpec;
 import com.ysheng.auth.model.api.exception.InternalException;
 
 import javax.ws.rs.Consumes;
@@ -51,7 +51,7 @@ public class AccessTokensResource {
   public AccessToken issueAccessToken(
       @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
       @PathParam(AuthCodeRoute.CODE_PATH_PARAM) String code,
-      AccessTokenSpec request) throws InternalException {
+      AccessTokenIssueSpec request) throws InternalException {
     return authCodeGrantService.issueAccessToken(clientId, code, request);
   }
 }

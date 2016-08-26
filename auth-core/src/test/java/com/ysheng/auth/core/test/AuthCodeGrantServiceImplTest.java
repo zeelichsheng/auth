@@ -21,7 +21,7 @@ import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.GrantType;
 import com.ysheng.auth.model.api.ResponseType;
 import com.ysheng.auth.model.api.authcode.AccessToken;
-import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
+import com.ysheng.auth.model.api.authcode.AccessTokenIssueSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationRevocationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationGrantSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
@@ -308,7 +308,7 @@ public class AuthCodeGrantServiceImplTest {
 
     @Test
     public void failsWithUnsupportedGrantType() {
-      AccessTokenSpec request = new AccessTokenSpec();
+      AccessTokenIssueSpec request = new AccessTokenIssueSpec();
       request.setGrantType(GrantType.IMPLICIT);
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(null, null);
@@ -327,7 +327,7 @@ public class AuthCodeGrantServiceImplTest {
       Database database = mock(Database.class);
       doReturn(null).when(database).findClientById(anyString());
 
-      AccessTokenSpec request = new AccessTokenSpec();
+      AccessTokenIssueSpec request = new AccessTokenIssueSpec();
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
@@ -347,7 +347,7 @@ public class AuthCodeGrantServiceImplTest {
       doReturn(new Client()).when(database).findClientById(anyString());
       doReturn(null).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
 
-      AccessTokenSpec request = new AccessTokenSpec();
+      AccessTokenIssueSpec request = new AccessTokenIssueSpec();
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
@@ -370,7 +370,7 @@ public class AuthCodeGrantServiceImplTest {
       doReturn(new Client()).when(database).findClientById(anyString());
       doReturn(authorizationTicket).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
 
-      AccessTokenSpec request = new AccessTokenSpec();
+      AccessTokenIssueSpec request = new AccessTokenIssueSpec();
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
       request.setRedirectUri("http://5.6.7.8");
 
@@ -396,7 +396,7 @@ public class AuthCodeGrantServiceImplTest {
       doReturn(client).when(database).findClientById(anyString());
       doReturn(authorizationTicket).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
 
-      AccessTokenSpec request = new AccessTokenSpec();
+      AccessTokenIssueSpec request = new AccessTokenIssueSpec();
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
       request.setRedirectUri("http://1.2.3.4");
 
@@ -425,7 +425,7 @@ public class AuthCodeGrantServiceImplTest {
       AuthValueGenerator authValueGenerator = mock(AuthValueGenerator.class);
       doReturn("accessToken").when(authValueGenerator).generateAccessToken();
 
-      AccessTokenSpec request = new AccessTokenSpec();
+      AccessTokenIssueSpec request = new AccessTokenIssueSpec();
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
       request.setRedirectUri("http://1.2.3.4");
 
