@@ -17,22 +17,28 @@ import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.frontend.resource.authcode.AccessTokensResource;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.frontend.test.resource.ResourceTestHelper;
+import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.ExternalException;
 import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AccessTokenIssueSpec;
+import com.ysheng.auth.model.api.exception.ClientNotFoundException;
 import com.ysheng.auth.model.api.exception.InvalidRequestException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.UriBuilder;
+
+import java.util.Arrays;
 
 /**
  * Tests for {@link com.ysheng.auth.frontend.resource.authcode.AccessTokensResource}.
@@ -70,7 +76,7 @@ public class AccessTokensResourceTest {
   }
 
   @Test
-  public void succeedsToIssueAccessToken() throws Throwable {
+  public void succeedsToIssue() throws Throwable {
     AccessTokenIssueSpec request = new AccessTokenIssueSpec();
     AccessToken response = new AccessToken();
     response.setAccessToken("accessToken");
@@ -87,7 +93,7 @@ public class AccessTokensResourceTest {
   }
 
   @Test
-  public void failsToIssueAccessToken() throws Throwable {
+  public void failsToIssue() throws Throwable {
     AccessTokenIssueSpec request = new AccessTokenIssueSpec();
     InvalidRequestException error = new InvalidRequestException("Invalid request");
 
@@ -97,6 +103,33 @@ public class AccessTokensResourceTest {
     ExternalException actualError = testHelper.post(
         accessTokensRoute,
         request,
+        ExternalException.class);
+
+    assertThat(actualError.getErrorCode(), equalTo(error.getErrorCode()));
+    assertThat(actualError.getErrorDescription(), equalTo(error.getErrorDescription()));
+  }
+
+  @Test
+  public void succeedsToList() throws Throwable {
+    ApiList<AccessToken> response = new ApiList<>(Arrays.asList(new AccessToken()));
+
+    doReturn(response).when(authCodeGrantService).listAccessTokens(anyString());
+
+    ApiList<AccessToken> actualResponse = testHelper.get(
+        accessTokensRoute,
+        new GenericType<ApiList<AccessToken>>() {});
+
+    assertThat(actualResponse.getItems().size(), is(1));
+  }
+
+  @Test
+  public void failsToList() throws Throwable {
+    ClientNotFoundException error = new ClientNotFoundException("clientId");
+
+    doThrow(error).when(authCodeGrantService).listAccessTokens(anyString());
+
+    ExternalException actualError = testHelper.get(
+        accessTokensRoute,
         ExternalException.class);
 
     assertThat(actualError.getErrorCode(), equalTo(error.getErrorCode()));
