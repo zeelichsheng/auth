@@ -424,6 +424,7 @@ public class AuthCodeGrantServiceImplTest {
       doReturn(client).when(database).findClientById(anyString());
       doReturn(authorizationTicket).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
       doNothing().when(database).storeAccessToken(any(AccessToken.class));
+      doNothing().when(database).removeAuthorizationTicket(anyString(), anyString());
 
       AuthValueGenerator authValueGenerator = mock(AuthValueGenerator.class);
       doReturn("accessToken").when(authValueGenerator).generateAccessToken();

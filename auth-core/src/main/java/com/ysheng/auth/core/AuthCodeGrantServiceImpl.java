@@ -217,6 +217,13 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
 
     database.storeAccessToken(response);
 
+    // We revoke the authorization code once we issue the access token.
+    // Because we don't want the client to abuse the same code to get multiple
+    // access tokens.
+    AuthorizationRevocationSpec revokeAuthorizationSpec = new AuthorizationRevocationSpec();
+    revokeAuthorizationSpec.setClientSecret(client.getSecret());
+    revokeAuthorization(clientId, code, revokeAuthorizationSpec);
+
     return response;
   }
 }
