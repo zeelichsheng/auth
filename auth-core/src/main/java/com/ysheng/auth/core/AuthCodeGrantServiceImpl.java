@@ -128,7 +128,7 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
    * @return A list of authorization tickets.
    * @throws InternalException The error that contains detail information.
    */
-  public ApiList<AuthorizationTicket> listAuthorizationTicket(String clientId) throws InternalException {
+  public ApiList<AuthorizationTicket> listAuthorizationTickets(String clientId) throws InternalException {
     Client client = database.findClientById(clientId);
     if (client == null) {
       throw new ClientNotFoundException(clientId);
@@ -225,5 +225,21 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
     revokeAuthorization(clientId, code, revokeAuthorizationSpec);
 
     return response;
+  }
+
+  /**
+   * Gets a list of access tokens issued to a particular client.
+   *
+   * @param clientId The client identifier for which the access token was issued to.
+   * @return A list of access tokens.
+   * @throws InternalException The error that contains detail information.
+   */
+  public ApiList<AccessToken> listAccessTokens(String clientId) throws InternalException {
+    Client client = database.findClientById(clientId);
+    if (client == null) {
+      throw new ClientNotFoundException(clientId);
+    }
+
+    return new ApiList<>(database.listAccessTokens(clientId));
   }
 }

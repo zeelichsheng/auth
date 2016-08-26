@@ -58,6 +58,6 @@ public class AuthCodesResource {
   @GET
   public ApiList<AuthorizationTicket> list(
       @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId) throws InternalException {
-    return authCodeGrantService.listAuthorizationTicket(clientId);
+    return authCodeGrantService.listAuthorizationTickets(clientId);
   }
 }

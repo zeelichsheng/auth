@@ -205,9 +205,9 @@ public class AuthCodeGrantServiceImplTest {
   }
 
   /**
-   * Tests for {@link com.ysheng.auth.core.AuthCodeGrantServiceImpl#listAuthorizationTicket}.
+   * Tests for {@link com.ysheng.auth.core.AuthCodeGrantServiceImpl#listAuthorizationTickets}.
    */
-  public static class ListAuthorizationTicketTest {
+  public static class ListAuthorizationTicketsTest {
 
     @Test
     public void failsWithNonExistClient() {
@@ -217,7 +217,7 @@ public class AuthCodeGrantServiceImplTest {
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
       try {
-        service.listAuthorizationTicket("clientId");
+        service.listAuthorizationTickets("clientId");
         fail("Listing authorization tickets should fail with non-exist client");
       } catch (InternalException ex) {
         assertThat(ex.getClass(), equalTo(ClientNotFoundException.class));
@@ -239,7 +239,7 @@ public class AuthCodeGrantServiceImplTest {
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
-      ApiList<AuthorizationTicket> ticketApiList = service.listAuthorizationTicket("clientId");
+      ApiList<AuthorizationTicket> ticketApiList = service.listAuthorizationTickets("clientId");
 
       assertThat(ticketApiList.getItems().size(), is(2));
       assertThat(ticketApiList.getItems().get(0).getCode(), equalTo(ticket1.getCode()));
@@ -439,6 +439,49 @@ public class AuthCodeGrantServiceImplTest {
       assertThat(response.getAccessToken(), equalTo("accessToken"));
       assertThat(response.getTokenType(), is(AccessTokenType.BEARER));
       assertThat(response.getExpiresIn(), equalTo((long) Integer.MAX_VALUE));
+    }
+  }
+
+  /**
+   * Tests for {@link com.ysheng.auth.core.AuthCodeGrantServiceImpl#listAccessTokens}.
+   */
+  public static class ListAccessTokensTest {
+
+    @Test
+    public void failsWithNonExistClient() {
+      Database database = mock(Database.class);
+      doReturn(null).when(database).findClientById(anyString());
+
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
+
+      try {
+        service.listAccessTokens("clientId");
+        fail("Listing access tokens should fail with non-exist client");
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(ClientNotFoundException.class));
+        assertThat(ex.getErrorDescription(), equalTo("Client not found with ID: clientId"));
+      }
+    }
+
+    @Test
+    public void succeedsToListAccessTokens() throws Throwable {
+      AccessToken token1 = new AccessToken();
+      token1.setAccessToken("accessToken1");
+      AccessToken token2 = new AccessToken();
+      token2.setAccessToken("accessToken1");
+      List<AccessToken> tickets = Arrays.asList(token1, token2);
+
+      Database database = mock(Database.class);
+      doReturn(new Client()).when(database).findClientById(anyString());
+      doReturn(tickets).when(database).listAccessTokens(anyString());
+
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
+
+      ApiList<AccessToken> ticketApiList = service.listAccessTokens("clientId");
+
+      assertThat(ticketApiList.getItems().size(), is(2));
+      assertThat(ticketApiList.getItems().get(0).getAccessToken(), equalTo(token1.getAccessToken()));
+      assertThat(ticketApiList.getItems().get(1).getAccessToken(), equalTo(token2.getAccessToken()));
     }
   }
 }

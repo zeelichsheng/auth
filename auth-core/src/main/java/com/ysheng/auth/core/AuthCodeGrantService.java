@@ -58,7 +58,7 @@ public interface AuthCodeGrantService {
    * @return A list of authorization tickets.
    * @throws InternalException The error that contains detail information.
    */
-  ApiList<AuthorizationTicket> listAuthorizationTicket(String clientId) throws InternalException;
+  ApiList<AuthorizationTicket> listAuthorizationTickets(String clientId) throws InternalException;
 
   /**
    * Gets an authorization ticket with the given client identifier and code.
@@ -86,4 +86,13 @@ public interface AuthCodeGrantService {
       String clientId,
       String code,
       AccessTokenIssueSpec request) throws InternalException;
+
+  /**
+   * Gets a list of access tokens issued to a particular client.
+   *
+   * @param clientId The client identifier for which the access token was issued to.
+   * @return A list of access tokens.
+   * @throws InternalException The error that contains detail information.
+   */
+  ApiList<AccessToken> listAccessTokens(String clientId) throws InternalException;
 }

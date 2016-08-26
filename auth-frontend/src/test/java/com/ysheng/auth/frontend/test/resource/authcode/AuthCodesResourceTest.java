@@ -108,7 +108,7 @@ public class AuthCodesResourceTest {
   public void succeedsToList() throws Throwable {
     ApiList<AuthorizationTicket> response = new ApiList<>(Arrays.asList(new AuthorizationTicket()));
 
-    doReturn(response).when(authCodeGrantService).listAuthorizationTicket(anyString());
+    doReturn(response).when(authCodeGrantService).listAuthorizationTickets(anyString());
 
     ApiList<AuthorizationTicket> actualResponse = testHelper.get(
         authorizationRoute,
@@ -121,7 +121,7 @@ public class AuthCodesResourceTest {
   public void failsToList() throws Throwable {
     ClientNotFoundException error = new ClientNotFoundException("clientId");
 
-    doThrow(error).when(authCodeGrantService).listAuthorizationTicket(anyString());
+    doThrow(error).when(authCodeGrantService).listAuthorizationTickets(anyString());
 
     ExternalException actualError = testHelper.get(
         authorizationRoute,
