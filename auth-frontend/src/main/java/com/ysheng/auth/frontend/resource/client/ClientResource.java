@@ -55,7 +55,7 @@ public class ClientResource {
   }
 
   @POST
-  @Path(ClientRoute.CLIENT_UNREGISTER_ACTION)
+  @Path(ClientRoute.UNREGISTER_CLIENT_ACTION)
   public void unregister(
       @PathParam(ClientRoute.CLIENT_ID_PATH_PARAM) String clientId,
       ClientUnregistrationSpec request) throws ClientUnregistrationError {

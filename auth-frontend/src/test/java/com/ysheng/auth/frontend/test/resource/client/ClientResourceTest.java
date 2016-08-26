@@ -57,7 +57,7 @@ public class ClientResourceTest {
 
   // The client unregisteration route.
   private String clientUnregistrationRoute =
-      UriBuilder.fromPath(ClientRoute.CLIENT_PATH + ClientRoute.CLIENT_UNREGISTER_ACTION).build(clientId).toString();
+      UriBuilder.fromPath(ClientRoute.CLIENT_PATH + ClientRoute.UNREGISTER_CLIENT_ACTION).build(clientId).toString();
 
   @BeforeMethod
   public void setUpTest() throws Throwable {

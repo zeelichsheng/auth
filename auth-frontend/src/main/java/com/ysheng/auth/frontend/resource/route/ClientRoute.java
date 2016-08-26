@@ -24,5 +24,5 @@ public class ClientRoute {
 
   public static final String CLIENT_PATH = API + "/{" + CLIENT_ID_PATH_PARAM + "}";
 
-  public static final String CLIENT_UNREGISTER_ACTION = "/unregister";
+  public static final String UNREGISTER_CLIENT_ACTION = "/unregister";
 }
