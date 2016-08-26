@@ -15,11 +15,13 @@ package com.ysheng.auth.frontend.resource.authcode;
 
 import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
+import com.ysheng.auth.model.api.authcode.AuthorizationRevocationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.exception.InternalException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -52,5 +54,13 @@ public class ClientAuthCodeResource {
       @PathParam(AuthCodeRoute.CODE_PATH_PARAM) String code)
     throws InternalException {
     return authCodeGrantService.getAuthorizationTicket(clientId, code);
+  }
+
+  @POST
+  public void revoke(
+      @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
+      @PathParam(AuthCodeRoute.CODE_PATH_PARAM) String code,
+      AuthorizationRevocationSpec request) throws InternalException {
+    authCodeGrantService.revokeAuthorization(clientId, code, request);
   }
 }

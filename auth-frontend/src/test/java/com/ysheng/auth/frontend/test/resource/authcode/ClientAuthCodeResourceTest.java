@@ -18,14 +18,18 @@ import com.ysheng.auth.frontend.resource.authcode.ClientAuthCodeResource;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.frontend.test.resource.ResourceTestHelper;
 import com.ysheng.auth.model.api.ExternalException;
+import com.ysheng.auth.model.api.authcode.AuthorizationRevocationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.exception.AuthorizationTicketNotFoundError;
+import com.ysheng.auth.model.api.exception.ClientNotFoundException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -90,6 +94,32 @@ public class ClientAuthCodeResourceTest {
 
     ExternalException actualError =  testHelper.get(
         authorizationRoute,
+        ExternalException.class);
+
+    assertThat(actualError.getErrorCode(), equalTo(error.getErrorCode()));
+    assertThat(actualError.getErrorDescription(), equalTo(error.getErrorDescription()));
+  }
+
+  @Test
+  public void succeedsToRevoke() throws Throwable {
+    doNothing().when(authCodeGrantService)
+        .revokeAuthorization(anyString(), anyString(), any(AuthorizationRevocationSpec.class));
+
+    testHelper.post(
+        authorizationRoute,
+        new AuthorizationRevocationSpec());
+  }
+
+  @Test
+  public void failsToRevoke() throws Throwable {
+    ClientNotFoundException error = new ClientNotFoundException("clientId");
+
+    doThrow(error).when(authCodeGrantService)
+        .revokeAuthorization(anyString(), anyString(), any(AuthorizationRevocationSpec.class));
+
+    ExternalException actualError =  testHelper.post(
+        authorizationRoute,
+        new AuthorizationRevocationSpec(),
         ExternalException.class);
 
     assertThat(actualError.getErrorCode(), equalTo(error.getErrorCode()));
