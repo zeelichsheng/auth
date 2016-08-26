@@ -15,12 +15,11 @@ package com.ysheng.auth.frontend.resource.authcode;
 
 import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
-import com.ysheng.auth.model.api.authcode.AuthorizationRevocationSpec;
-import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
+import com.ysheng.auth.model.api.authcode.AccessToken;
+import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
 import com.ysheng.auth.model.api.exception.InternalException;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -28,13 +27,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
- * Defines the RESTful endpoints related to auth code grant operations for
- * a specific client and auth code combination.
+ * Defines the RESTful endpoints related to access token related operations for
+ * a specific client and auth code combinatino.
  */
-@Path(AuthCodeRoute.AUTHORIZATION_PATH)
+@Path(AuthCodeRoute.ACCESS_TOKENS_API)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class AuthCodeResource {
+public class AccessTokensResource {
 
   // The auth code grant service that performs backend operation.
   private final AuthCodeGrantService authCodeGrantService;
@@ -44,23 +43,15 @@ public class AuthCodeResource {
    *
    * @param authCodeGrantService The auth code grant service that performs backend operation.
    */
-  public AuthCodeResource(AuthCodeGrantService authCodeGrantService) {
+  public AccessTokensResource(AuthCodeGrantService authCodeGrantService) {
     this.authCodeGrantService = authCodeGrantService;
   }
 
-  @GET
-  public AuthorizationTicket get(
-      @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
-      @PathParam(AuthCodeRoute.CODE_PATH_PARAM) String code)
-    throws InternalException {
-    return authCodeGrantService.getAuthorizationTicket(clientId, code);
-  }
-
   @POST
-  public void revoke(
+  public AccessToken issueAccessToken(
       @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
       @PathParam(AuthCodeRoute.CODE_PATH_PARAM) String code,
-      AuthorizationRevocationSpec request) throws InternalException {
-    authCodeGrantService.revokeAuthorization(clientId, code, request);
+      AccessTokenSpec request) throws InternalException {
+    return authCodeGrantService.issueAccessToken(clientId, code, request);
   }
 }

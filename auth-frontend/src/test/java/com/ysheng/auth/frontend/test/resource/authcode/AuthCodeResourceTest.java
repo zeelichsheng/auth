@@ -18,13 +18,10 @@ import com.ysheng.auth.frontend.resource.authcode.AuthCodeResource;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.frontend.test.resource.ResourceTestHelper;
 import com.ysheng.auth.model.api.ExternalException;
-import com.ysheng.auth.model.api.authcode.AccessToken;
-import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationRevocationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.exception.AuthorizationTicketNotFoundError;
 import com.ysheng.auth.model.api.exception.ClientNotFoundException;
-import com.ysheng.auth.model.api.exception.InvalidRequestException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -59,11 +56,6 @@ public class AuthCodeResourceTest {
   // The authorization route.
   private String authorizationRoute =
       UriBuilder.fromPath(AuthCodeRoute.AUTHORIZATION_PATH).build(clientId, code).toString();
-
-  // The access tokens route.
-  private String accessTokensRoute =
-      UriBuilder.fromPath(AuthCodeRoute.AUTHORIZATION_PATH + AuthCodeRoute.ACCESS_TOKEN_PATH).build(clientId, code)
-          .toString();
 
   @BeforeMethod
   public void setUpTest() throws Throwable {
@@ -129,40 +121,6 @@ public class AuthCodeResourceTest {
     ExternalException actualError =  testHelper.post(
         authorizationRoute,
         new AuthorizationRevocationSpec(),
-        ExternalException.class);
-
-    assertThat(actualError.getErrorCode(), equalTo(error.getErrorCode()));
-    assertThat(actualError.getErrorDescription(), equalTo(error.getErrorDescription()));
-  }
-
-  @Test
-  public void succeedsToIssueAccessToken() throws Throwable {
-    AccessTokenSpec request = new AccessTokenSpec();
-    AccessToken response = new AccessToken();
-    response.setAccessToken("accessToken");
-
-    doReturn(response).when(authCodeGrantService)
-        .issueAccessToken(anyString(), anyString(), any(AccessTokenSpec.class));
-
-    AccessToken actualResponse = testHelper.post(
-        accessTokensRoute,
-        request,
-        AccessToken.class);
-
-    assertThat(actualResponse.getAccessToken(), equalTo(response.getAccessToken()));
-  }
-
-  @Test
-  public void failsToIssueAccessToken() throws Throwable {
-    AccessTokenSpec request = new AccessTokenSpec();
-    InvalidRequestException error = new InvalidRequestException("Invalid request");
-
-    doThrow(error).when(authCodeGrantService)
-        .issueAccessToken(anyString(), anyString(), any(AccessTokenSpec.class));
-
-    ExternalException actualError = testHelper.post(
-        accessTokensRoute,
-        request,
         ExternalException.class);
 
     assertThat(actualError.getErrorCode(), equalTo(error.getErrorCode()));

@@ -22,9 +22,12 @@ public class AuthCodeRoute {
 
   public static final String CODE_PATH_PARAM = "code";
 
+  // This is the auth codes path, i.e. /auth-codes/{clientId}
   public static final String API = "/auth-codes/{" + CLIENT_ID_PATH_PARAM + "}";
 
+  // This is the individual auth code path, i.e. /auth-codes/{clientId}/{code}
   public static final String AUTHORIZATION_PATH = API + "/{" + CODE_PATH_PARAM + "}";
 
-  public static final String ACCESS_TOKEN_PATH = "/access-tokens";
+  // This is the access tokens path, i.e. /auth-codes/{cliendId}/{code}/access-tokens
+  public static final String ACCESS_TOKENS_API = AUTHORIZATION_PATH +  "/access-tokens";
 }
