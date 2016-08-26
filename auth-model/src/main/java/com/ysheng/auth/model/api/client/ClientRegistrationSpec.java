@@ -24,11 +24,11 @@ import com.ysheng.auth.model.api.ClientType;
 public class ClientRegistrationSpec {
 
   // Type of the client.
-  @JsonProperty
+  @JsonProperty(required = true)
   private ClientType type;
 
   // Redirect URI of the client.
-  @JsonProperty
+  @JsonProperty(required = true)
   private String redirectUri;
 
   ///
