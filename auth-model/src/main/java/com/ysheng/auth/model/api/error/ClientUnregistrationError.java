@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 VMware, Inc. All Rights Reserved.
+ * Copyright 2016 Yu Sheng. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy of
@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.api.authcode;
+package com.ysheng.auth.model.api.error;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,33 +20,27 @@ import com.ysheng.auth.model.api.InternalException;
 import javax.ws.rs.core.Response;
 
 /**
- * Defines the data structure of access token error for Authorization Code Grant.
+ * Defines the data structure of client unregistration error response.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AccessTokenError extends InternalException {
+public class ClientUnregistrationError extends InternalException {
 
-  // REQUIRED. A single ASCII error code.
+  // Client unregistration error code.
   @JsonProperty
-  private AccessTokenErrorType error;
+  private ClientUnregistrationErrorType error;
 
-  // OPTIONAL. Human-readable ASCII text providing additional
-  // information.
+  // Human-readable ASCII text providing additional information.
   @JsonProperty
   private String errorDescription;
 
-  // OPTIONAL. A URI identifying a human-readable web page with
-  // information about the error.
-  @JsonProperty
-  private String errorUri;
-
   /**
-   * Constructs an AccessTokenError object.
+   * Constructs a ClientUnregistrationError object.
    *
    * @param error The error code.
    * @param errorDescription The error message.
    */
-  public AccessTokenError(
-      AccessTokenErrorType error,
+  public ClientUnregistrationError(
+      ClientUnregistrationErrorType error,
       String errorDescription) {
     super(errorDescription);
     this.error = error;
@@ -57,13 +51,10 @@ public class AccessTokenError extends InternalException {
   public Response.Status getHttpStatusCode() {
     switch (error) {
       case INVALID_REQUEST:
-      case INVALID_GRANT:
-      case UNSUPPORTED_GRANT_TYPE:
         return Response.Status.BAD_REQUEST;
-      case INVALID_CLIENT:
+      case CLIENT_NOT_FOUND:
         return Response.Status.NOT_FOUND;
-      case UNAUTHORIZED_CLIENT:
-      case INVALID_SCOPE:
+      case UNAUTHOURIZED_CLIENT:
         return Response.Status.UNAUTHORIZED;
     }
 
@@ -84,11 +75,11 @@ public class AccessTokenError extends InternalException {
   /// Getters and Setters.
   ///
 
-  public AccessTokenErrorType getError() {
+  public ClientUnregistrationErrorType getError() {
     return error;
   }
 
-  public void setError(AccessTokenErrorType error) {
+  public void setError(ClientUnregistrationErrorType error) {
     this.error = error;
   }
 
@@ -98,13 +89,5 @@ public class AccessTokenError extends InternalException {
 
   public void setErrorDescription(String errorDescription) {
     this.errorDescription = errorDescription;
-  }
-
-  public String getErrorUri() {
-    return errorUri;
-  }
-
-  public void setErrorUri(String errorUri) {
-    this.errorUri = errorUri;
   }
 }

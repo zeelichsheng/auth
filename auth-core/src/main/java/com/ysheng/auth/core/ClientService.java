@@ -15,10 +15,10 @@ package com.ysheng.auth.core;
 
 import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.client.Client;
-import com.ysheng.auth.model.api.client.ClientNotFoundError;
-import com.ysheng.auth.model.api.client.ClientRegistrationError;
+import com.ysheng.auth.model.api.error.ClientNotFoundError;
+import com.ysheng.auth.model.api.error.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationSpec;
-import com.ysheng.auth.model.api.client.ClientUnregistrationError;
+import com.ysheng.auth.model.api.error.ClientUnregistrationError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationSpec;
 
 /**

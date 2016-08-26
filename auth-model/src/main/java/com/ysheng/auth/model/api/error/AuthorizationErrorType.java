@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.api.authcode;
+package com.ysheng.auth.model.api.error;
 
 /**
  * Defines the error types used in the authorization error response.

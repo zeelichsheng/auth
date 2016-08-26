@@ -18,16 +18,16 @@ import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.api.AccessTokenType;
 import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.authcode.AccessToken;
-import com.ysheng.auth.model.api.authcode.AccessTokenError;
-import com.ysheng.auth.model.api.authcode.AccessTokenErrorType;
+import com.ysheng.auth.model.api.error.AccessTokenError;
+import com.ysheng.auth.model.api.error.AccessTokenErrorType;
 import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
-import com.ysheng.auth.model.api.authcode.AuthorizationError;
-import com.ysheng.auth.model.api.authcode.AuthorizationErrorType;
+import com.ysheng.auth.model.api.error.AuthorizationError;
+import com.ysheng.auth.model.api.error.AuthorizationErrorType;
 import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
-import com.ysheng.auth.model.api.authcode.AuthorizationTicketNotFoundError;
+import com.ysheng.auth.model.api.error.AuthorizationTicketNotFoundError;
 import com.ysheng.auth.model.api.client.Client;
-import com.ysheng.auth.model.api.client.ClientNotFoundError;
+import com.ysheng.auth.model.api.error.ClientNotFoundError;
 
 /**
  * Implements authorization code grant related functions.

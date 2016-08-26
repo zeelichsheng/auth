@@ -16,8 +16,8 @@ package com.ysheng.auth.frontend.resource.authcode;
 import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
-import com.ysheng.auth.model.api.authcode.AuthorizationTicketNotFoundError;
-import com.ysheng.auth.model.api.client.ClientNotFoundError;
+import com.ysheng.auth.model.api.error.AuthorizationTicketNotFoundError;
+import com.ysheng.auth.model.api.error.ClientNotFoundError;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;

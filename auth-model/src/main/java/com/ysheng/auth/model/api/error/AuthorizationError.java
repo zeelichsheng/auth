@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.api.client;
+package com.ysheng.auth.model.api.error;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,27 +20,38 @@ import com.ysheng.auth.model.api.InternalException;
 import javax.ws.rs.core.Response;
 
 /**
- * Defines the data structure of client registration error response.
+ * Defines the data structure of authorization error for Authorization Code Grant.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ClientRegistrationError extends InternalException {
+public class AuthorizationError extends InternalException {
 
-  // Client registration error code.
+  // REQUIRED. A single ASCII error code.
   @JsonProperty
-  private ClientRegistrationErrorType error;
+  private AuthorizationErrorType error;
 
-  // Human-readable ASCII text providing additional information.
+  // OPTIONAL. Human-readable ASCII text providing additional
+  // information.
   @JsonProperty
   private String errorDescription;
 
+  // OPTIONAL. A URI identifying a human-readable web page with
+  // information about the error.
+  @JsonProperty
+  private String errorUri;
+
+  // REQUIRED if a "state" parameter was present in the client
+  // authorization request.
+  @JsonProperty
+  private String state;
+
   /**
-   * Constructs a ClientRegistrationError object.
+   * Constructs an AuthorizationError object.
    *
    * @param error The error code.
    * @param errorDescription The error message.
    */
-  public ClientRegistrationError(
-      ClientRegistrationErrorType error,
+  public AuthorizationError(
+      AuthorizationErrorType error,
       String errorDescription) {
     super(errorDescription);
     this.error = error;
@@ -51,8 +62,16 @@ public class ClientRegistrationError extends InternalException {
   public Response.Status getHttpStatusCode() {
     switch (error) {
       case INVALID_REQUEST:
-      case ALREADY_REGISTERED:
+      case UNSUPPORTED_RESPONSE_TYPE:
         return Response.Status.BAD_REQUEST;
+      case UNAUTHORIZED_CLIENT:
+      case ACCESS_DENIDED:
+      case INVALID_SCOPE:
+        return Response.Status.UNAUTHORIZED;
+      case SERVER_ERROR:
+        return Response.Status.INTERNAL_SERVER_ERROR;
+      case TEMPORARILY_UNAVAILABLE:
+        return Response.Status.SERVICE_UNAVAILABLE;
     }
 
     return Response.Status.INTERNAL_SERVER_ERROR;
@@ -72,11 +91,11 @@ public class ClientRegistrationError extends InternalException {
   /// Getters and Setters.
   ///
 
-  public ClientRegistrationErrorType getError() {
+  public AuthorizationErrorType getError() {
     return error;
   }
 
-  public void setError(ClientRegistrationErrorType error) {
+  public void setError(AuthorizationErrorType error) {
     this.error = error;
   }
 
@@ -86,5 +105,21 @@ public class ClientRegistrationError extends InternalException {
 
   public void setErrorDescription(String errorDescription) {
     this.errorDescription = errorDescription;
+  }
+
+  public String getErrorUri() {
+    return errorUri;
+  }
+
+  public void setErrorUri(String errorUri) {
+    this.errorUri = errorUri;
+  }
+
+  public String getState() {
+    return state;
+  }
+
+  public void setState(String state) {
+    this.state = state;
   }
 }

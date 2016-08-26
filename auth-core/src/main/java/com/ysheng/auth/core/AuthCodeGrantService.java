@@ -15,13 +15,13 @@ package com.ysheng.auth.core;
 
 import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.authcode.AccessToken;
-import com.ysheng.auth.model.api.authcode.AccessTokenError;
+import com.ysheng.auth.model.api.error.AccessTokenError;
 import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
-import com.ysheng.auth.model.api.authcode.AuthorizationError;
+import com.ysheng.auth.model.api.error.AuthorizationError;
 import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
-import com.ysheng.auth.model.api.authcode.AuthorizationTicketNotFoundError;
-import com.ysheng.auth.model.api.client.ClientNotFoundError;
+import com.ysheng.auth.model.api.error.AuthorizationTicketNotFoundError;
+import com.ysheng.auth.model.api.error.ClientNotFoundError;
 
 /**
  * Defines the interface of authorization code grant related functions.

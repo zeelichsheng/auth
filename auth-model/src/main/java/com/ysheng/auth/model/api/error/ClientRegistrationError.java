@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.api.client;
+package com.ysheng.auth.model.api.error;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,27 +20,27 @@ import com.ysheng.auth.model.api.InternalException;
 import javax.ws.rs.core.Response;
 
 /**
- * Defines the data structure of client unregistration error response.
+ * Defines the data structure of client registration error response.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ClientUnregistrationError extends InternalException {
+public class ClientRegistrationError extends InternalException {
 
-  // Client unregistration error code.
+  // Client registration error code.
   @JsonProperty
-  private ClientUnregistrationErrorType error;
+  private ClientRegistrationErrorType error;
 
   // Human-readable ASCII text providing additional information.
   @JsonProperty
   private String errorDescription;
 
   /**
-   * Constructs a ClientUnregistrationError object.
+   * Constructs a ClientRegistrationError object.
    *
    * @param error The error code.
    * @param errorDescription The error message.
    */
-  public ClientUnregistrationError(
-      ClientUnregistrationErrorType error,
+  public ClientRegistrationError(
+      ClientRegistrationErrorType error,
       String errorDescription) {
     super(errorDescription);
     this.error = error;
@@ -51,11 +51,8 @@ public class ClientUnregistrationError extends InternalException {
   public Response.Status getHttpStatusCode() {
     switch (error) {
       case INVALID_REQUEST:
+      case ALREADY_REGISTERED:
         return Response.Status.BAD_REQUEST;
-      case CLIENT_NOT_FOUND:
-        return Response.Status.NOT_FOUND;
-      case UNAUTHOURIZED_CLIENT:
-        return Response.Status.UNAUTHORIZED;
     }
 
     return Response.Status.INTERNAL_SERVER_ERROR;
@@ -75,11 +72,11 @@ public class ClientUnregistrationError extends InternalException {
   /// Getters and Setters.
   ///
 
-  public ClientUnregistrationErrorType getError() {
+  public ClientRegistrationErrorType getError() {
     return error;
   }
 
-  public void setError(ClientUnregistrationErrorType error) {
+  public void setError(ClientRegistrationErrorType error) {
     this.error = error;
   }
 

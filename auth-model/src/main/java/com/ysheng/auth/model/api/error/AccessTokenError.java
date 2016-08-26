@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Yu Sheng. All Rights Reserved.
+ * Copyright 2016 VMware, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy of
@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.api.authcode;
+package com.ysheng.auth.model.api.error;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,14 +20,14 @@ import com.ysheng.auth.model.api.InternalException;
 import javax.ws.rs.core.Response;
 
 /**
- * Defines the data structure of authorization error for Authorization Code Grant.
+ * Defines the data structure of access token error for Authorization Code Grant.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AuthorizationError extends InternalException {
+public class AccessTokenError extends InternalException {
 
   // REQUIRED. A single ASCII error code.
   @JsonProperty
-  private AuthorizationErrorType error;
+  private AccessTokenErrorType error;
 
   // OPTIONAL. Human-readable ASCII text providing additional
   // information.
@@ -39,19 +39,14 @@ public class AuthorizationError extends InternalException {
   @JsonProperty
   private String errorUri;
 
-  // REQUIRED if a "state" parameter was present in the client
-  // authorization request.
-  @JsonProperty
-  private String state;
-
   /**
-   * Constructs an AuthorizationError object.
+   * Constructs an AccessTokenError object.
    *
    * @param error The error code.
    * @param errorDescription The error message.
    */
-  public AuthorizationError(
-      AuthorizationErrorType error,
+  public AccessTokenError(
+      AccessTokenErrorType error,
       String errorDescription) {
     super(errorDescription);
     this.error = error;
@@ -62,16 +57,14 @@ public class AuthorizationError extends InternalException {
   public Response.Status getHttpStatusCode() {
     switch (error) {
       case INVALID_REQUEST:
-      case UNSUPPORTED_RESPONSE_TYPE:
+      case INVALID_GRANT:
+      case UNSUPPORTED_GRANT_TYPE:
         return Response.Status.BAD_REQUEST;
+      case INVALID_CLIENT:
+        return Response.Status.NOT_FOUND;
       case UNAUTHORIZED_CLIENT:
-      case ACCESS_DENIDED:
       case INVALID_SCOPE:
         return Response.Status.UNAUTHORIZED;
-      case SERVER_ERROR:
-        return Response.Status.INTERNAL_SERVER_ERROR;
-      case TEMPORARILY_UNAVAILABLE:
-        return Response.Status.SERVICE_UNAVAILABLE;
     }
 
     return Response.Status.INTERNAL_SERVER_ERROR;
@@ -91,11 +84,11 @@ public class AuthorizationError extends InternalException {
   /// Getters and Setters.
   ///
 
-  public AuthorizationErrorType getError() {
+  public AccessTokenErrorType getError() {
     return error;
   }
 
-  public void setError(AuthorizationErrorType error) {
+  public void setError(AccessTokenErrorType error) {
     this.error = error;
   }
 
@@ -113,13 +106,5 @@ public class AuthorizationError extends InternalException {
 
   public void setErrorUri(String errorUri) {
     this.errorUri = errorUri;
-  }
-
-  public String getState() {
-    return state;
-  }
-
-  public void setState(String state) {
-    this.state = state;
   }
 }

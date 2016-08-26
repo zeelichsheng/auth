@@ -16,8 +16,8 @@ package com.ysheng.auth.frontend.resource.client;
 import com.ysheng.auth.core.ClientService;
 import com.ysheng.auth.frontend.resource.route.ClientRoute;
 import com.ysheng.auth.model.api.client.Client;
-import com.ysheng.auth.model.api.client.ClientNotFoundError;
-import com.ysheng.auth.model.api.client.ClientUnregistrationError;
+import com.ysheng.auth.model.api.error.ClientNotFoundError;
+import com.ysheng.auth.model.api.error.ClientUnregistrationError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationSpec;
 
 import javax.ws.rs.Consumes;
