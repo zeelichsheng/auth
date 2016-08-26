@@ -165,26 +165,36 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
    * Issues an access token for a client with an auth code received from authorization of
    * Authorization Code Grant type.
    *
+   * @param clientId The client identifier.
+   * @param code The authorization code.
    * @param request The access token request that contains required information.
    * @return The access token response that contains the access token.
    * @throws InternalException The exception contains error details.
    */
-  public AccessToken issueAccessToken(AccessTokenSpec request) throws InternalException {
+  public AccessToken issueAccessToken(
+      String clientId,
+      String code,
+      AccessTokenSpec request) throws InternalException {
     // Validate the request.
     if (!AccessTokenSpec.VALID_GRANT_TYPE.equals(request.getGrantType())) {
       throw new GrantTypeUnsupportedException(request.getGrantType());
     }
 
-    Client client = database.findClientById(request.getClientId());
+    Client client = database.findClientById(clientId);
     if (client == null) {
-      throw new ClientNotFoundException(request.getClientId());
+      throw new ClientNotFoundException(clientId);
+    }
+
+    if (client.getSecret() != null &&
+        !client.getSecret().equals(request.getClientSecret())) {
+      throw new ClientUnauthorizedException(clientId);
     }
 
     AuthorizationTicket authorizationTicket = database.findAuthorizationTicketByCodeAndClientId(
-        request.getCode(),
-        request.getClientId());
+        code,
+        clientId);
     if (authorizationTicket == null) {
-      throw new InvalidRequestException("Unable to find authorization code: " + request.getCode());
+      throw new AuthorizationTicketNotFoundError(clientId, code);
     }
 
     if (authorizationTicket.getRedirectUri() != null &&
@@ -193,7 +203,7 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
     }
 
     if (!client.getId().equals(authorizationTicket.getClientId())) {
-      throw new InvalidClientException(request.getClientId());
+      throw new InvalidClientException(clientId);
     }
 
     // Build the response.
@@ -201,7 +211,7 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
     response.setAccessToken(authValueGenerator.generateAccessToken());
     response.setTokenType(AccessTokenType.BEARER);
     // TODO: change how we calculate the token expiration.
-    // Also consider how to set refresh token and scop.
+    // Also consider how to set refresh token and scope.
     response.setExpiresIn((long) Integer.MAX_VALUE);
 
     return response;

@@ -76,9 +76,14 @@ public interface AuthCodeGrantService {
    * Issues an access token for a client with an auth code received from authorization of
    * Authorization Code Grant type.
    *
+   * @param clientId The client identifier.
+   * @param code The authorization code.
    * @param request The access token request that contains required information.
    * @return The access token response that contains the access token.
    * @throws InternalException The exception that contains error details.
    */
-  AccessToken issueAccessToken(AccessTokenSpec request) throws InternalException;
+  AccessToken issueAccessToken(
+      String clientId,
+      String code,
+      AccessTokenSpec request) throws InternalException;
 }

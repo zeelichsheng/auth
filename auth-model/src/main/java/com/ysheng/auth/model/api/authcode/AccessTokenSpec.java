@@ -30,19 +30,14 @@ public class AccessTokenSpec {
   @JsonProperty
   private GrantType grantType;
 
-  // REQUIRED. The authorization code received from the authorization server.
-  @JsonProperty
-  private String code;
-
   // REQUIRED if the "redirect_uri" parameter was included in the
   // authorization request, and their value must be identical.
   @JsonProperty
   private String redirectUri;
 
-  // REQUIRED to prevent the server from accepting a code intended for a client
-  // with a different client ID.
+  // REQUIRED. The client secret used to validate if the request is authorized.
   @JsonProperty
-  private String clientId;
+  private String clientSecret;
 
   ///
   /// Getters and Setters.
@@ -56,14 +51,6 @@ public class AccessTokenSpec {
     this.grantType = grantType;
   }
 
-  public String getCode() {
-    return code;
-  }
-
-  public void setCode(String code) {
-    this.code = code;
-  }
-
   public String getRedirectUri() {
     return redirectUri;
   }
@@ -72,11 +59,11 @@ public class AccessTokenSpec {
     this.redirectUri = redirectUri;
   }
 
-  public String getClientId() {
-    return clientId;
+  public String getClientSecret() {
+    return clientSecret;
   }
 
-  public void setClientId(String clientId) {
-    this.clientId = clientId;
+  public void setClientSecret(String clientSecret) {
+    this.clientSecret = clientSecret;
   }
 }
