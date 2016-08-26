@@ -11,12 +11,15 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.api.error;
+package com.ysheng.auth.model.api.exception;
 
 /**
- * Defines the error types used in the client registration error response.
+ * Defines the invalid client exception.
  */
-public enum ClientRegistrationErrorType {
-  INVALID_REQUEST,
-  ALREADY_REGISTERED
+public class InvalidClientException extends InternalException {
+
+  public InvalidClientException(String clientId) {
+    super(ErrorType.GRANT_TYPE_UNSUPPORTED,
+        "Invalid client: " + clientId);
+  }
 }

@@ -14,7 +14,7 @@
 package com.ysheng.auth.frontend.mapper;
 
 import com.ysheng.auth.model.api.ExternalException;
-import com.ysheng.auth.model.api.InternalException;
+import com.ysheng.auth.model.api.exception.InternalException;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -35,8 +35,8 @@ public class InternalExceptionMapper implements ExceptionMapper<InternalExceptio
   @Override
   public Response toResponse(InternalException ex) {
     ExternalException externalException = new ExternalException(
-        ex.getInternalErrorCode(),
-        ex.getInternalErrorDescription());
+        ex.getErrorCode(),
+        ex.getErrorDescription());
 
     Response.ResponseBuilder builder = Response
         .status(ex.getHttpStatusCode())

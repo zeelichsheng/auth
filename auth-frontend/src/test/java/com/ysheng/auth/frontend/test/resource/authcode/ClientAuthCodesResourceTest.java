@@ -19,11 +19,10 @@ import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.frontend.test.resource.ResourceTestHelper;
 import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.ExternalException;
-import com.ysheng.auth.model.api.error.AuthorizationError;
-import com.ysheng.auth.model.api.error.AuthorizationErrorType;
 import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
-import com.ysheng.auth.model.api.error.ClientNotFoundError;
+import com.ysheng.auth.model.api.exception.ClientNotFoundException;
+import com.ysheng.auth.model.api.exception.InvalidRequestException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -92,9 +91,7 @@ public class ClientAuthCodesResourceTest {
   @Test
   public void failsToAuthorize() throws Throwable {
     AuthorizationSpec request = new AuthorizationSpec();
-    AuthorizationError error = new AuthorizationError(
-        AuthorizationErrorType.INVALID_REQUEST,
-        "Invalid request");
+    InvalidRequestException error = new InvalidRequestException("Invalid request");
 
     doThrow(error).when(authCodeGrantService).authorize(anyString(), any(AuthorizationSpec.class));
 
@@ -103,8 +100,8 @@ public class ClientAuthCodesResourceTest {
         request,
         ExternalException.class);
 
-    assertThat(actualError.getErrorCode(), equalTo(error.getInternalErrorCode()));
-    assertThat(actualError.getErrorDescription(), equalTo(error.getInternalErrorDescription()));
+    assertThat(actualError.getErrorCode(), equalTo(error.getErrorCode()));
+    assertThat(actualError.getErrorDescription(), equalTo(error.getErrorDescription()));
   }
 
   @Test
@@ -122,7 +119,7 @@ public class ClientAuthCodesResourceTest {
 
   @Test
   public void failsToList() throws Throwable {
-    ClientNotFoundError error = new ClientNotFoundError("clientId");
+    ClientNotFoundException error = new ClientNotFoundException("clientId");
 
     doThrow(error).when(authCodeGrantService).listAuthorizationTicket(anyString());
 
@@ -130,7 +127,7 @@ public class ClientAuthCodesResourceTest {
         authorizationRoute,
         ExternalException.class);
 
-    assertThat(actualError.getErrorCode(), equalTo(error.getInternalErrorCode()));
-    assertThat(actualError.getErrorDescription(), equalTo(error.getInternalErrorDescription()));
+    assertThat(actualError.getErrorCode(), equalTo(error.getErrorCode()));
+    assertThat(actualError.getErrorDescription(), equalTo(error.getErrorDescription()));
   }
 }

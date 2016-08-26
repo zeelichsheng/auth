@@ -19,8 +19,7 @@ import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.frontend.test.resource.ResourceTestHelper;
 import com.ysheng.auth.model.api.ExternalException;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
-import com.ysheng.auth.model.api.error.AuthorizationTicketNotFoundError;
-import com.ysheng.auth.model.api.error.ClientNotFoundError;
+import com.ysheng.auth.model.api.exception.AuthorizationTicketNotFoundError;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -84,21 +83,7 @@ public class ClientAuthCodeResourceTest {
   }
 
   @Test
-  public void failsToGetWithNonExistClient() throws Throwable {
-    ClientNotFoundError error = new ClientNotFoundError(clientId);
-
-    doThrow(error).when(authCodeGrantService).getAuthorizationTicket(anyString(), anyString());
-
-    ExternalException actualError =  testHelper.get(
-        authorizationRoute,
-        ExternalException.class);
-
-    assertThat(actualError.getErrorCode(), equalTo(error.getInternalErrorCode()));
-    assertThat(actualError.getErrorDescription(), equalTo(error.getInternalErrorDescription()));
-  }
-
-  @Test
-  public void failsToGetWithNonExistTicket() throws Throwable {
+  public void failsToGet() throws Throwable {
     AuthorizationTicketNotFoundError error = new AuthorizationTicketNotFoundError(clientId, code);
 
     doThrow(error).when(authCodeGrantService).getAuthorizationTicket(anyString(), anyString());
@@ -107,7 +92,7 @@ public class ClientAuthCodeResourceTest {
         authorizationRoute,
         ExternalException.class);
 
-    assertThat(actualError.getErrorCode(), equalTo(error.getInternalErrorCode()));
-    assertThat(actualError.getErrorDescription(), equalTo(error.getInternalErrorDescription()));
+    assertThat(actualError.getErrorCode(), equalTo(error.getErrorCode()));
+    assertThat(actualError.getErrorDescription(), equalTo(error.getErrorDescription()));
   }
 }

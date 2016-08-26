@@ -18,14 +18,13 @@ import com.ysheng.auth.common.utility.UriUtil;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.ClientType;
+import com.ysheng.auth.model.api.exception.InternalException;
 import com.ysheng.auth.model.api.client.Client;
-import com.ysheng.auth.model.api.error.ClientNotFoundError;
-import com.ysheng.auth.model.api.error.ClientRegistrationError;
-import com.ysheng.auth.model.api.error.ClientRegistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientRegistrationSpec;
-import com.ysheng.auth.model.api.error.ClientUnregistrationError;
-import com.ysheng.auth.model.api.error.ClientUnregistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientUnregistrationSpec;
+import com.ysheng.auth.model.api.exception.ClientNotFoundException;
+import com.ysheng.auth.model.api.exception.ClientUnauthorizedException;
+import com.ysheng.auth.model.api.exception.InvalidRequestException;
 
 import java.util.List;
 
@@ -58,21 +57,17 @@ public class ClientServiceImpl implements ClientService {
    *
    * @param request The client registration request that contains required information.
    * @return The client object.
-   * @throws ClientRegistrationError The exception that contains error details.
+   * @throws InternalException The exception that contains error details.
    */
   public Client register(ClientRegistrationSpec request)
-      throws ClientRegistrationError {
+      throws InternalException {
     // Validate the request.
     if (request.getRedirectUri() == null) {
-      throw new ClientRegistrationError(
-          ClientRegistrationErrorType.INVALID_REQUEST,
-          "Redirect URI cannot be null");
+      throw new InvalidRequestException("Redirect URI cannot be null");
     }
 
     if (!UriUtil.isValidUri(request.getRedirectUri())) {
-      throw new ClientRegistrationError(
-          ClientRegistrationErrorType.INVALID_REQUEST,
-          "Invalid redirect URI: " + request.getRedirectUri());
+      throw new InvalidRequestException("Invalid redirect URI: " + request.getRedirectUri());
     }
 
     String clientId = authValueGenerator.generateClientId();
@@ -95,31 +90,25 @@ public class ClientServiceImpl implements ClientService {
    *
    * @param clientId The client identifier.
    * @param request The client unregistration request that contains required information.
-   * @throws ClientUnregistrationError The exception that contains error details.
+   * @throws InternalException The exception that contains error details.
    */
   public void unregister(
       String clientId,
       ClientUnregistrationSpec request)
-      throws ClientUnregistrationError {
+      throws InternalException {
     // Validate the request.
     if (clientId == null) {
-      throw new ClientUnregistrationError(
-          ClientUnregistrationErrorType.INVALID_REQUEST,
-          "Client ID cannot be null");
+      throw new InvalidRequestException("Client ID cannot be null");
     }
 
     Client client = database.findClientById(clientId);
     if (client == null) {
-      throw new ClientUnregistrationError(
-          ClientUnregistrationErrorType.CLIENT_NOT_FOUND,
-          "Unable to find client with ID: " + clientId);
+      throw new ClientNotFoundException(clientId);
     }
 
     if (client.getSecret() != null &&
         !client.getSecret().equals(request.getClientSecret())) {
-      throw new ClientUnregistrationError(
-          ClientUnregistrationErrorType.UNAUTHOURIZED_CLIENT,
-          "Unauthorized client unregistration with invalid client secret: " + request.getClientSecret());
+      throw new ClientUnauthorizedException(clientId);
     }
 
     // Remove client from database.
@@ -142,13 +131,13 @@ public class ClientServiceImpl implements ClientService {
    *
    * @param clientId The client identifier.
    * @return A client object with the give identifier.
-   * @throws ClientNotFoundError The error that contains detail information.
+   * @throws ClientNotFoundException The error that contains detail information.
    */
-  public Client get(String clientId) throws ClientNotFoundError {
+  public Client get(String clientId) throws ClientNotFoundException {
     Client client = database.findClientById(clientId);
 
     if (client == null) {
-      throw new ClientNotFoundError(clientId);
+      throw new ClientNotFoundException(clientId);
     }
 
     return client;

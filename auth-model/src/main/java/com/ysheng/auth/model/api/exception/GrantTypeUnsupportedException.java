@@ -11,17 +11,17 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.api.implicit;
+package com.ysheng.auth.model.api.exception;
+
+import com.ysheng.auth.model.api.GrantType;
 
 /**
- * Defines the error types used in the access token error response.
+ * Defines the grant type unsupported exception.
  */
-public enum AccessTokenErrorType {
-  INVALID_REQUEST,
-  UNAUTHORIZED_CLIENT,
-  ACCESS_DENIED,
-  UNSUPPORTED_RESPONSE_TYPE,
-  INVALID_SCOPE,
-  SERVER_ERROR,
-  TEMPORARILY_UNAVAILABLE
+public class GrantTypeUnsupportedException extends InternalException {
+
+  public GrantTypeUnsupportedException(GrantType grantType) {
+    super(ErrorType.GRANT_TYPE_UNSUPPORTED,
+        "Grant type not supported: " + grantType.name());
+  }
 }

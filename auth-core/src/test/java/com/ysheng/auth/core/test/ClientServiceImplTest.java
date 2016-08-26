@@ -18,14 +18,13 @@ import com.ysheng.auth.core.ClientServiceImpl;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.ClientType;
+import com.ysheng.auth.model.api.exception.InternalException;
 import com.ysheng.auth.model.api.client.Client;
-import com.ysheng.auth.model.api.error.ClientNotFoundError;
-import com.ysheng.auth.model.api.error.ClientRegistrationError;
-import com.ysheng.auth.model.api.error.ClientRegistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientRegistrationSpec;
-import com.ysheng.auth.model.api.error.ClientUnregistrationError;
-import com.ysheng.auth.model.api.error.ClientUnregistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientUnregistrationSpec;
+import com.ysheng.auth.model.api.exception.ClientNotFoundException;
+import com.ysheng.auth.model.api.exception.ClientUnauthorizedException;
+import com.ysheng.auth.model.api.exception.InvalidRequestException;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -65,8 +64,8 @@ public class ClientServiceImplTest {
       try {
         service.register(request);
         fail("Client registration should fail with null redirect URI");
-      } catch (ClientRegistrationError ex) {
-        assertThat(ex.getError(), is(ClientRegistrationErrorType.INVALID_REQUEST));
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(InvalidRequestException.class));
         assertThat(ex.getErrorDescription(), equalTo("Redirect URI cannot be null"));
       }
     }
@@ -82,8 +81,8 @@ public class ClientServiceImplTest {
       try {
         service.register(request);
         fail("Client registration should fail with invalid redirect URI");
-      } catch (ClientRegistrationError ex) {
-        assertThat(ex.getError(), is(ClientRegistrationErrorType.INVALID_REQUEST));
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(InvalidRequestException.class));
         assertThat(ex.getErrorDescription(), equalTo("Invalid redirect URI: invalidUri"));
       }
     }
@@ -123,8 +122,8 @@ public class ClientServiceImplTest {
       try {
         service.unregister(null, request);
         fail("Client unregistration should fail with null client ID");
-      } catch (ClientUnregistrationError ex) {
-        assertThat(ex.getError(), is(ClientUnregistrationErrorType.INVALID_REQUEST));
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(InvalidRequestException.class));
         assertThat(ex.getErrorDescription(), equalTo("Client ID cannot be null"));
       }
     }
@@ -141,15 +140,16 @@ public class ClientServiceImplTest {
       try {
         service.unregister("clientId", request);
         fail("Client unregistration should fail with non-exist client ID");
-      } catch (ClientUnregistrationError ex) {
-        assertThat(ex.getError(), is(ClientUnregistrationErrorType.CLIENT_NOT_FOUND));
-        assertThat(ex.getErrorDescription(), equalTo("Unable to find client with ID: clientId"));
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(ClientNotFoundException.class));
+        assertThat(ex.getErrorDescription(), equalTo("Client not found with ID: clientId"));
       }
     }
 
     @Test
     public void failsWithUnauthorizedClient() {
       Client client = new Client();
+      client.setId("clientId");
       client.setSecret("clientSecret1");
 
       Database database = mock(Database.class);
@@ -163,10 +163,10 @@ public class ClientServiceImplTest {
       try {
         service.unregister("clientId", request);
         fail("Client unregistration should fail with unauthorized client");
-      } catch (ClientUnregistrationError ex) {
-        assertThat(ex.getError(), is(ClientUnregistrationErrorType.UNAUTHOURIZED_CLIENT));
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(ClientUnauthorizedException.class));
         assertThat(ex.getErrorDescription(),
-            equalTo("Unauthorized client unregistration with invalid client secret: clientSecret2"));
+            equalTo("Client not authorized: clientId"));
       }
     }
 
@@ -227,9 +227,9 @@ public class ClientServiceImplTest {
       try {
         service.get("clientId");
         fail("Get client should fail with non-exist client");
-      } catch (ClientNotFoundError ex) {
-        assertThat(ex.getInternalErrorCode(), equalTo("ClientNotFound"));
-        assertThat(ex.getInternalErrorDescription(), equalTo("Client not found with ID: clientId"));
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(ClientNotFoundException.class));
+        assertThat(ex.getErrorDescription(), equalTo("Client not found with ID: clientId"));
       }
     }
 

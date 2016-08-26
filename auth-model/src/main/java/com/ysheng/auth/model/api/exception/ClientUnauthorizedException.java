@@ -11,16 +11,20 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.api.error;
+package com.ysheng.auth.model.api.exception;
 
 /**
- * Defines the error types used in the access token error response.
+ * Defines client unauthorized exception.
  */
-public enum AccessTokenErrorType {
-  INVALID_REQUEST,
-  INVALID_CLIENT,
-  INVALID_GRANT,
-  UNAUTHORIZED_CLIENT,
-  UNSUPPORTED_GRANT_TYPE,
-  INVALID_SCOPE
+public class ClientUnauthorizedException extends InternalException {
+
+  /**
+   * Constructs a ClientUnauthorizedException object.
+   *
+   * @param clientId The client identifier.
+   */
+  public ClientUnauthorizedException(String clientId) {
+    super(ErrorType.CLIENT_UNAUTHORIZED,
+        "Client not authorized: " + clientId);
+  }
 }

@@ -14,11 +14,9 @@
 package com.ysheng.auth.core;
 
 import com.ysheng.auth.model.api.ApiList;
+import com.ysheng.auth.model.api.exception.InternalException;
 import com.ysheng.auth.model.api.client.Client;
-import com.ysheng.auth.model.api.error.ClientNotFoundError;
-import com.ysheng.auth.model.api.error.ClientRegistrationError;
 import com.ysheng.auth.model.api.client.ClientRegistrationSpec;
-import com.ysheng.auth.model.api.error.ClientUnregistrationError;
 import com.ysheng.auth.model.api.client.ClientUnregistrationSpec;
 
 /**
@@ -31,20 +29,20 @@ public interface ClientService {
    *
    * @param request The client registration request that contains required information.
    * @return The client object.
-   * @throws ClientRegistrationError The exception that contains error details.
+   * @throws InternalException The exception that contains error details.
    */
-  Client register(ClientRegistrationSpec request) throws ClientRegistrationError;
+  Client register(ClientRegistrationSpec request) throws InternalException;
 
   /**
    * Unregisters a client with the authorization server.
    *
    * @param clientId The client identifier.
    * @param request The client unregistration request that contains required information.
-   * @throws ClientUnregistrationError The exception that contains error details.
+   * @throws InternalException The exception that contains error details.
    */
   void unregister(
       String clientId,
-      ClientUnregistrationSpec request) throws ClientUnregistrationError;
+      ClientUnregistrationSpec request) throws InternalException;
 
   /**
    * Gets a list of all clients.
@@ -58,7 +56,7 @@ public interface ClientService {
    *
    * @param clientId The client identifier.
    * @return A client object with the give identifier.
-   * @throws ClientNotFoundError The error that contains detail information.
+   * @throws InternalException The error that contains detail information.
    */
-  Client get(String clientId) throws ClientNotFoundError;
+  Client get(String clientId) throws InternalException;
 }

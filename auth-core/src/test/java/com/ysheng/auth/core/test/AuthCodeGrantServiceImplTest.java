@@ -19,21 +19,21 @@ import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.api.AccessTokenType;
 import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.GrantType;
+import com.ysheng.auth.model.api.exception.InternalException;
 import com.ysheng.auth.model.api.ResponseType;
 import com.ysheng.auth.model.api.authcode.AccessToken;
-import com.ysheng.auth.model.api.error.AccessTokenError;
-import com.ysheng.auth.model.api.error.AccessTokenErrorType;
 import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
-import com.ysheng.auth.model.api.error.AuthorizationError;
-import com.ysheng.auth.model.api.error.AuthorizationErrorType;
 import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
-import com.ysheng.auth.model.api.error.AuthorizationTicketNotFoundError;
 import com.ysheng.auth.model.api.client.Client;
-import com.ysheng.auth.model.api.error.ClientNotFoundError;
+import com.ysheng.auth.model.api.exception.AuthorizationTicketNotFoundError;
+import com.ysheng.auth.model.api.exception.ClientNotFoundException;
+import com.ysheng.auth.model.api.exception.GrantTypeUnsupportedException;
+import com.ysheng.auth.model.api.exception.InvalidClientException;
+import com.ysheng.auth.model.api.exception.InvalidRequestException;
+import com.ysheng.auth.model.api.exception.ResponseTypeUnsupportedException;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -68,9 +68,9 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.authorize("clientId", request);
         fail("Authorization should fail with unsupported response type");
-      } catch (AuthorizationError ex) {
-        assertThat(ex.getError(), is(AuthorizationErrorType.UNSUPPORTED_RESPONSE_TYPE));
-        assertThat(ex.getMessage(), equalTo("Unsupported response type in request: TOKEN"));
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(ResponseTypeUnsupportedException.class));
+        assertThat(ex.getErrorDescription(), equalTo("Response type not supported: TOKEN"));
       }
     }
 
@@ -87,9 +87,9 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.authorize("clientId", request);
         fail("Authorization should fail with non-exist client");
-      } catch (AuthorizationError ex) {
-        assertThat(ex.getError(), is(AuthorizationErrorType.UNAUTHORIZED_CLIENT));
-        assertThat(ex.getMessage(), equalTo("Unable to find client with ID: clientId"));
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(ClientNotFoundException.class));
+        assertThat(ex.getErrorDescription(), equalTo("Client not found with ID: clientId"));
       }
     }
 
@@ -126,8 +126,9 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.listAuthorizationTicket("clientId");
         fail("Listing authorization tickets should fail with non-exist client");
-      } catch (ClientNotFoundError ex) {
-        assertThat(ex.getMessage(), containsString("clientId"));
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(ClientNotFoundException.class));
+        assertThat(ex.getErrorDescription(), equalTo("Client not found with ID: clientId"));
       }
     }
 
@@ -168,10 +169,9 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.getAuthorizationTicket("clientId", "code");
         fail("Getting authorization ticket should fail with non-exist client");
-      } catch (ClientNotFoundError ex) {
-        assertThat(ex.getMessage(), containsString("clientId"));
-      } catch (AuthorizationTicketNotFoundError ex) {
-        fail("Getting authorization ticket should not fail with authorization ticket not found error");
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(ClientNotFoundException.class));
+        assertThat(ex.getErrorDescription(), equalTo("Client not found with ID: clientId"));
       }
     }
 
@@ -186,11 +186,10 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.getAuthorizationTicket("clientId", "code");
         fail("Getting authorization ticket should fail with non-exist ticket");
-      } catch (ClientNotFoundError ex) {
-        fail("Getting authorization ticket should not fail with client not found error");
-      } catch (AuthorizationTicketNotFoundError ex) {
-        assertThat(ex.getMessage(), containsString("clientId"));
-        assertThat(ex.getMessage(), containsString("code"));
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(AuthorizationTicketNotFoundError.class));
+        assertThat(ex.getErrorDescription(), equalTo("Authorization ticket not found with client ID: clientId" +
+          " and code: code"));
       }
     }
 
@@ -226,9 +225,9 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.issueAccessToken(request);
         fail("Issuing access token should fail with unsupported grant type");
-      } catch (AccessTokenError ex) {
-        assertThat(ex.getError(), is(AccessTokenErrorType.UNSUPPORTED_GRANT_TYPE));
-        assertThat(ex.getMessage(), equalTo("Unsupported grant type in request: IMPLICIT"));
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(GrantTypeUnsupportedException.class));
+        assertThat(ex.getMessage(), equalTo("Grant type not supported: IMPLICIT"));
       }
     }
 
@@ -246,9 +245,9 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.issueAccessToken(request);
         fail("Issuing access token should fail with non-exist client");
-      } catch (AccessTokenError ex) {
-        assertThat(ex.getError(), is(AccessTokenErrorType.UNAUTHORIZED_CLIENT));
-        assertThat(ex.getMessage(), equalTo("Unable to find client with ID: clientId"));
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(ClientNotFoundException.class));
+        assertThat(ex.getMessage(), equalTo("Client not found with ID: clientId"));
       }
     }
 
@@ -268,8 +267,8 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.issueAccessToken(request);
         fail("Issuing access token should fail with non-exist authorization ticket");
-      } catch (AccessTokenError ex) {
-        assertThat(ex.getError(), is(AccessTokenErrorType.INVALID_REQUEST));
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(InvalidRequestException.class));
         assertThat(ex.getMessage(), equalTo("Unable to find authorization code: code"));
       }
     }
@@ -293,8 +292,8 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.issueAccessToken(request);
         fail("Issuing access token should fail with mis-matching redirect URIs");
-      } catch (AccessTokenError ex) {
-        assertThat(ex.getError(), is(AccessTokenErrorType.INVALID_REQUEST));
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(InvalidRequestException.class));
         assertThat(ex.getMessage(), equalTo("Mismatch of redirect URI: http://5.6.7.8"));
       }
     }
@@ -321,9 +320,9 @@ public class AuthCodeGrantServiceImplTest {
       try {
         service.issueAccessToken(request);
         fail("Issuing access token should fail with mis-matching client identifiers");
-      } catch (AccessTokenError ex) {
-        assertThat(ex.getError(), is(AccessTokenErrorType.INVALID_CLIENT));
-        assertThat(ex.getMessage(), equalTo("Invalid client ID: clientId2"));
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(InvalidClientException.class));
+        assertThat(ex.getMessage(), equalTo("Invalid client: clientId2"));
       }
     }
 

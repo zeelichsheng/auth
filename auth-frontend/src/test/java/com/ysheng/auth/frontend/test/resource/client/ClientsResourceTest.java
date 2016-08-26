@@ -21,9 +21,8 @@ import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.ClientType;
 import com.ysheng.auth.model.api.ExternalException;
 import com.ysheng.auth.model.api.client.Client;
-import com.ysheng.auth.model.api.error.ClientRegistrationError;
-import com.ysheng.auth.model.api.error.ClientRegistrationErrorType;
 import com.ysheng.auth.model.api.client.ClientRegistrationSpec;
+import com.ysheng.auth.model.api.exception.InvalidRequestException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -84,9 +83,7 @@ public class ClientsResourceTest {
   public void failsToRegister() throws Throwable {
     ClientRegistrationSpec request = new ClientRegistrationSpec();
     request.setType(ClientType.CONFIDENTIAL);
-    ClientRegistrationError error = new ClientRegistrationError(
-        ClientRegistrationErrorType.INVALID_REQUEST,
-        "Invalid request");
+    InvalidRequestException error = new InvalidRequestException("Invalid request");
 
     doThrow(error).when(clientService).register(any(ClientRegistrationSpec.class));
 
@@ -95,7 +92,7 @@ public class ClientsResourceTest {
         request,
         ExternalException.class);
 
-    assertThat(actualError.getErrorCode(), equalTo(error.getError().toString()));
+    assertThat(actualError.getErrorCode(), equalTo(error.getErrorCode()));
     assertThat(actualError.getErrorDescription(), equalTo(error.getErrorDescription()));
   }
 

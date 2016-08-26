@@ -11,17 +11,17 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.api.error;
+package com.ysheng.auth.model.api.exception;
+
+import com.ysheng.auth.model.api.ResponseType;
 
 /**
- * Defines the error types used in the authorization error response.
+ * Defines the response type unsupported exception.
  */
-public enum AuthorizationErrorType {
-  INVALID_REQUEST,
-  UNAUTHORIZED_CLIENT,
-  ACCESS_DENIDED,
-  UNSUPPORTED_RESPONSE_TYPE,
-  INVALID_SCOPE,
-  SERVER_ERROR,
-  TEMPORARILY_UNAVAILABLE
+public class ResponseTypeUnsupportedException extends InternalException {
+
+  public ResponseTypeUnsupportedException(ResponseType responseType) {
+    super(ErrorType.RESPONSE_TYPE_UNSUPPORTED,
+        "Response type not supported: " + responseType.name());
+  }
 }

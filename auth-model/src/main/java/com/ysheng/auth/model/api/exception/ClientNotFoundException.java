@@ -11,13 +11,20 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.api.error;
+package com.ysheng.auth.model.api.exception;
 
 /**
- * Defines the error types used in the client unregistration error response.
+ * Defines the client not found exception.
  */
-public enum ClientUnregistrationErrorType {
-  INVALID_REQUEST,
-  CLIENT_NOT_FOUND,
-  UNAUTHOURIZED_CLIENT
+public class ClientNotFoundException extends InternalException {
+
+  /**
+   * Constructs a ClientNotFoundError object.
+   *
+   * @param clientId The client identifier.
+   */
+  public ClientNotFoundException(String clientId) {
+    super(ErrorType.CLIENT_NOT_FOUND,
+        "Client not found with ID: " + clientId);
+  }
 }

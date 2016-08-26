@@ -16,10 +16,9 @@ package com.ysheng.auth.frontend.resource.authcode;
 import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.model.api.ApiList;
-import com.ysheng.auth.model.api.error.AuthorizationError;
 import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
-import com.ysheng.auth.model.api.error.ClientNotFoundError;
+import com.ysheng.auth.model.api.exception.InternalException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -52,13 +51,13 @@ public class ClientAuthCodesResource {
   @POST
   public AuthorizationTicket authorize(
       @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
-      AuthorizationSpec request) throws AuthorizationError {
+      AuthorizationSpec request) throws InternalException {
     return authCodeGrantService.authorize(clientId, request);
   }
 
   @GET
   public ApiList<AuthorizationTicket> list(
-      @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId) throws ClientNotFoundError {
+      @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId) throws InternalException {
     return authCodeGrantService.listAuthorizationTicket(clientId);
   }
 }

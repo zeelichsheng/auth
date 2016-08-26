@@ -14,14 +14,11 @@
 package com.ysheng.auth.core;
 
 import com.ysheng.auth.model.api.ApiList;
+import com.ysheng.auth.model.api.exception.InternalException;
 import com.ysheng.auth.model.api.authcode.AccessToken;
-import com.ysheng.auth.model.api.error.AccessTokenError;
 import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
-import com.ysheng.auth.model.api.error.AuthorizationError;
 import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
-import com.ysheng.auth.model.api.error.AuthorizationTicketNotFoundError;
-import com.ysheng.auth.model.api.error.ClientNotFoundError;
 
 /**
  * Defines the interface of authorization code grant related functions.
@@ -34,20 +31,20 @@ public interface AuthCodeGrantService {
    * @param clientId The client identifier.
    * @param request The authorization request that contains required information.
    * @return The authorization ticket object.
-   * @throws AuthorizationError The exception that contains error details.
+   * @throws InternalException The exception that contains error details.
    */
   AuthorizationTicket authorize(
       String clientId,
-      AuthorizationSpec request) throws AuthorizationError;
+      AuthorizationSpec request) throws InternalException;
 
   /**
    * Gets a list of authorization tickets granted to a particular client.
    *
    * @param clientId The client identifier for which the authorization ticket was granted to.
    * @return A list of authorization tickets.
-   * @throws ClientNotFoundError The error that contains detail information.
+   * @throws InternalException The error that contains detail information.
    */
-  ApiList<AuthorizationTicket> listAuthorizationTicket(String clientId) throws ClientNotFoundError;
+  ApiList<AuthorizationTicket> listAuthorizationTicket(String clientId) throws InternalException;
 
   /**
    * Gets an authorization ticket with the given client identifier and code.
@@ -55,12 +52,11 @@ public interface AuthCodeGrantService {
    * @param clientId The client identifier.
    * @param code The authorization code.
    * @return An authorization ticket that matches the criteria.
-   * @throws ClientNotFoundError The error that contains detail information.
-   * @throws AuthorizationTicketNotFoundError The error that contains detail information.
+   * @throws InternalException The error that contains detail information.
    */
   AuthorizationTicket getAuthorizationTicket(
       String clientId,
-      String code) throws ClientNotFoundError, AuthorizationTicketNotFoundError;
+      String code) throws InternalException;
 
   /**
    * Issues an access token for a client with an auth code received from authorization of
@@ -68,7 +64,7 @@ public interface AuthCodeGrantService {
    *
    * @param request The access token request that contains required information.
    * @return The access token response that contains the access token.
-   * @throws AccessTokenError The exception that contains error details.
+   * @throws InternalException The exception that contains error details.
    */
-  AccessToken issueAccessToken(AccessTokenSpec request) throws AccessTokenError;
+  AccessToken issueAccessToken(AccessTokenSpec request) throws InternalException;
 }

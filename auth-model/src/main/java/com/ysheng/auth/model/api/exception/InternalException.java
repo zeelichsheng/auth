@@ -11,14 +11,20 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.api;
+package com.ysheng.auth.model.api.exception;
 
 import javax.ws.rs.core.Response;
 
 /**
  * Defines the data structure that represents an API exception.
  */
-public abstract class InternalException extends Exception {
+public class InternalException extends Exception {
+
+  // The error code.
+  private ErrorType error;
+
+  // The error description.
+  private String errorDescription;
 
   /**
    * Constructs an InternalException object.
@@ -26,13 +32,22 @@ public abstract class InternalException extends Exception {
    * @param errorDescription The error detail.
    */
   public InternalException(
+      ErrorType error,
       String errorDescription) {
     super(errorDescription);
+    this.error = error;
+    this.errorDescription = errorDescription;
   }
 
-  public abstract Response.Status getHttpStatusCode();
+  public Response.Status getHttpStatusCode() {
+    return error.getHttpStatus();
+  }
 
-  public abstract String getInternalErrorCode();
+  public String getErrorCode() {
+    return error.name();
+  }
 
-  public abstract String getInternalErrorDescription();
+  public String getErrorDescription() {
+    return errorDescription;
+  }
 }

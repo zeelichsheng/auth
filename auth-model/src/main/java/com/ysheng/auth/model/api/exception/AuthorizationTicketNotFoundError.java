@@ -11,27 +11,12 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.model.api.error;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ysheng.auth.model.api.InternalException;
-
-import javax.ws.rs.core.Response;
+package com.ysheng.auth.model.api.exception;
 
 /**
  * Defines the data structure of authorization not found error.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthorizationTicketNotFoundError extends InternalException {
-
-  // The client identifier.
-  @JsonProperty
-  private String clientId;
-
-  // The authorization code.
-  @JsonProperty
-  private String code;
 
   /**
    * Constructs a AuthorizationTicketNotFoundError object.
@@ -42,24 +27,7 @@ public class AuthorizationTicketNotFoundError extends InternalException {
   public AuthorizationTicketNotFoundError(
       String clientId,
       String code) {
-    super("Authorization ticket not found with client ID: " + clientId +
-      " and code: " + code);
-    this.clientId = clientId;
-    this.code = code;
-  }
-
-  @Override
-  public Response.Status getHttpStatusCode() {
-    return Response.Status.NOT_FOUND;
-  }
-
-  @Override
-  public String getInternalErrorCode() {
-    return "AuthorizationTicketNotFound";
-  }
-
-  @Override
-  public String getInternalErrorDescription() {
-    return getMessage();
+    super(ErrorType.AUTHORIZATION_TICKET_NOT_FOUND,
+        "Authorization ticket not found with client ID: " + clientId + " and code: " + code);
   }
 }
