@@ -19,16 +19,18 @@ import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.api.AccessTokenType;
 import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.GrantType;
-import com.ysheng.auth.model.api.exception.InternalException;
 import com.ysheng.auth.model.api.ResponseType;
 import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
+import com.ysheng.auth.model.api.authcode.AuthorizationRevocationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.exception.AuthorizationTicketNotFoundError;
 import com.ysheng.auth.model.api.exception.ClientNotFoundException;
+import com.ysheng.auth.model.api.exception.ClientUnauthorizedException;
 import com.ysheng.auth.model.api.exception.GrantTypeUnsupportedException;
+import com.ysheng.auth.model.api.exception.InternalException;
 import com.ysheng.auth.model.api.exception.InvalidClientException;
 import com.ysheng.auth.model.api.exception.InvalidRequestException;
 import com.ysheng.auth.model.api.exception.ResponseTypeUnsupportedException;
@@ -108,6 +110,95 @@ public class AuthCodeGrantServiceImplTest {
 
       AuthorizationTicket response = service.authorize("clientId", request);
       assertThat(response.getCode(), equalTo("authCode"));
+    }
+  }
+
+  /**
+   * Tests for {@link com.ysheng.auth.core.AuthCodeGrantServiceImpl#revokeAuthorization}.
+   */
+  public static class RevokeAuthorizationTest {
+
+    @Test
+    public void failsWithNonExistClient() {
+      AuthorizationRevocationSpec request = new AuthorizationRevocationSpec();
+      request.setClientSecret("clientSecret");
+
+      Database database = mock(Database.class);
+      doReturn(null).when(database).findClientById(anyString());
+
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
+
+      try {
+        service.revokeAuthorization("clientId", "code", request);
+        fail("Revoking authorization tickets should fail with non-exist client");
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(ClientNotFoundException.class));
+        assertThat(ex.getErrorDescription(), equalTo("Client not found with ID: clientId"));
+      }
+    }
+
+    @Test
+    public void failsWithUnauthorizedClient() {
+      AuthorizationRevocationSpec request = new AuthorizationRevocationSpec();
+      request.setClientSecret("clientSecret1");
+
+      Client client = new Client();
+      client.setSecret("clientSecret2");
+
+      Database database = mock(Database.class);
+      doReturn(client).when(database).findClientById(anyString());
+
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
+
+      try {
+        service.revokeAuthorization("clientId", "code", request);
+        fail("Revoking authorization tickets should fail with unauthorized client");
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(ClientUnauthorizedException.class));
+        assertThat(ex.getErrorDescription(), equalTo("Client not authorized: clientId"));
+      }
+    }
+
+    @Test
+    public void failsWithNonExistAuthorizationTicket() {
+      AuthorizationRevocationSpec request = new AuthorizationRevocationSpec();
+      request.setClientSecret("clientSecret");
+
+      Client client = new Client();
+      client.setSecret("clientSecret");
+
+      Database database = mock(Database.class);
+      doReturn(client).when(database).findClientById(anyString());
+      doReturn(null).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
+
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
+
+      try {
+        service.revokeAuthorization("clientId", "code", request);
+        fail("Revoking authorization tickets should fail with non-exist authorization ticket");
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(AuthorizationTicketNotFoundError.class));
+        assertThat(ex.getErrorDescription(), equalTo("Authorization ticket not found with client ID: clientId" +
+          " and code: code"));
+      }
+    }
+
+    @Test
+    public void succeedsToRevokeAuthorization() throws Throwable {
+      AuthorizationRevocationSpec request = new AuthorizationRevocationSpec();
+      request.setClientSecret("clientSecret");
+
+      Client client = new Client();
+      client.setSecret("clientSecret");
+
+      Database database = mock(Database.class);
+      doReturn(client).when(database).findClientById(anyString());
+      doReturn(new AuthorizationTicket()).when(database)
+          .findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
+
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
+
+      service.revokeAuthorization("clientId", "code", request);
     }
   }
 

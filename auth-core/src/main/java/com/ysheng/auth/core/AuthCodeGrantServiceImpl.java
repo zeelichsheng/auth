@@ -17,6 +17,8 @@ import com.ysheng.auth.backend.Database;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.api.AccessTokenType;
 import com.ysheng.auth.model.api.ApiList;
+import com.ysheng.auth.model.api.authcode.AuthorizationRevocationSpec;
+import com.ysheng.auth.model.api.exception.ClientUnauthorizedException;
 import com.ysheng.auth.model.api.exception.InternalException;
 import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AccessTokenSpec;
@@ -87,6 +89,36 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
     database.storeAuthorizationTicket(authorizationTicket);
 
     return authorizationTicket;
+  }
+
+  /**
+   * Revokes an authorization ticket from a client.
+   *
+   * @param clientId The client identifier.
+   * @param code The authorization code.
+   * @param request The authorization revocation request that contains required information.
+   * @throws InternalException The exception that contains error details.
+   */
+  public void revokeAuthorization(
+      String clientId,
+      String code,
+      AuthorizationRevocationSpec request) throws InternalException {
+    Client client = database.findClientById(clientId);
+    if (client == null) {
+      throw new ClientNotFoundException(clientId);
+    }
+
+    if (client.getSecret() != null &&
+        !client.getSecret().equals(request.getClientSecret())) {
+      throw new ClientUnauthorizedException(clientId);
+    }
+
+    AuthorizationTicket ticket = database.findAuthorizationTicketByCodeAndClientId(clientId, code);
+    if (ticket == null) {
+      throw new AuthorizationTicketNotFoundError(clientId, code);
+    }
+
+    database.removeAuthorizationTicket(clientId, code);
   }
 
   /**
