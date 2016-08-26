@@ -15,50 +15,43 @@ package com.ysheng.auth.frontend.resource.authcode;
 
 import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
-import com.ysheng.auth.model.api.ApiList;
-import com.ysheng.auth.model.api.authcode.AuthorizationError;
-import com.ysheng.auth.model.api.authcode.AuthorizationSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
+import com.ysheng.auth.model.api.authcode.AuthorizationTicketNotFoundError;
 import com.ysheng.auth.model.api.client.ClientNotFoundError;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
- * Defines the RESTful endpoints related to auth code grant operations for a specific client.
+ * Defines the RESTful endpoints related to auth code grant operations for
+ * a specific client and auth code combination.
  */
-@Path(AuthCodeRoute.API)
+@Path(AuthCodeRoute.AUTHORIZATION_PATH)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ClientAuthCodesResource {
+public class ClientAuthCodeResource {
 
   // The auth code grant service that performs backend operation.
   private final AuthCodeGrantService authCodeGrantService;
 
   /**
-   * Constructs a ClientAuthCodesResource object.
+   * Constructs a ClientAuthCodeResource object.
    *
    * @param authCodeGrantService The auth code grant service that performs backend operation.
    */
-  public ClientAuthCodesResource(AuthCodeGrantService authCodeGrantService) {
+  public ClientAuthCodeResource(AuthCodeGrantService authCodeGrantService) {
     this.authCodeGrantService = authCodeGrantService;
   }
 
-  @POST
-  public AuthorizationTicket authorize(
-      @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
-      AuthorizationSpec request) throws AuthorizationError {
-    return authCodeGrantService.authorize(clientId, request);
-  }
-
   @GET
-  public ApiList<AuthorizationTicket> list(
-      @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId) throws ClientNotFoundError {
-    return authCodeGrantService.listAuthorizationTicket(clientId);
+  public AuthorizationTicket get(
+      @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
+      @PathParam(AuthCodeRoute.CODE_PATH_PARAM) String code)
+    throws ClientNotFoundError, AuthorizationTicketNotFoundError {
+    return authCodeGrantService.getAuthorizationTicket(clientId, code);
   }
 }
