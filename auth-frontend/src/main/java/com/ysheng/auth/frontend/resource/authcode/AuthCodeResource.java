@@ -36,17 +36,17 @@ import javax.ws.rs.core.MediaType;
 @Path(AuthCodeRoute.AUTHORIZATION_PATH)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ClientAuthCodeResource {
+public class AuthCodeResource {
 
   // The auth code grant service that performs backend operation.
   private final AuthCodeGrantService authCodeGrantService;
 
   /**
-   * Constructs a ClientAuthCodeResource object.
+   * Constructs a AuthCodeResource object.
    *
    * @param authCodeGrantService The auth code grant service that performs backend operation.
    */
-  public ClientAuthCodeResource(AuthCodeGrantService authCodeGrantService) {
+  public AuthCodeResource(AuthCodeGrantService authCodeGrantService) {
     this.authCodeGrantService = authCodeGrantService;
   }
 

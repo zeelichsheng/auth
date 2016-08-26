@@ -14,7 +14,7 @@
 package com.ysheng.auth.frontend.test.resource.authcode;
 
 import com.ysheng.auth.core.AuthCodeGrantService;
-import com.ysheng.auth.frontend.resource.authcode.ClientAuthCodeResource;
+import com.ysheng.auth.frontend.resource.authcode.AuthCodeResource;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.frontend.test.resource.ResourceTestHelper;
 import com.ysheng.auth.model.api.ExternalException;
@@ -40,9 +40,9 @@ import static org.mockito.Mockito.mock;
 import javax.ws.rs.core.UriBuilder;
 
 /**
- * Tests for {@link com.ysheng.auth.frontend.resource.authcode.ClientAuthCodeResource}.
+ * Tests for {@link com.ysheng.auth.frontend.resource.authcode.AuthCodeResource}.
  */
-public class ClientAuthCodeResourceTest {
+public class AuthCodeResourceTest {
 
   // The helper related to resource test.
   private ResourceTestHelper testHelper;
@@ -70,7 +70,7 @@ public class ClientAuthCodeResourceTest {
     authCodeGrantService = mock(AuthCodeGrantService.class);
 
     testHelper = new ResourceTestHelper();
-    testHelper.addResource(new ClientAuthCodeResource(authCodeGrantService));
+    testHelper.addResource(new AuthCodeResource(authCodeGrantService));
     testHelper.setup();
   }
 
