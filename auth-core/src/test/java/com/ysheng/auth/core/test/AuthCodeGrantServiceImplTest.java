@@ -534,7 +534,7 @@ public class AuthCodeGrantServiceImplTest {
     }
 
     @Test
-    public void failsWithNonExistAuthorizationTicket() {
+    public void failsWithNonExistAccessToken() {
       AccessTokenRevokeSpec request = new AccessTokenRevokeSpec();
       request.setClientSecret("clientSecret");
 
@@ -558,7 +558,7 @@ public class AuthCodeGrantServiceImplTest {
     }
 
     @Test
-    public void succeedsToRevokeAuthorization() throws Throwable {
+    public void succeedsToRevokeAccessToken() throws Throwable {
       AccessTokenRevokeSpec request = new AccessTokenRevokeSpec();
       request.setClientSecret("clientSecret");
 
@@ -573,6 +573,62 @@ public class AuthCodeGrantServiceImplTest {
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
       service.revokeAccessToken("clientId", "accessToken", request);
+    }
+  }
+
+  /**
+   * Tests for {@link com.ysheng.auth.core.AuthCodeGrantServiceImpl#getAccessToken}.
+   */
+  public static class GetAccessTokenTest {
+
+    @Test
+    public void failsWithNonExistClient() {
+      Database database = mock(Database.class);
+      doReturn(null).when(database).findClientById(anyString());
+
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
+
+      try {
+        service.getAccessToken("clientId", "accessToken");
+        fail("Getting access token should fail with non-exist client");
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(ClientNotFoundException.class));
+        assertThat(ex.getErrorDescription(), equalTo("Client not found with ID: clientId"));
+      }
+    }
+
+    @Test
+    public void failsWithNonExistAccessToken() {
+      Database database = mock(Database.class);
+      doReturn(new Client()).when(database).findClientById(anyString());
+      doReturn(null).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
+
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
+
+      try {
+        service.getAccessToken("clientId", "accessToken");
+        fail("Getting access token should fail with non-exist ticket");
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(AccessTokenNotFoundException.class));
+        assertThat(ex.getErrorDescription(), equalTo("Access token not found with client ID: clientId" +
+            " and token: accessToken"));
+      }
+    }
+
+    @Test
+    public void succeedsToGetAccessToken() throws Throwable {
+      AccessToken token = new AccessToken();
+      token.setClientId("clientId");
+      token.setAccessToken("accessToken");
+      Database database = mock(Database.class);
+      doReturn(new Client()).when(database).findClientById(anyString());
+      doReturn(token).when(database).findAccessTokenByClientIdAndToken(anyString(), anyString());
+
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
+
+      AccessToken actualToken = service.getAccessToken("clientId", "accessToken");
+      assertThat(actualToken.getClientId(), equalTo("clientId"));
+      assertThat(actualToken.getAccessToken(), equalTo("accessToken"));
     }
   }
 }

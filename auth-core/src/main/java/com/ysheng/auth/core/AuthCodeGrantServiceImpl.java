@@ -252,6 +252,7 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
    * @param accessToken The access token.
    * @param request The access token revocation request that contains required information.
    * @throws InternalException
+   * @throws InternalException The error that contains detail information.
    */
   public void revokeAccessToken(
       String clientId,
@@ -273,5 +274,29 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
     }
 
     database.removeAccessToken(clientId, accessToken);
+  }
+
+  /**
+   * Gets an access token with the given client identifier and token.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   * @return An access token that matches the criteria.
+   * @throws InternalException The error that contains detail information.
+   */
+  public AccessToken getAccessToken(
+      String clientId,
+      String accessToken) throws InternalException {
+    Client client = database.findClientById(clientId);
+    if (client == null) {
+      throw new ClientNotFoundException(clientId);
+    }
+
+    AccessToken token = database.findAccessTokenByClientIdAndToken(clientId, accessToken);
+    if (token == null) {
+      throw new AccessTokenNotFoundException(clientId, accessToken);
+    }
+
+    return token;
   }
 }
