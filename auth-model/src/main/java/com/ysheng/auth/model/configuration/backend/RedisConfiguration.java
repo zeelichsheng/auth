@@ -13,26 +13,35 @@
 
 package com.ysheng.auth.model.configuration.backend;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Set;
 
 /**
  * Defines configuration related to Redis.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RedisConfiguration {
 
   // The Redis connection type.
+  @JsonProperty
   private String connectionType;
 
   // The address of the master node.
+  @JsonProperty
   private String masterAddress;
 
   // The number of maximum connections.
+  @JsonProperty
   private int maxConnections;
 
   // The list of sentinels.
+  @JsonProperty
   private Set<String> sentinels;
 
   // Whether to block when connection is exhausted.
+  @JsonProperty
   private boolean blockWhenExhausted;
 
   ///

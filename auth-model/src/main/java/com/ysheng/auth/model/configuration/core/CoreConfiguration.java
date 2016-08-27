@@ -13,11 +13,13 @@
 
 package com.ysheng.auth.model.configuration.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Defines the configuration of the core.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CoreConfiguration {
 
   // The auth value generator configuration.

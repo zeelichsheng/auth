@@ -13,6 +13,7 @@
 
 package com.ysheng.auth.frontend.configuration;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ysheng.auth.model.configuration.backend.BackendConfiguration;
 import com.ysheng.auth.model.configuration.core.CoreConfiguration;
@@ -21,6 +22,7 @@ import io.dropwizard.Configuration;
 /**
  * Defines the data structure that contains API configuration.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ApiConfiguration extends Configuration {
 
   @JsonProperty
