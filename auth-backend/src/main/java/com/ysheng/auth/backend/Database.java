@@ -69,7 +69,7 @@ public interface Database {
   List<AuthorizationTicket> listAuthorizationTickets(String clientId);
 
   /**
-   * removes an authorization ticket object from database.
+   * Removes an authorization ticket object from database.
    *
    * @param clientId  The client identifier.
    * @param code The authorization code.
@@ -77,7 +77,7 @@ public interface Database {
   void removeAuthorizationTicket(String clientId, String code);
 
   /**
-   * Finds an authorization ticket object by authorization code.
+   * Finds an authorization ticket object by client ID and authorization code.
    *
    * @param code The authorization code to be matched.
    * @param clientId The client identifier to be matched.
@@ -101,4 +101,23 @@ public interface Database {
    * @return A list of access tokens.
    */
   List<AccessToken> listAccessTokens(String clientId);
+
+  /**
+   * Removes an access token object from database.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   */
+  void removeAccessToken(String clientId, String accessToken);
+
+  /**
+   * Finds an access token object by client ID and token.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   * @return An access token object that matches the client ID and token.
+   */
+  AccessToken findAccessTokenByClientIdAndToken(
+      String clientId,
+      String accessToken);
 }

@@ -227,4 +227,29 @@ public class RedisDatabaseTest {
         { "clientId1" }
     };
   }
+
+  @Test
+  public void succeedsToRemoveAccessToken() {
+    RedisClient redisClient = mock(RedisClient.class);
+    doNothing().when(redisClient).remove(anyString());
+
+    RedisDatabase database = new RedisDatabase(redisClient);
+    database.removeAccessToken("clientId", "token");
+
+    verify(redisClient).remove(anyString());
+  }
+
+  @Test
+  public void succeedsToGetAccessToken() {
+    RedisClient redisClient = mock(RedisClient.class);
+    String hash = "{\"clientId\":\"clientId\",\"accessToken\":\"accessToken\",\"tokenType\":\"BEARER\"," +
+        "\"expiresIn\":1000,\"refreshToken\":\"refreshToken\",\"scope\":\"scope\"}";
+
+    doReturn(hash).when(redisClient).get(anyString());
+
+    RedisDatabase database = new RedisDatabase(redisClient);
+    database.findAccessTokenByClientIdAndToken("clientId", "token");
+
+    verify(redisClient).get(anyString());
+  }
 }

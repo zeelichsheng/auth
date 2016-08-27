@@ -112,7 +112,7 @@ public class RedisDatabase implements Database {
   }
 
   /**
-   * removes an authorization ticket object from database.
+   * Removes an authorization ticket object from database.
    *
    * @param clientId  The client identifier.
    * @param code The authorization code.
@@ -158,5 +158,29 @@ public class RedisDatabase implements Database {
         .stream()
         .map(AccessTokenAdapter::fromHash)
         .collect(Collectors.toList());
+  }
+
+  /**
+   * Removes an access token object from database.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   */
+  public void removeAccessToken(String clientId, String accessToken) {
+    redisClient.remove(AccessTokenAdapter.getKey(clientId, accessToken));
+  }
+
+  /**
+   * Finds an access token object by client ID and token.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   * @return An access token object that matches the client ID and token.
+   */
+  public AccessToken findAccessTokenByClientIdAndToken(
+      String clientId,
+      String accessToken) {
+    return AccessTokenAdapter.fromHash(
+        redisClient.get(AccessTokenAdapter.getKey(clientId, accessToken)));
   }
 }
