@@ -30,7 +30,8 @@ public enum ErrorType {
   INVALID_GRANT(Response.Status.BAD_REQUEST),
   GRANT_TYPE_UNSUPPORTED(Response.Status.BAD_REQUEST),
   INVALID_SCOPE(Response.Status.BAD_REQUEST),
-  RESPONSE_TYPE_UNSUPPORTED(Response.Status.BAD_REQUEST);
+  RESPONSE_TYPE_UNSUPPORTED(Response.Status.BAD_REQUEST),
+  ACCESS_TOKEN_NOT_FOUND(Response.Status.NOT_FOUND);
 
   private Response.Status httpStatus;
 

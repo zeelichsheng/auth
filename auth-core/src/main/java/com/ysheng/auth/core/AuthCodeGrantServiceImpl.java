@@ -17,7 +17,9 @@ import com.ysheng.auth.backend.Database;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.api.AccessTokenType;
 import com.ysheng.auth.model.api.ApiList;
+import com.ysheng.auth.model.api.authcode.AccessTokenRevokeSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationRevokeSpec;
+import com.ysheng.auth.model.api.exception.AccessTokenNotFoundException;
 import com.ysheng.auth.model.api.exception.ClientUnauthorizedException;
 import com.ysheng.auth.model.api.exception.InternalException;
 import com.ysheng.auth.model.api.authcode.AccessToken;
@@ -241,5 +243,35 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
     }
 
     return new ApiList<>(database.listAccessTokens(clientId));
+  }
+
+  /**
+   * Revokes an access token from a client.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   * @param request The access token revocation request that contains required information.
+   * @throws InternalException
+   */
+  public void revokeAccessToken(
+      String clientId,
+      String accessToken,
+      AccessTokenRevokeSpec request) throws InternalException {
+    Client client = database.findClientById(clientId);
+    if (client == null) {
+      throw new ClientNotFoundException(clientId);
+    }
+
+    if (client.getSecret() != null &&
+        !client.getSecret().equals(request.getClientSecret())) {
+      throw new ClientUnauthorizedException(clientId);
+    }
+
+    AccessToken token = database.findAccessTokenByClientIdAndToken(clientId, accessToken);
+    if (token == null) {
+      throw new AccessTokenNotFoundException(clientId, accessToken);
+    }
+
+    database.removeAccessToken(clientId, accessToken);
   }
 }

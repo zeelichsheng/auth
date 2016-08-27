@@ -14,6 +14,7 @@
 package com.ysheng.auth.core;
 
 import com.ysheng.auth.model.api.ApiList;
+import com.ysheng.auth.model.api.authcode.AccessTokenRevokeSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationRevokeSpec;
 import com.ysheng.auth.model.api.exception.InternalException;
 import com.ysheng.auth.model.api.authcode.AccessToken;
@@ -95,4 +96,17 @@ public interface AuthCodeGrantService {
    * @throws InternalException The error that contains detail information.
    */
   ApiList<AccessToken> listAccessTokens(String clientId) throws InternalException;
+
+  /**
+   * Revokes an access token from a client.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   * @param request The access token revocation request that contains required information.
+   * @throws InternalException
+   */
+  void revokeAccessToken(
+      String clientId,
+      String accessToken,
+      AccessTokenRevokeSpec request) throws InternalException;
 }
