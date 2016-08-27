@@ -1,0 +1,12 @@
+---
+coreConfiguration:
+  authValueGeneratorConfiguration:
+    clientIdGeneratorType: UUID
+    clientSecretGeneratorType: UUID
+    authCodeGeneratorType: UUID
+    accessTokenGeneratorType: UUID
+backendConfiguration:
+  databaseType: Redis
+  redisConfiguration:
+    connectionType: simple
+    masterAddress: localhost
