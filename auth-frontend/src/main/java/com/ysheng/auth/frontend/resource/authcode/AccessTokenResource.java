@@ -15,9 +15,8 @@ package com.ysheng.auth.frontend.resource.authcode;
 
 import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
-import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.authcode.AccessToken;
-import com.ysheng.auth.model.api.authcode.AccessTokenIssueSpec;
+import com.ysheng.auth.model.api.authcode.AccessTokenRevokeSpec;
 import com.ysheng.auth.model.api.exception.InternalException;
 
 import javax.ws.rs.Consumes;
@@ -30,35 +29,38 @@ import javax.ws.rs.core.MediaType;
 
 /**
  * Defines the RESTful endpoints related to access token related operations for
- * a specific client.
+ * a specific client and access token combination.
  */
-@Path(AuthCodeRoute.ACCESS_TOKENS_PATH)
+@Path(AuthCodeRoute.ACCESS_TOKEN_PATH)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class AccessTokensResource {
+public class AccessTokenResource {
 
   // The auth code grant service that performs backend operation.
   private final AuthCodeGrantService authCodeGrantService;
 
   /**
-   * Constructs a AccessTokensResource object.
+   * Constructs a AccessTokenResource object.
    *
    * @param authCodeGrantService The auth code grant service that performs backend operation.
    */
-  public AccessTokensResource(AuthCodeGrantService authCodeGrantService) {
+  public AccessTokenResource(AuthCodeGrantService authCodeGrantService) {
     this.authCodeGrantService = authCodeGrantService;
   }
 
-  @POST
-  public AccessToken issue(
+  @GET
+  public AccessToken get(
       @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
-      AccessTokenIssueSpec request) throws InternalException {
-    return authCodeGrantService.issueAccessToken(clientId, request);
+      @PathParam(AuthCodeRoute.ACCESS_TOKEN_PATH_PARAM) String accessToken) throws InternalException {
+    return authCodeGrantService.getAccessToken(clientId, accessToken);
   }
 
-  @GET
-  public ApiList<AccessToken> list(
-      @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId) throws InternalException {
-    return authCodeGrantService.listAccessTokens(clientId);
+  @POST
+  @Path(AuthCodeRoute.REVOKE_ACCESS_TOKEN_ACTION)
+  public void revoke(
+      @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
+      @PathParam(AuthCodeRoute.ACCESS_TOKEN_PATH_PARAM) String accessToken,
+      AccessTokenRevokeSpec request) throws InternalException {
+        authCodeGrantService.revokeAccessToken(clientId, accessToken, request);
   }
 }

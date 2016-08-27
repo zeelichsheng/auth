@@ -28,10 +28,13 @@ public class AuthCodeRoute {
   // The path parameter of authorization code.
   public static final String CODE_PATH_PARAM = "code";
 
+  // The path parameter of access token.
+  public static final String ACCESS_TOKEN_PATH_PARAM = "accessToken";
+
   ///
   /// Path.
   ///
-  
+
   // This is the auth codes root path, i.e. /auth-codes/{clientId}
   private static final String ROOT_PATH = "/auth-codes/{" + CLIENT_ID_PATH_PARAM + "}";
 
@@ -46,4 +49,10 @@ public class AuthCodeRoute {
 
   // This is the access tokens path, i.e. /auth-codes/{cliendId}/access-tokens
   public static final String ACCESS_TOKENS_PATH = ROOT_PATH +  "/access-tokens";
+
+  // This is the individual access token path, i.e. /auth-codes/{clientId}/access-tokens/{accessToken}
+  public static final String ACCESS_TOKEN_PATH = ACCESS_TOKENS_PATH + "/{" + ACCESS_TOKEN_PATH_PARAM + "}";
+
+  // This is the path to revoke access token, i.e /auth-codes/{clientId}/access-tokens/{accessToken}/revoke-access-token
+  public static final String REVOKE_ACCESS_TOKEN_ACTION = "/revoke-access-token";
 }
