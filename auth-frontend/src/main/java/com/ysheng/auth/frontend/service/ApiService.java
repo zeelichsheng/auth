@@ -18,6 +18,7 @@ import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.core.ClientService;
 import com.ysheng.auth.frontend.configuration.ApiConfiguration;
 import com.ysheng.auth.frontend.mapper.InternalExceptionMapper;
+import com.ysheng.auth.frontend.resource.authcode.AccessTokenResource;
 import com.ysheng.auth.frontend.resource.authcode.AccessTokensResource;
 import com.ysheng.auth.frontend.resource.authcode.AuthCodeResource;
 import com.ysheng.auth.frontend.resource.authcode.AuthCodesResource;
@@ -106,5 +107,6 @@ public class ApiService extends Application<ApiConfiguration> {
     environment.jersey().register(new AuthCodesResource(authCodeGrantService));
     environment.jersey().register(new AuthCodeResource(authCodeGrantService));
     environment.jersey().register(new AccessTokensResource(authCodeGrantService));
+    environment.jersey().register(new AccessTokenResource(authCodeGrantService));
   }
 }
