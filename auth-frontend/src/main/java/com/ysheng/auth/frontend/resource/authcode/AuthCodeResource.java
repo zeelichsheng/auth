@@ -57,6 +57,7 @@ public class AuthCodeResource {
   }
 
   @POST
+  @Path(AuthCodeRoute.REVOKE_AUTHORIZATION_ACTION)
   public void revoke(
       @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
       @PathParam(AuthCodeRoute.CODE_PATH_PARAM) String code,

@@ -31,7 +31,7 @@ import javax.ws.rs.core.MediaType;
 /**
  * Defines the RESTful endpoints related to auth code grant operations for a specific client.
  */
-@Path(AuthCodeRoute.API)
+@Path(AuthCodeRoute.AUTHORIZATIONS_PATH)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AuthCodesResource {

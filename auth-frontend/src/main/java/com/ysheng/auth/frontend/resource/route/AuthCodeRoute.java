@@ -18,16 +18,32 @@ package com.ysheng.auth.frontend.resource.route;
  */
 public class AuthCodeRoute {
 
+  ///
+  /// Path Param.
+  ///
+
+  // The path parameter of client identifier.
   public static final String CLIENT_ID_PATH_PARAM = "clientId";
 
+  // The path parameter of authorization code.
   public static final String CODE_PATH_PARAM = "code";
 
-  // This is the auth codes path, i.e. /auth-codes/{clientId}
-  public static final String API = "/auth-codes/{" + CLIENT_ID_PATH_PARAM + "}";
+  ///
+  /// Path.
+  ///
+  
+  // This is the auth codes root path, i.e. /auth-codes/{clientId}
+  private static final String ROOT_PATH = "/auth-codes/{" + CLIENT_ID_PATH_PARAM + "}";
 
-  // This is the individual auth code path, i.e. /auth-codes/{clientId}/{code}
-  public static final String AUTHORIZATION_PATH = API + "/{" + CODE_PATH_PARAM + "}";
+  // This is tha authorization codes path, i.e. /auth-codes/{clientId}/authorizations
+  public static final String AUTHORIZATIONS_PATH = ROOT_PATH + "/authorizations";
+
+  // This is the individual auth code path, i.e. /auth-codes/{clientId}/authorizations/{code}
+  public static final String AUTHORIZATION_PATH = AUTHORIZATIONS_PATH + "/{" + CODE_PATH_PARAM + "}";
+
+  // This is the path to revoke authorization, i.e. /auth-codes/{clientId}/authorizations/{code}/revoke-authorization
+  public static final String REVOKE_AUTHORIZATION_ACTION = "/revoke-authorization";
 
   // This is the access tokens path, i.e. /auth-codes/{cliendId}/access-tokens
-  public static final String ACCESS_TOKENS_API = API +  "/access-tokens";
+  public static final String ACCESS_TOKENS_PATH = ROOT_PATH +  "/access-tokens";
 }

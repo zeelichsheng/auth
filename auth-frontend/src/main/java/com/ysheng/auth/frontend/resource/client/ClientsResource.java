@@ -30,7 +30,7 @@ import javax.ws.rs.core.MediaType;
 /**
  * Defines the RESTful endpoints related to client operations.
  */
-@Path(ClientRoute.API)
+@Path(ClientRoute.CLIENTS_PATH)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ClientsResource {

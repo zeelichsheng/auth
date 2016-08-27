@@ -56,7 +56,7 @@ public class AuthCodesResourceTest {
 
   // The authorization route.
   private String authorizationRoute =
-      UriBuilder.fromPath(AuthCodeRoute.API).build(clientId).toString();
+      UriBuilder.fromPath(AuthCodeRoute.AUTHORIZATIONS_PATH).build(clientId).toString();
 
   @BeforeMethod
   public void setUpTest() throws Throwable {

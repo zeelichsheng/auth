@@ -57,6 +57,11 @@ public class AuthCodeResourceTest {
   private String authorizationRoute =
       UriBuilder.fromPath(AuthCodeRoute.AUTHORIZATION_PATH).build(clientId, code).toString();
 
+  // The authorization revocation route.
+  private String revokeAuthorizationRoute =
+      UriBuilder.fromPath(AuthCodeRoute.AUTHORIZATION_PATH + AuthCodeRoute.REVOKE_AUTHORIZATION_ACTION)
+        .build(clientId, code).toString();
+
   @BeforeMethod
   public void setUpTest() throws Throwable {
     authCodeGrantService = mock(AuthCodeGrantService.class);
@@ -107,7 +112,7 @@ public class AuthCodeResourceTest {
         .revokeAuthorization(anyString(), anyString(), any(AuthorizationRevokeSpec.class));
 
     testHelper.post(
-        authorizationRoute,
+        revokeAuthorizationRoute,
         new AuthorizationRevokeSpec());
   }
 
@@ -119,7 +124,7 @@ public class AuthCodeResourceTest {
         .revokeAuthorization(anyString(), anyString(), any(AuthorizationRevokeSpec.class));
 
     ExternalException actualError =  testHelper.post(
-        authorizationRoute,
+        revokeAuthorizationRoute,
         new AuthorizationRevokeSpec(),
         ExternalException.class);
 

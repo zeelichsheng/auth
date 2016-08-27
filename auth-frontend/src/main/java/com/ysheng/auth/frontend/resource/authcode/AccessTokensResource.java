@@ -32,7 +32,7 @@ import javax.ws.rs.core.MediaType;
  * Defines the RESTful endpoints related to access token related operations for
  * a specific client and auth code combinatino.
  */
-@Path(AuthCodeRoute.ACCESS_TOKENS_API)
+@Path(AuthCodeRoute.ACCESS_TOKENS_PATH)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AccessTokensResource {

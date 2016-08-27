@@ -56,7 +56,7 @@ public class AccessTokensResourceTest {
 
   // The access tokens route.
   private String accessTokensRoute =
-      UriBuilder.fromPath(AuthCodeRoute.ACCESS_TOKENS_API).build(clientId).toString();
+      UriBuilder.fromPath(AuthCodeRoute.ACCESS_TOKENS_PATH).build(clientId).toString();
 
   @BeforeMethod
   public void setUpTest() throws Throwable {

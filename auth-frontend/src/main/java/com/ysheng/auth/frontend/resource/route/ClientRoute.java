@@ -18,11 +18,23 @@ package com.ysheng.auth.frontend.resource.route;
  */
 public class ClientRoute {
 
+  ///
+  /// Path Param.
+  ///
+
+  // The path parameter of client identifier.
   public static final String CLIENT_ID_PATH_PARAM = "id";
 
-  public static final String API = "/clients";
+  ///
+  /// Path.
+  ///
 
-  public static final String CLIENT_PATH = API + "/{" + CLIENT_ID_PATH_PARAM + "}";
+  // This is the clients root path, i.e. /clients
+  public static final String CLIENTS_PATH = "/clients";
 
+  // This is the individual client path, i.e. /clients/{id}
+  public static final String CLIENT_PATH = CLIENTS_PATH + "/{" + CLIENT_ID_PATH_PARAM + "}";
+
+  // This is the path to unregister client, i.e. /clients/{id}/unregister
   public static final String UNREGISTER_CLIENT_ACTION = "/unregister";
 }

@@ -72,7 +72,7 @@ public class ClientsResourceTest {
     doReturn(response).when(clientService).register(any(ClientRegistrationSpec.class));
 
     Client actualResponse = testHelper.post(
-        ClientRoute.API,
+        ClientRoute.CLIENTS_PATH,
         request,
         Client.class);
 
@@ -88,7 +88,7 @@ public class ClientsResourceTest {
     doThrow(error).when(clientService).register(any(ClientRegistrationSpec.class));
 
     ExternalException actualError = testHelper.post(
-        ClientRoute.API,
+        ClientRoute.CLIENTS_PATH,
         request,
         ExternalException.class);
 
@@ -107,7 +107,7 @@ public class ClientsResourceTest {
     doReturn(clientList).when(clientService).list();
 
     ApiList<Client> actualClientList = testHelper.get(
-        ClientRoute.API,
+        ClientRoute.CLIENTS_PATH,
         new GenericType<ApiList<Client>>(){});
 
     assertThat(actualClientList.getItems().size(), equalTo(clientList.getItems().size()));
