@@ -15,7 +15,7 @@ package com.ysheng.auth.frontend.resource.authcode;
 
 import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
-import com.ysheng.auth.model.api.authcode.AuthorizationRevocationSpec;
+import com.ysheng.auth.model.api.authcode.AuthorizationRevokeSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.exception.InternalException;
 
@@ -60,7 +60,7 @@ public class AuthCodeResource {
   public void revoke(
       @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
       @PathParam(AuthCodeRoute.CODE_PATH_PARAM) String code,
-      AuthorizationRevocationSpec request) throws InternalException {
+      AuthorizationRevokeSpec request) throws InternalException {
     authCodeGrantService.revokeAuthorization(clientId, code, request);
   }
 }

@@ -14,7 +14,7 @@
 package com.ysheng.auth.core;
 
 import com.ysheng.auth.model.api.ApiList;
-import com.ysheng.auth.model.api.authcode.AuthorizationRevocationSpec;
+import com.ysheng.auth.model.api.authcode.AuthorizationRevokeSpec;
 import com.ysheng.auth.model.api.exception.InternalException;
 import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AccessTokenIssueSpec;
@@ -49,7 +49,7 @@ public interface AuthCodeGrantService {
   void revokeAuthorization(
       String clientId,
       String code,
-      AuthorizationRevocationSpec request) throws InternalException;
+      AuthorizationRevokeSpec request) throws InternalException;
 
   /**
    * Gets a list of authorization tickets granted to a particular client.

@@ -17,7 +17,7 @@ import com.ysheng.auth.backend.Database;
 import com.ysheng.auth.core.generator.AuthValueGenerator;
 import com.ysheng.auth.model.api.AccessTokenType;
 import com.ysheng.auth.model.api.ApiList;
-import com.ysheng.auth.model.api.authcode.AuthorizationRevocationSpec;
+import com.ysheng.auth.model.api.authcode.AuthorizationRevokeSpec;
 import com.ysheng.auth.model.api.exception.ClientUnauthorizedException;
 import com.ysheng.auth.model.api.exception.InternalException;
 import com.ysheng.auth.model.api.authcode.AccessToken;
@@ -102,7 +102,7 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
   public void revokeAuthorization(
       String clientId,
       String code,
-      AuthorizationRevocationSpec request) throws InternalException {
+      AuthorizationRevokeSpec request) throws InternalException {
     Client client = database.findClientById(clientId);
     if (client == null) {
       throw new ClientNotFoundException(clientId);
@@ -220,7 +220,7 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
     // We revoke the authorization code once we issue the access token.
     // Because we don't want the client to abuse the same code to get multiple
     // access tokens.
-    AuthorizationRevocationSpec revokeAuthorizationSpec = new AuthorizationRevocationSpec();
+    AuthorizationRevokeSpec revokeAuthorizationSpec = new AuthorizationRevokeSpec();
     revokeAuthorizationSpec.setClientSecret(client.getSecret());
     revokeAuthorization(clientId, code, revokeAuthorizationSpec);
 

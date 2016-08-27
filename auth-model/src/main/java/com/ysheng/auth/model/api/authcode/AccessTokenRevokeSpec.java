@@ -13,14 +13,12 @@
 
 package com.ysheng.auth.model.api.authcode;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Defines the data structure of authorization revocation request.
+ * Defines the data structure of access token revocation request.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class AuthorizationRevocationSpec {
+public class AccessTokenRevokeSpec {
 
   // The client secret.
   @JsonProperty

@@ -18,7 +18,7 @@ import com.ysheng.auth.frontend.resource.authcode.AuthCodeResource;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.frontend.test.resource.ResourceTestHelper;
 import com.ysheng.auth.model.api.ExternalException;
-import com.ysheng.auth.model.api.authcode.AuthorizationRevocationSpec;
+import com.ysheng.auth.model.api.authcode.AuthorizationRevokeSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.exception.AuthorizationTicketNotFoundError;
 import com.ysheng.auth.model.api.exception.ClientNotFoundException;
@@ -104,11 +104,11 @@ public class AuthCodeResourceTest {
   @Test
   public void succeedsToRevoke() throws Throwable {
     doNothing().when(authCodeGrantService)
-        .revokeAuthorization(anyString(), anyString(), any(AuthorizationRevocationSpec.class));
+        .revokeAuthorization(anyString(), anyString(), any(AuthorizationRevokeSpec.class));
 
     testHelper.post(
         authorizationRoute,
-        new AuthorizationRevocationSpec());
+        new AuthorizationRevokeSpec());
   }
 
   @Test
@@ -116,11 +116,11 @@ public class AuthCodeResourceTest {
     ClientNotFoundException error = new ClientNotFoundException("clientId");
 
     doThrow(error).when(authCodeGrantService)
-        .revokeAuthorization(anyString(), anyString(), any(AuthorizationRevocationSpec.class));
+        .revokeAuthorization(anyString(), anyString(), any(AuthorizationRevokeSpec.class));
 
     ExternalException actualError =  testHelper.post(
         authorizationRoute,
-        new AuthorizationRevocationSpec(),
+        new AuthorizationRevokeSpec(),
         ExternalException.class);
 
     assertThat(actualError.getErrorCode(), equalTo(error.getErrorCode()));

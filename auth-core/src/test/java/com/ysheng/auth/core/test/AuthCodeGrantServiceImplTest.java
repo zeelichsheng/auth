@@ -22,7 +22,7 @@ import com.ysheng.auth.model.api.GrantType;
 import com.ysheng.auth.model.api.ResponseType;
 import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AccessTokenIssueSpec;
-import com.ysheng.auth.model.api.authcode.AuthorizationRevocationSpec;
+import com.ysheng.auth.model.api.authcode.AuthorizationRevokeSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationGrantSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
@@ -122,7 +122,7 @@ public class AuthCodeGrantServiceImplTest {
 
     @Test
     public void failsWithNonExistClient() {
-      AuthorizationRevocationSpec request = new AuthorizationRevocationSpec();
+      AuthorizationRevokeSpec request = new AuthorizationRevokeSpec();
       request.setClientSecret("clientSecret");
 
       Database database = mock(Database.class);
@@ -141,7 +141,7 @@ public class AuthCodeGrantServiceImplTest {
 
     @Test
     public void failsWithUnauthorizedClient() {
-      AuthorizationRevocationSpec request = new AuthorizationRevocationSpec();
+      AuthorizationRevokeSpec request = new AuthorizationRevokeSpec();
       request.setClientSecret("clientSecret1");
 
       Client client = new Client();
@@ -163,7 +163,7 @@ public class AuthCodeGrantServiceImplTest {
 
     @Test
     public void failsWithNonExistAuthorizationTicket() {
-      AuthorizationRevocationSpec request = new AuthorizationRevocationSpec();
+      AuthorizationRevokeSpec request = new AuthorizationRevokeSpec();
       request.setClientSecret("clientSecret");
 
       Client client = new Client();
@@ -187,7 +187,7 @@ public class AuthCodeGrantServiceImplTest {
 
     @Test
     public void succeedsToRevokeAuthorization() throws Throwable {
-      AuthorizationRevocationSpec request = new AuthorizationRevocationSpec();
+      AuthorizationRevokeSpec request = new AuthorizationRevokeSpec();
       request.setClientSecret("clientSecret");
 
       Client client = new Client();
