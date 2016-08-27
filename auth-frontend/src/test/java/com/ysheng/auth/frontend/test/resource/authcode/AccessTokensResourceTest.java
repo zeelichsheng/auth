@@ -54,12 +54,9 @@ public class AccessTokensResourceTest {
   // The client identifier.
   private String clientId = "clientId";
 
-  // The authorization code.
-  private String code = "code";
-
   // The access tokens route.
   private String accessTokensRoute =
-      UriBuilder.fromPath(AuthCodeRoute.ACCESS_TOKENS_API).build(clientId, code).toString();
+      UriBuilder.fromPath(AuthCodeRoute.ACCESS_TOKENS_API).build(clientId).toString();
 
   @BeforeMethod
   public void setUpTest() throws Throwable {
@@ -82,7 +79,7 @@ public class AccessTokensResourceTest {
     response.setAccessToken("accessToken");
 
     doReturn(response).when(authCodeGrantService)
-        .issueAccessToken(anyString(), anyString(), any(AccessTokenIssueSpec.class));
+        .issueAccessToken(anyString(), any(AccessTokenIssueSpec.class));
 
     AccessToken actualResponse = testHelper.post(
         accessTokensRoute,
@@ -98,7 +95,7 @@ public class AccessTokensResourceTest {
     InvalidRequestException error = new InvalidRequestException("Invalid request");
 
     doThrow(error).when(authCodeGrantService)
-        .issueAccessToken(anyString(), anyString(), any(AccessTokenIssueSpec.class));
+        .issueAccessToken(anyString(), any(AccessTokenIssueSpec.class));
 
     ExternalException actualError = testHelper.post(
         accessTokensRoute,

@@ -311,14 +311,30 @@ public class AuthCodeGrantServiceImplTest {
   public static class IssueAccessTokenTest {
 
     @Test
+    public void failsWithNullCode() {
+      AccessTokenIssueSpec request = new AccessTokenIssueSpec();
+
+      AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(null, null);
+
+      try {
+        service.issueAccessToken("clientId", request);
+        fail("Issuing access token should fail with null code");
+      } catch (InternalException ex) {
+        assertThat(ex.getClass(), equalTo(InvalidRequestException.class));
+        assertThat(ex.getErrorDescription(), equalTo("Authorization code cannot be null"));
+      }
+    }
+
+    @Test
     public void failsWithUnsupportedGrantType() {
       AccessTokenIssueSpec request = new AccessTokenIssueSpec();
+      request.setCode("code");
       request.setGrantType(GrantType.IMPLICIT);
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(null, null);
 
       try {
-        service.issueAccessToken("clientId", "code", request);
+        service.issueAccessToken("clientId", request);
         fail("Issuing access token should fail with unsupported grant type");
       } catch (InternalException ex) {
         assertThat(ex.getClass(), equalTo(GrantTypeUnsupportedException.class));
@@ -332,12 +348,13 @@ public class AuthCodeGrantServiceImplTest {
       doReturn(null).when(database).findClientById(anyString());
 
       AccessTokenIssueSpec request = new AccessTokenIssueSpec();
+      request.setCode("code");
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
       try {
-        service.issueAccessToken("clientId", "code", request);
+        service.issueAccessToken("clientId", request);
         fail("Issuing access token should fail with non-exist client");
       } catch (InternalException ex) {
         assertThat(ex.getClass(), equalTo(ClientNotFoundException.class));
@@ -352,12 +369,13 @@ public class AuthCodeGrantServiceImplTest {
       doReturn(null).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
 
       AccessTokenIssueSpec request = new AccessTokenIssueSpec();
+      request.setCode("code");
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
       try {
-        service.issueAccessToken("clientId", "code", request);
+        service.issueAccessToken("clientId", request);
         fail("Issuing access token should fail with non-exist authorization ticket");
       } catch (InternalException ex) {
         assertThat(ex.getClass(), equalTo(AuthorizationTicketNotFoundError.class));
@@ -375,13 +393,14 @@ public class AuthCodeGrantServiceImplTest {
       doReturn(authorizationTicket).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
 
       AccessTokenIssueSpec request = new AccessTokenIssueSpec();
+      request.setCode("code");
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
       request.setRedirectUri("http://5.6.7.8");
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
       try {
-        service.issueAccessToken("clientId", "code", request);
+        service.issueAccessToken("clientId", request);
         fail("Issuing access token should fail with mis-matching redirect URIs");
       } catch (InternalException ex) {
         assertThat(ex.getClass(), equalTo(InvalidRequestException.class));
@@ -401,13 +420,14 @@ public class AuthCodeGrantServiceImplTest {
       doReturn(authorizationTicket).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
 
       AccessTokenIssueSpec request = new AccessTokenIssueSpec();
+      request.setCode("code");
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
       request.setRedirectUri("http://1.2.3.4");
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
       try {
-        service.issueAccessToken("clientId2", "code", request);
+        service.issueAccessToken("clientId2", request);
         fail("Issuing access token should fail with mis-matching client identifiers");
       } catch (InternalException ex) {
         assertThat(ex.getClass(), equalTo(InvalidClientException.class));
@@ -432,12 +452,13 @@ public class AuthCodeGrantServiceImplTest {
       doReturn("accessToken").when(authValueGenerator).generateAccessToken();
 
       AccessTokenIssueSpec request = new AccessTokenIssueSpec();
+      request.setCode("code");
       request.setGrantType(GrantType.AUTHORIZATION_CODE);
       request.setRedirectUri("http://1.2.3.4");
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, authValueGenerator);
 
-      AccessToken response = service.issueAccessToken("clientId", "code", request);
+      AccessToken response = service.issueAccessToken("clientId", request);
       assertThat(response.getAccessToken(), equalTo("accessToken"));
       assertThat(response.getTokenType(), is(AccessTokenType.BEARER));
       assertThat(response.getExpiresIn(), equalTo((long) Integer.MAX_VALUE));

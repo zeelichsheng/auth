@@ -28,6 +28,6 @@ public class AuthCodeRoute {
   // This is the individual auth code path, i.e. /auth-codes/{clientId}/{code}
   public static final String AUTHORIZATION_PATH = API + "/{" + CODE_PATH_PARAM + "}";
 
-  // This is the access tokens path, i.e. /auth-codes/{cliendId}/{code}/access-tokens
-  public static final String ACCESS_TOKENS_API = AUTHORIZATION_PATH +  "/access-tokens";
+  // This is the access tokens path, i.e. /auth-codes/{cliendId}/access-tokens
+  public static final String ACCESS_TOKENS_API = API +  "/access-tokens";
 }

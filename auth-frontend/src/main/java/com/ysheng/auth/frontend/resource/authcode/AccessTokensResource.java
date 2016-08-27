@@ -52,9 +52,8 @@ public class AccessTokensResource {
   @POST
   public AccessToken issue(
       @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
-      @PathParam(AuthCodeRoute.CODE_PATH_PARAM) String code,
       AccessTokenIssueSpec request) throws InternalException {
-    return authCodeGrantService.issueAccessToken(clientId, code, request);
+    return authCodeGrantService.issueAccessToken(clientId, request);
   }
 
   @GET

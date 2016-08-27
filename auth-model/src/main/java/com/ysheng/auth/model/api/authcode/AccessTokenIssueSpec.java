@@ -26,6 +26,10 @@ public class AccessTokenIssueSpec {
   // Valid grant type.
   public static final GrantType VALID_GRANT_TYPE = GrantType.AUTHORIZATION_CODE;
 
+  // REQUIRED. The authorization code.
+  @JsonProperty
+  private String code;
+
   // REQUIRED. Value must be set to "authorization_code".
   @JsonProperty
   private GrantType grantType;
@@ -42,6 +46,14 @@ public class AccessTokenIssueSpec {
   ///
   /// Getters and Setters.
   ///
+
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
+  }
 
   public GrantType getGrantType() {
     return grantType;

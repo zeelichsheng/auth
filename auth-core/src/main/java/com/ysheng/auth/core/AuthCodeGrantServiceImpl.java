@@ -168,16 +168,18 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
    * Authorization Code Grant type.
    *
    * @param clientId The client identifier.
-   * @param code The authorization code.
    * @param request The access token request that contains required information.
    * @return The access token response that contains the access token.
    * @throws InternalException The exception contains error details.
    */
   public AccessToken issueAccessToken(
       String clientId,
-      String code,
       AccessTokenIssueSpec request) throws InternalException {
     // Validate the request.
+    if (request.getCode() == null) {
+      throw new InvalidRequestException("Authorization code cannot be null");
+    }
+
     if (!AccessTokenIssueSpec.VALID_GRANT_TYPE.equals(request.getGrantType())) {
       throw new GrantTypeUnsupportedException(request.getGrantType());
     }
@@ -193,10 +195,10 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
     }
 
     AuthorizationTicket authorizationTicket = database.findAuthorizationTicketByCodeAndClientId(
-        code,
+        request.getCode(),
         clientId);
     if (authorizationTicket == null) {
-      throw new AuthorizationTicketNotFoundError(clientId, code);
+      throw new AuthorizationTicketNotFoundError(clientId, request.getCode());
     }
 
     if (authorizationTicket.getRedirectUri() != null &&
@@ -224,7 +226,7 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
     // access tokens.
     AuthorizationRevokeSpec revokeAuthorizationSpec = new AuthorizationRevokeSpec();
     revokeAuthorizationSpec.setClientSecret(client.getSecret());
-    revokeAuthorization(clientId, code, revokeAuthorizationSpec);
+    revokeAuthorization(clientId, request.getCode(), revokeAuthorizationSpec);
 
     return response;
   }
