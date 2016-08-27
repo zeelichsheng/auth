@@ -18,9 +18,9 @@ import com.ysheng.auth.core.AuthCodeGrantServiceFactory;
 import com.ysheng.auth.core.ClientServiceFactory;
 
 /**
- * Defines a builder class that builds factories.
+ * Implements the factory provider functions.
  */
-public class FactoryBuilder {;
+public class FactoryProviderImpl implements FactoryProvider {
 
   // The database factory.
   private DatabaseFactory databaseFactory;
@@ -32,17 +32,13 @@ public class FactoryBuilder {;
   private AuthCodeGrantServiceFactory authCodeGrantServiceFactory;
 
   /**
-   * Constructs a FactoryBuilder object.
+   * Constructs a FactoryProviderImpl object.
    */
-  public FactoryBuilder() {
+  public FactoryProviderImpl() {
     this.databaseFactory = new DatabaseFactory();
     this.clientServiceFactory = new ClientServiceFactory();
     this.authCodeGrantServiceFactory = new AuthCodeGrantServiceFactory();
   }
-
-  ///
-  /// Getters.
-  ///
 
   public DatabaseFactory getDatabaseFactory() {
     return databaseFactory;

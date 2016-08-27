@@ -36,8 +36,8 @@ public class ApiService extends Application<ApiConfiguration> {
   // The API configuration.
   private ApiConfiguration configuration;
 
-  // The factory builder.
-  private FactoryBuilder factoryBuilder;
+  // The factory provider.
+  private FactoryProvider factoryProvider;
 
   // The database object that provides database related operations.
   private Database database;
@@ -53,13 +53,13 @@ public class ApiService extends Application<ApiConfiguration> {
    * Constructs an ApiService object.
    *
    * @param configuration The API configuration.
-   * @param factoryBuilder The factory builder.
+   * @param factoryProvider The factory builder.
    */
   public ApiService(
       ApiConfiguration configuration,
-      FactoryBuilder factoryBuilder) {
+      FactoryProvider factoryProvider) {
     this.configuration = configuration;
-    this.factoryBuilder = factoryBuilder;
+    this.factoryProvider = factoryProvider;
   }
 
   /**
@@ -88,12 +88,12 @@ public class ApiService extends Application<ApiConfiguration> {
   }
 
   private void produceServices() throws Exception {
-    database = factoryBuilder.getDatabaseFactory().produce(configuration.getBackendConfiguration());
+    database = factoryProvider.getDatabaseFactory().produce(configuration.getBackendConfiguration());
 
-    clientService = factoryBuilder.getClientServiceFactory().produce(
+    clientService = factoryProvider.getClientServiceFactory().produce(
         database, configuration.getCoreConfiguration());
 
-    authCodeGrantService = factoryBuilder.getAuthCodeGrantServiceFactory().produce(
+    authCodeGrantService = factoryProvider.getAuthCodeGrantServiceFactory().produce(
         database, configuration.getCoreConfiguration());
   }
 
