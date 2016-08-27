@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.common.utility;
+package com.ysheng.auth.core.util;
 
 import java.net.MalformedURLException;
 import java.net.URL;

@@ -11,16 +11,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.common.test.utility;
+package com.ysheng.auth.core.test.util;
 
-import com.ysheng.auth.common.utility.UriUtil;
+import com.ysheng.auth.core.util.UriUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * Tests for {@link com.ysheng.auth.common.utility.ReflectionUtil}.
+ * Tests for {@link com.ysheng.auth.core.util.UriUtil}.
  */
 public class UriUtilTest {
 
