@@ -10,41 +10,37 @@
  * conditions of any kind, EITHER EXPRESS OR IMPLIED.  See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
 package com.ysheng.auth.model.api.implicit;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ysheng.auth.model.api.ResponseType;
+import com.ysheng.auth.model.api.AccessTokenType;
 
 /**
- * Defines the data structure of authorization request for Implicit Grant.
+ * Defines the data structure of access token response for Implicit Grant.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AuthorizationRequest {
+public class AccessToken {
 
-  // Valid response type.
-  public static final ResponseType VALID_RESPONSE_TYPE = ResponseType.TOKEN;
-
-  // REQUIRED. Value must be set to "token".
+  // REQUIRED. The access token issued by the authorization server.
   @JsonProperty
-  private ResponseType responseType;
+  private String accessToken;
 
-  // REQUIRED. The client identifier.
+  // REQUIRED. The type of the token.
   @JsonProperty
-  private String clientId;
+  private AccessTokenType tokenType;
 
-  // OPTIONAL. The URI the resource owner is redirected to after the request
-  // is fulfilled.
+  // RECOMMENDED. The lifetime in seconds of the access token.
   @JsonProperty
-  private String redirectUri;
+  private Long expiresIn;
 
-  // OPTIONAL. The scope of the access request.
+  // OPTIONAL if identical to the scope requested by the client. Otherwise
+  // REQUIRED.
   @JsonProperty
   private String scope;
 
-  // RECOMMENDED. An opaque value used by the client to maintain state between
-  // the request and callback.
+  // REQUIRED if the "state" parameter was present in the client
+  // authorization request.
   @JsonProperty
   private String state;
 
@@ -52,28 +48,28 @@ public class AuthorizationRequest {
   /// Getters and Setters.
   ///
 
-  public ResponseType getResponseType() {
-    return responseType;
+  public String getAccessToken() {
+    return accessToken;
   }
 
-  public void setResponseType(ResponseType responseType) {
-    this.responseType = responseType;
+  public void setAccessToken(String accessToken) {
+    this.accessToken = accessToken;
   }
 
-  public String getClientId() {
-    return clientId;
+  public AccessTokenType getTokenType() {
+    return tokenType;
   }
 
-  public void setClientId(String clientId) {
-    this.clientId = clientId;
+  public void setTokenType(AccessTokenType tokenType) {
+    this.tokenType = tokenType;
   }
 
-  public String getRedirectUri() {
-    return redirectUri;
+  public Long getExpiresIn() {
+    return expiresIn;
   }
 
-  public void setRedirectUri(String redirectUri) {
-    this.redirectUri = redirectUri;
+  public void setExpiresIn(Long expiresIn) {
+    this.expiresIn = expiresIn;
   }
 
   public String getScope() {
