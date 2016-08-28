@@ -13,7 +13,6 @@
 
 package com.ysheng.auth.backend;
 
-import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
 
@@ -23,6 +22,10 @@ import java.util.List;
  * Defines the interface of backend database related functions.
  */
 public interface Database {
+
+  ///
+  /// Client related functions.
+  ///
 
   /**
    * Stores a client object in database.
@@ -52,6 +55,10 @@ public interface Database {
    * @return A list of all clients in database.
    */
   List<Client> listClients();
+
+  ///
+  /// Auth Code Grant related functions.
+  ///
 
   /**
    * Stores an authorization ticket object in database.
@@ -92,7 +99,7 @@ public interface Database {
    *
    * @param accessToken The access token object to be stored.
    */
-  void storeAccessToken(AccessToken accessToken);
+  void storeAccessToken(com.ysheng.auth.model.api.authcode.AccessToken accessToken);
 
   /**
    * Gets a list of access tokens that belong to the client.
@@ -100,7 +107,7 @@ public interface Database {
    * @param clientId The clietn identifier.
    * @return A list of access tokens.
    */
-  List<AccessToken> listAccessTokens(String clientId);
+  List<com.ysheng.auth.model.api.authcode.AccessToken> listAccessTokens(String clientId);
 
   /**
    * Removes an access token object from database.
@@ -117,7 +124,26 @@ public interface Database {
    * @param accessToken The access token.
    * @return An access token object that matches the client ID and token.
    */
-  AccessToken findAccessTokenByClientIdAndToken(
+  com.ysheng.auth.model.api.authcode.AccessToken findAccessTokenByClientIdAndToken(
       String clientId,
       String accessToken);
+
+  ///
+  /// Implicit Grant related functions.
+  ///
+
+  /**
+   * Stores an implict access token object in database.
+   *
+   * @param accessToken The access token object to be stored.
+   */
+  void storeImplictAccessToken(com.ysheng.auth.model.api.implicit.AccessToken accessToken);
+
+  /**
+   * Gets a list of access tokens that belong to the client.
+   *
+   * @param clientId The clietn identifier.
+   * @return A list of access tokens.
+   */
+  List<com.ysheng.auth.model.api.implicit.AccessToken> listImplicitAccessTokens(String clientId);
 }

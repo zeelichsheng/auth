@@ -17,7 +17,6 @@ import com.ysheng.auth.backend.redis.RedisClient;
 import com.ysheng.auth.backend.redis.RedisDatabase;
 import com.ysheng.auth.model.api.AccessTokenType;
 import com.ysheng.auth.model.api.ClientType;
-import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
 import org.testng.annotations.DataProvider;
@@ -38,6 +37,10 @@ import java.util.Set;
  * Tests for {@link com.ysheng.auth.backend.redis.RedisDatabase}.
  */
 public class RedisDatabaseTest {
+
+  ///
+  /// Client related tests.
+  ///
 
   @Test
   public void succeedsToStoreClient() {
@@ -105,6 +108,10 @@ public class RedisDatabaseTest {
     verify(redisClient).keys(anyString());
     verify(redisClient).mget(anySet());
   }
+
+  ///
+  /// Auth Code Grant related tests.
+  ///
 
   @Test
   public void succeedsToStoreAuthorizationTicket() {
@@ -184,7 +191,7 @@ public class RedisDatabaseTest {
     RedisClient redisClient = mock(RedisClient.class);
     doNothing().when(redisClient).set(anyString(), anyString());
 
-    AccessToken accessToken = new AccessToken();
+    com.ysheng.auth.model.api.authcode.AccessToken accessToken = new com.ysheng.auth.model.api.authcode.AccessToken();
     accessToken.setClientId("clientId");
     accessToken.setAccessToken("accessToken");
     accessToken.setTokenType(AccessTokenType.BEARER);
@@ -251,5 +258,60 @@ public class RedisDatabaseTest {
     database.findAccessTokenByClientIdAndToken("clientId", "token");
 
     verify(redisClient).get(anyString());
+  }
+
+  ///
+  /// Implicit Grant related tests.
+  ///
+
+  @Test
+  public void succeedsToStoreImplictAccessToken() {
+    RedisClient redisClient = mock(RedisClient.class);
+    doNothing().when(redisClient).set(anyString(), anyString());
+
+    com.ysheng.auth.model.api.implicit.AccessToken accessToken = new com.ysheng.auth.model.api.implicit.AccessToken();
+    accessToken.setClientId("clientId");
+    accessToken.setAccessToken("accessToken");
+    accessToken.setTokenType(AccessTokenType.BEARER);
+    accessToken.setExpiresIn(1000L);
+    accessToken.setScope("scope");
+    accessToken.setState("state");
+
+    RedisDatabase database = new RedisDatabase(redisClient);
+    database.storeImplictAccessToken(accessToken);
+
+    verify(redisClient).set(anyString(), anyString());
+  }
+
+  @Test(dataProvider = "ClientIdForListImplicitAccessTokens")
+  public void succeedsToListImplicitAccessTokens(String clientId) {
+    RedisClient redisClient = mock(RedisClient.class);
+    Set<String> keys = new HashSet<>();
+    keys.add("key1");
+    keys.add("key2");
+    String hash1 =
+        "{\"clientId\":\"clientId1\",\"accessToken\":\"accessToken1\",\"tokenType\":\"BEARER\",\"expiresIn\":1000," +
+            "\"scope\":\"scope\",\"state\":\"state\"}";
+    String hash2 =
+        "{\"clientId\":\"clientId1\",\"accessToken\":\"accessToken2\",\"tokenType\":\"BEARER\",\"expiresIn\":1000," +
+            "\"scope\":\"scope\",\"state\":\"state\"}";
+    List<String> hashes = Arrays.asList(hash1, hash2);
+
+    doReturn(keys).when(redisClient).keys(anyString());
+    doReturn(hashes).when(redisClient).mget(anySet());
+
+    RedisDatabase database = new RedisDatabase(redisClient);
+    database.listImplicitAccessTokens(clientId);
+
+    verify(redisClient).keys(anyString());
+    verify(redisClient).mget(anySet());
+  }
+
+  @DataProvider(name = "ClientIdForListImplicitAccessTokens")
+  public Object[][] provideClientIdForListImplicitAccessTokens() {
+    return new Object[][] {
+        { null },
+        { "clientId1" }
+    };
   }
 }

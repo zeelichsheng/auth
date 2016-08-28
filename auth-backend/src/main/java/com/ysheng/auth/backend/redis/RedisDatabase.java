@@ -17,7 +17,7 @@ import com.ysheng.auth.backend.Database;
 import com.ysheng.auth.backend.redis.adapter.AccessTokenAdapter;
 import com.ysheng.auth.backend.redis.adapter.AuthorizationTicketAdapter;
 import com.ysheng.auth.backend.redis.adapter.ClientAdapter;
-import com.ysheng.auth.model.api.authcode.AccessToken;
+import com.ysheng.auth.backend.redis.adapter.ImplicitAccessTokenAdapter;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
 
@@ -41,6 +41,10 @@ public class RedisDatabase implements Database {
       RedisClient redisClient) {
     this.redisClient = redisClient;
   }
+
+  ///
+  /// Client related functions.
+  ///
 
   /**
    * Stores a client object in database.
@@ -85,6 +89,10 @@ public class RedisDatabase implements Database {
         .map(ClientAdapter::fromHash)
         .collect(Collectors.toList());
   }
+
+  ///
+  /// Auth Code Grant related functions.
+  ///
 
   /**
    * Stores an authorization ticket object in database.
@@ -140,7 +148,7 @@ public class RedisDatabase implements Database {
    *
    * @param accessToken The access token object to be stored.
    */
-  public void storeAccessToken(AccessToken accessToken) {
+  public void storeAccessToken(com.ysheng.auth.model.api.authcode.AccessToken accessToken) {
     redisClient.set(
         AccessTokenAdapter.getKey(accessToken.getClientId(), accessToken.getAccessToken()),
         AccessTokenAdapter.toHash(accessToken));
@@ -152,7 +160,7 @@ public class RedisDatabase implements Database {
    * @param clientId The clietn identifier.
    * @return A list of access tokens.
    */
-  public List<AccessToken> listAccessTokens(String clientId) {
+  public List<com.ysheng.auth.model.api.authcode.AccessToken> listAccessTokens(String clientId) {
     return redisClient
         .mget(redisClient.keys(AccessTokenAdapter.getKey(clientId, null)))
         .stream()
@@ -177,10 +185,39 @@ public class RedisDatabase implements Database {
    * @param accessToken The access token.
    * @return An access token object that matches the client ID and token.
    */
-  public AccessToken findAccessTokenByClientIdAndToken(
+  public com.ysheng.auth.model.api.authcode.AccessToken findAccessTokenByClientIdAndToken(
       String clientId,
       String accessToken) {
     return AccessTokenAdapter.fromHash(
         redisClient.get(AccessTokenAdapter.getKey(clientId, accessToken)));
+  }
+
+  ///
+  /// Implicit Grant related functions.
+  ///
+
+  /**
+   * Stores an implict access token object in database.
+   *
+   * @param accessToken The access token object to be stored.
+   */
+  public void storeImplictAccessToken(com.ysheng.auth.model.api.implicit.AccessToken accessToken) {
+    redisClient.set(
+        ImplicitAccessTokenAdapter.getKey(accessToken.getClientId(), accessToken.getAccessToken()),
+        ImplicitAccessTokenAdapter.toHash(accessToken));
+  }
+
+  /**
+   * Gets a list of access tokens that belong to the client.
+   *
+   * @param clientId The clietn identifier.
+   * @return A list of access tokens.
+   */
+  public List<com.ysheng.auth.model.api.implicit.AccessToken> listImplicitAccessTokens(String clientId) {
+    return redisClient
+        .mget(redisClient.keys(ImplicitAccessTokenAdapter.getKey(clientId, null)))
+        .stream()
+        .map(ImplicitAccessTokenAdapter::fromHash)
+        .collect(Collectors.toList());
   }
 }
