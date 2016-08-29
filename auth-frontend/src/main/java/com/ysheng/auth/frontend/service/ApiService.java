@@ -16,6 +16,7 @@ package com.ysheng.auth.frontend.service;
 import com.ysheng.auth.backend.Database;
 import com.ysheng.auth.core.AuthCodeGrantService;
 import com.ysheng.auth.core.ClientService;
+import com.ysheng.auth.core.ImplicitGrantService;
 import com.ysheng.auth.frontend.configuration.ApiConfiguration;
 import com.ysheng.auth.frontend.mapper.InternalExceptionMapper;
 import com.ysheng.auth.frontend.resource.authcode.AccessTokenResource;
@@ -48,6 +49,9 @@ public class ApiService extends Application<ApiConfiguration> {
   // The authorization code grant service that provides auth code
   // related operations.
   private AuthCodeGrantService authCodeGrantService;
+
+  // The implicit grant service that provides access token related operations.
+  private ImplicitGrantService implicitGrantService;
 
   /**
    * Constructs an ApiService object.
@@ -95,6 +99,9 @@ public class ApiService extends Application<ApiConfiguration> {
 
     authCodeGrantService = factoryProvider.getAuthCodeGrantServiceFactory().produce(
         database, configuration.getCoreConfiguration());
+
+    implicitGrantService = factoryProvider.getImplicitGrantServiceFactory().produce(
+        database, configuration.getCoreConfiguration());
   }
 
   private void registerMappers(Environment environment) {
@@ -108,5 +115,9 @@ public class ApiService extends Application<ApiConfiguration> {
     environment.jersey().register(new AuthCodeResource(authCodeGrantService));
     environment.jersey().register(new AccessTokensResource(authCodeGrantService));
     environment.jersey().register(new AccessTokenResource(authCodeGrantService));
+    environment.jersey().register(
+        new com.ysheng.auth.frontend.resource.implicit.AccessTokensResource(implicitGrantService));
+    environment.jersey().register(
+        new com.ysheng.auth.frontend.resource.implicit.AccessTokenResource(implicitGrantService));
   }
 }

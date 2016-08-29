@@ -16,6 +16,7 @@ package com.ysheng.auth.frontend.service;
 import com.ysheng.auth.backend.DatabaseFactory;
 import com.ysheng.auth.core.AuthCodeGrantServiceFactory;
 import com.ysheng.auth.core.ClientServiceFactory;
+import com.ysheng.auth.core.ImplicitGrantServiceFactory;
 
 /**
  * Defines a builder interface that provides factories.
@@ -27,4 +28,6 @@ public interface FactoryProvider {
   ClientServiceFactory getClientServiceFactory();
 
   AuthCodeGrantServiceFactory getAuthCodeGrantServiceFactory();
+
+  ImplicitGrantServiceFactory getImplicitGrantServiceFactory();
 }

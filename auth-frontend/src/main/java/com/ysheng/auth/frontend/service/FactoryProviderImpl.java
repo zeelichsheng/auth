@@ -16,6 +16,7 @@ package com.ysheng.auth.frontend.service;
 import com.ysheng.auth.backend.DatabaseFactory;
 import com.ysheng.auth.core.AuthCodeGrantServiceFactory;
 import com.ysheng.auth.core.ClientServiceFactory;
+import com.ysheng.auth.core.ImplicitGrantServiceFactory;
 
 /**
  * Implements the factory provider functions.
@@ -31,6 +32,9 @@ public class FactoryProviderImpl implements FactoryProvider {
   // The auth code grant service factory.
   private AuthCodeGrantServiceFactory authCodeGrantServiceFactory;
 
+  // The implicit grant service factory.
+  private ImplicitGrantServiceFactory implicitGrantServiceFactory;
+
   /**
    * Constructs a FactoryProviderImpl object.
    */
@@ -38,6 +42,7 @@ public class FactoryProviderImpl implements FactoryProvider {
     this.databaseFactory = new DatabaseFactory();
     this.clientServiceFactory = new ClientServiceFactory();
     this.authCodeGrantServiceFactory = new AuthCodeGrantServiceFactory();
+    this.implicitGrantServiceFactory = new ImplicitGrantServiceFactory();
   }
 
   public DatabaseFactory getDatabaseFactory() {
@@ -50,5 +55,9 @@ public class FactoryProviderImpl implements FactoryProvider {
 
   public AuthCodeGrantServiceFactory getAuthCodeGrantServiceFactory() {
     return authCodeGrantServiceFactory;
+  }
+
+  public ImplicitGrantServiceFactory getImplicitGrantServiceFactory() {
+    return implicitGrantServiceFactory;
   }
 }
