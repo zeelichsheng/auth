@@ -197,7 +197,7 @@ public class RedisDatabase implements Database {
   ///
 
   /**
-   * Stores an implict access token object in database.
+   * Stores an implicit access token object in database.
    *
    * @param accessToken The access token object to be stored.
    */
@@ -208,7 +208,7 @@ public class RedisDatabase implements Database {
   }
 
   /**
-   * Gets a list of access tokens that belong to the client.
+   * Gets a list of implicit access tokens that belong to the client.
    *
    * @param clientId The clietn identifier.
    * @return A list of access tokens.
@@ -219,5 +219,29 @@ public class RedisDatabase implements Database {
         .stream()
         .map(ImplicitAccessTokenAdapter::fromHash)
         .collect(Collectors.toList());
+  }
+
+  /**
+   * Removes an implicit access token object from database.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   */
+  public void removeImplictAccessToken(String clientId, String accessToken) {
+    redisClient.remove(ImplicitAccessTokenAdapter.getKey(clientId, accessToken));
+  }
+
+  /**
+   * Finds an implicit access token by client ID and token.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   * @return An implicit access token object that matches the client ID and token.
+   */
+  public com.ysheng.auth.model.api.implicit.AccessToken findImplicitAccessTokenByClientIdAndToken(
+      String clientId,
+      String accessToken) {
+    return ImplicitAccessTokenAdapter.fromHash(
+        redisClient.get(ImplicitAccessTokenAdapter.getKey(clientId, accessToken)));
   }
 }

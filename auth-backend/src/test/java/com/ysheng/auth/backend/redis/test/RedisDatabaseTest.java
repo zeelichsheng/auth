@@ -314,4 +314,30 @@ public class RedisDatabaseTest {
         { "clientId1" }
     };
   }
+
+  @Test
+  public void succeedsToRemoveImplicitAccessToken() {
+    RedisClient redisClient = mock(RedisClient.class);
+    doNothing().when(redisClient).remove(anyString());
+
+    RedisDatabase database = new RedisDatabase(redisClient);
+    database.removeImplictAccessToken("clientId", "token");
+
+    verify(redisClient).remove(anyString());
+  }
+
+  @Test
+  public void succeedsToGetImplicitAccessToken() {
+    RedisClient redisClient = mock(RedisClient.class);
+    String hash =
+        "{\"clientId\":\"clientId\",\"accessToken\":\"accessToken\",\"tokenType\":\"BEARER\",\"expiresIn\":1000," +
+            "\"scope\":\"scope\",\"state\":\"state\"}";
+
+    doReturn(hash).when(redisClient).get(anyString());
+
+    RedisDatabase database = new RedisDatabase(redisClient);
+    database.findImplicitAccessTokenByClientIdAndToken("clientId", "token");
+
+    verify(redisClient).get(anyString());
+  }
 }

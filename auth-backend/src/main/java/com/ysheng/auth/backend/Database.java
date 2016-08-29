@@ -133,17 +133,36 @@ public interface Database {
   ///
 
   /**
-   * Stores an implict access token object in database.
+   * Stores an implicit access token object in database.
    *
    * @param accessToken The access token object to be stored.
    */
   void storeImplictAccessToken(com.ysheng.auth.model.api.implicit.AccessToken accessToken);
 
   /**
-   * Gets a list of access tokens that belong to the client.
+   * Gets a list of implicit access tokens that belong to the client.
    *
    * @param clientId The clietn identifier.
    * @return A list of access tokens.
    */
   List<com.ysheng.auth.model.api.implicit.AccessToken> listImplicitAccessTokens(String clientId);
+
+  /**
+   * Removes an implicit access token object from database.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   */
+  void removeImplictAccessToken(String clientId, String accessToken);
+
+  /**
+   * Finds an implicit access token by client ID and token.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   * @return An implicit access token object that matches the client ID and token.
+   */
+  com.ysheng.auth.model.api.implicit.AccessToken findImplicitAccessTokenByClientIdAndToken(
+      String clientId,
+      String accessToken);
 }
