@@ -30,10 +30,6 @@ public class AuthorizationGrantSpec {
   @JsonProperty
   private ResponseType responseType;
 
-  // REQUIRED. The client identifier.
-  @JsonProperty
-  private String clientId;
-
   // OPTIONAL. The URI the resource owner is redirected to after the request
   // is fulfilled.
   @JsonProperty
@@ -58,14 +54,6 @@ public class AuthorizationGrantSpec {
 
   public void setResponseType(ResponseType responseType) {
     this.responseType = responseType;
-  }
-
-  public String getClientId() {
-    return clientId;
-  }
-
-  public void setClientId(String clientId) {
-    this.clientId = clientId;
   }
 
   public String getRedirectUri() {

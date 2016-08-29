@@ -51,7 +51,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Tests {@link com.ysheng.auth.core.AuthCodeGrantServiceImpl}.
+ * Tests for {@link com.ysheng.auth.core.AuthCodeGrantServiceImpl}.
  */
 public class AuthCodeGrantServiceImplTest {
 
@@ -622,13 +622,13 @@ public class AuthCodeGrantServiceImplTest {
     public void failsWithNonExistAccessToken() {
       Database database = mock(Database.class);
       doReturn(new Client()).when(database).findClientById(anyString());
-      doReturn(null).when(database).findAuthorizationTicketByCodeAndClientId(anyString(), anyString());
+      doReturn(null).when(database).findAccessTokenByClientIdAndToken(anyString(), anyString());
 
       AuthCodeGrantServiceImpl service = new AuthCodeGrantServiceImpl(database, null);
 
       try {
         service.getAccessToken("clientId", "accessToken");
-        fail("Getting access token should fail with non-exist ticket");
+        fail("Getting access token should fail with non-exist access token");
       } catch (InternalException ex) {
         assertThat(ex.getClass(), equalTo(AccessTokenNotFoundException.class));
         assertThat(ex.getErrorDescription(), equalTo("Access token not found with client ID: clientId" +
