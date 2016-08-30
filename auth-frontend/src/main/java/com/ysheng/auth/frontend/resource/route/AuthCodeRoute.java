@@ -35,24 +35,24 @@ public class AuthCodeRoute {
   /// Path.
   ///
 
-  // This is the auth codes root path, i.e. /auth-codes/{clientId}
-  private static final String ROOT_PATH = "/auth-codes/{" + CLIENT_ID_PATH_PARAM + "}";
+  // This is the auth codes root path, i.e. /auth-code/{clientId}
+  private static final String ROOT_PATH = "/auth-code/{" + CLIENT_ID_PATH_PARAM + "}";
 
-  // This is tha authorization codes path, i.e. /auth-codes/{clientId}/authorizations
+  // This is tha authorization codes path, i.e. /auth-code/{clientId}/authorizations
   public static final String AUTHORIZATIONS_PATH = ROOT_PATH + "/authorizations";
 
-  // This is the individual auth code path, i.e. /auth-codes/{clientId}/authorizations/{code}
+  // This is the individual auth code path, i.e. /auth-code/{clientId}/authorizations/{code}
   public static final String AUTHORIZATION_PATH = AUTHORIZATIONS_PATH + "/{" + CODE_PATH_PARAM + "}";
 
-  // This is the path to revoke authorization, i.e. /auth-codes/{clientId}/authorizations/{code}/revoke-authorization
-  public static final String REVOKE_AUTHORIZATION_ACTION = "/revoke-authorization";
+  // This is the path to revoke authorization, i.e. /auth-code/{clientId}/authorizations/{code}/revoke-authorization
+  public static final String REVOKE_AUTHORIZATION_ACTION = "/revoke";
 
-  // This is the access tokens path, i.e. /auth-codes/{cliendId}/access-tokens
+  // This is the access tokens path, i.e. /auth-code/{cliendId}/access-tokens
   public static final String ACCESS_TOKENS_PATH = ROOT_PATH +  "/access-tokens";
 
-  // This is the individual access token path, i.e. /auth-codes/{clientId}/access-tokens/{accessToken}
+  // This is the individual access token path, i.e. /auth-code/{clientId}/access-tokens/{accessToken}
   public static final String ACCESS_TOKEN_PATH = ACCESS_TOKENS_PATH + "/{" + ACCESS_TOKEN_PATH_PARAM + "}";
 
-  // This is the path to revoke access token, i.e /auth-codes/{clientId}/access-tokens/{accessToken}/revoke-access-token
-  public static final String REVOKE_ACCESS_TOKEN_ACTION = "/revoke-access-token";
+  // This is the path to revoke access token, i.e /auth-code/{clientId}/access-tokens/{accessToken}/revoke-access-token
+  public static final String REVOKE_ACCESS_TOKEN_ACTION = "/revoke";
 }

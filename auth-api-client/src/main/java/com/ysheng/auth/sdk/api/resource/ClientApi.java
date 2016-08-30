@@ -25,7 +25,7 @@ import org.apache.http.concurrent.FutureCallback;
 import javax.ws.rs.core.UriBuilder;
 
 /**
- * Defines the API related to client operations.
+ * Defines the APIs related to client operations.
  */
 public class ClientApi extends BaseClient {
 

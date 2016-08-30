@@ -13,6 +13,7 @@
 
 package com.ysheng.auth.sdk.api;
 
+import com.ysheng.auth.sdk.api.resource.AuthCodeGrantApi;
 import com.ysheng.auth.sdk.api.resource.ClientApi;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 
@@ -27,6 +28,9 @@ public class ApiClient {
   // The auth client related APIs.
   private ClientApi clientApi;
 
+  // The authorization code grant related APIs.
+  private AuthCodeGrantApi authCodeGrantApi;
+
   /**
    * Constructs an ApiClient object.
    *
@@ -39,6 +43,7 @@ public class ApiClient {
     this.restClient = new RestClient(target, httpClient);
 
     this.clientApi = new ClientApi(restClient);
+    this.authCodeGrantApi = new AuthCodeGrantApi(restClient);
   }
 
   ///
@@ -47,5 +52,9 @@ public class ApiClient {
 
   public ClientApi getClientApi() {
     return clientApi;
+  }
+
+  public AuthCodeGrantApi getAuthCodeGrantApi() {
+    return authCodeGrantApi;
   }
 }
