@@ -14,6 +14,9 @@
 package com.ysheng.auth.sdk.api.resource;
 
 import com.ysheng.auth.model.api.ApiList;
+import com.ysheng.auth.model.api.authcode.AccessToken;
+import com.ysheng.auth.model.api.authcode.AccessTokenIssueSpec;
+import com.ysheng.auth.model.api.authcode.AccessTokenRevokeSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationGrantSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationRevokeSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
@@ -63,14 +66,14 @@ public class AuthCodeGrantApi extends BaseClient {
       final AuthorizationGrantSpec spec,
       final FutureCallback<AuthorizationTicket> responseHandler) throws Exception {
     postAsync(
-        AUTHORIZATIONS_PATH,
+        UriBuilder.fromPath(AUTHORIZATIONS_PATH).build(clientId).toString(),
         JsonSerializer.serialize(spec),
         HttpStatus.SC_CREATED,
         responseHandler);
   }
 
   /**
-   * Lists the authorization tickets asynchronously.
+   * Lists the authorization tickets that belongs to the client asynchronously.
    *
    * @param clientId The client identifier.
    * @param responseHandler The response handler that handles the retrieved authorization ticket list.
@@ -80,7 +83,7 @@ public class AuthCodeGrantApi extends BaseClient {
       final String clientId,
       final FutureCallback<ApiList<AuthorizationTicket>> responseHandler) throws Exception {
     getAsync(
-        AUTHORIZATIONS_PATH,
+        UriBuilder.fromPath(AUTHORIZATIONS_PATH).build(clientId).toString(),
         HttpStatus.SC_OK,
         responseHandler);
   }
@@ -119,6 +122,80 @@ public class AuthCodeGrantApi extends BaseClient {
       final FutureCallback<Void> responseHandler) throws Exception {
     postAsync(
         UriBuilder.fromPath(REVOKE_AUTHORIZATION_PATH).build(clientId, code).toString(),
+        JsonSerializer.serialize(spec),
+        HttpStatus.SC_CREATED,
+        responseHandler);
+  }
+
+  /**
+   * Issues an access token to the client asynchronously.
+   *
+   * @param clientId The client identifier.
+   * @param spec The access token issue spec.
+   * @param responseHandler The response handler that handles the newly issued access token.
+   * @throws Exception The error that contains detail information.
+   */
+  public void issueAccessTokenAsync(
+      final String clientId,
+      final AccessTokenIssueSpec spec,
+      final FutureCallback<AccessToken> responseHandler) throws Exception {
+    postAsync(
+        UriBuilder.fromPath(ACCESS_TOKENS_PATH).build(clientId).toString(),
+        JsonSerializer.serialize(spec),
+        HttpStatus.SC_CREATED,
+        responseHandler);
+  }
+
+  /**
+   * Lists the access tokens that belong to the client asynchronously.
+   *
+   * @param clientId The client identifier.
+   * @param responseHandler The response handler that handles the retrieved access token list.
+   * @throws Exception The error that contains detail information.
+   */
+  public void listAccessTokensAsync(
+      final String clientId,
+      final FutureCallback<ApiList<AccessToken>> responseHandler) throws Exception {
+    getAsync(
+        UriBuilder.fromPath(ACCESS_TOKENS_PATH).build(clientId).toString(),
+        HttpStatus.SC_OK,
+        responseHandler);
+  }
+
+  /**
+   * Gets an access token asynchronously that matches the client identifier and the token.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   * @param responseHandler The response handler that handles the retrieved access token.
+   * @throws Exception The error that contains detail information.
+   */
+  public void getAccessTokenAsync(
+      final String clientId,
+      final String accessToken,
+      final FutureCallback<AccessToken> responseHandler) throws Exception {
+    getAsync(
+        UriBuilder.fromPath(ACCESS_TOKEN_PATH).build(clientId, accessToken).toString(),
+        HttpStatus.SC_OK,
+        responseHandler);
+  }
+
+  /**
+   * Revokes an access token from a client asynchronously.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   * @param spec The access token revoke spec.
+   * @param responseHandler The response handler that handles the revocation.
+   * @throws Exception The error that contains detail information.
+   */
+  public void revokeAccessTokenAsync(
+      final String clientId,
+      final String accessToken,
+      final AccessTokenRevokeSpec spec,
+      final FutureCallback<Void> responseHandler) throws Exception {
+    postAsync(
+        UriBuilder.fromPath(REVOKE_ACCESS_TOKEN_PATH).build(clientId, accessToken).toString(),
         JsonSerializer.serialize(spec),
         HttpStatus.SC_CREATED,
         responseHandler);
