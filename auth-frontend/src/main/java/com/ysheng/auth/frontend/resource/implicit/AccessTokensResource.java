@@ -14,10 +14,9 @@
 package com.ysheng.auth.frontend.resource.implicit;
 
 import com.ysheng.auth.core.ImplicitGrantService;
+import com.ysheng.auth.frontend.resource.ResponseBuilder;
 import com.ysheng.auth.frontend.resource.route.ImplicitRoute;
-import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.exception.InternalException;
-import com.ysheng.auth.model.api.implicit.AccessToken;
 import com.ysheng.auth.model.api.implicit.AuthorizationGrantSpec;
 
 import javax.ws.rs.Consumes;
@@ -27,6 +26,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * Defines the RESTful endpoints related to implicit access token related operations for
@@ -50,15 +50,19 @@ public class AccessTokensResource {
   }
 
   @POST
-  public AccessToken issue(
+  public Response issue(
       @PathParam(ImplicitRoute.CLIENT_ID_PATH_PARAM) String clientId,
       AuthorizationGrantSpec request) throws InternalException {
-    return implicitGrantService.issueAccessToken(clientId, request);
+    return ResponseBuilder.build(
+        Response.Status.CREATED,
+        implicitGrantService.issueAccessToken(clientId, request));
   }
 
   @GET
-  public ApiList<AccessToken> list(
+  public Response list(
       @PathParam(ImplicitRoute.CLIENT_ID_PATH_PARAM) String clientId) throws InternalException {
-    return implicitGrantService.listAccessTokens(clientId);
+    return ResponseBuilder.build(
+        Response.Status.OK,
+        implicitGrantService.listAccessTokens(clientId));
   }
 }

@@ -14,9 +14,9 @@
 package com.ysheng.auth.frontend.resource.implicit;
 
 import com.ysheng.auth.core.ImplicitGrantService;
+import com.ysheng.auth.frontend.resource.ResponseBuilder;
 import com.ysheng.auth.frontend.resource.route.ImplicitRoute;
 import com.ysheng.auth.model.api.exception.InternalException;
-import com.ysheng.auth.model.api.implicit.AccessToken;
 import com.ysheng.auth.model.api.implicit.AccessTokenRevokeSpec;
 
 import javax.ws.rs.Consumes;
@@ -26,6 +26,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * Defines the RESTful endpoints related to implicit access token related operations for
@@ -49,18 +50,21 @@ public class AccessTokenResource {
   }
 
   @GET
-  public AccessToken get(
+  public Response get(
       @PathParam(ImplicitRoute.CLIENT_ID_PATH_PARAM) String clientId,
       @PathParam(ImplicitRoute.ACCESS_TOKEN_PATH_PARAM) String accessToken) throws InternalException {
-    return implicitGrantService.getAccessToken(clientId, accessToken);
+    return ResponseBuilder.build(
+        Response.Status.OK,
+        implicitGrantService.getAccessToken(clientId, accessToken));
   }
 
   @POST
   @Path(ImplicitRoute.REVOKE_ACCESS_TOKEN_ACTION)
-  public void revoke(
+  public Response revoke(
       @PathParam(ImplicitRoute.CLIENT_ID_PATH_PARAM) String clientId,
       @PathParam(ImplicitRoute.ACCESS_TOKEN_PATH_PARAM) String accessToken,
       AccessTokenRevokeSpec request) throws InternalException {
     implicitGrantService.revokeAccessToken(clientId, accessToken, request);
+    return ResponseBuilder.build(Response.Status.CREATED);
   }
 }

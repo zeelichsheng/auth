@@ -14,9 +14,8 @@
 package com.ysheng.auth.frontend.resource.authcode;
 
 import com.ysheng.auth.core.AuthCodeGrantService;
+import com.ysheng.auth.frontend.resource.ResponseBuilder;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
-import com.ysheng.auth.model.api.ApiList;
-import com.ysheng.auth.model.api.authcode.AccessToken;
 import com.ysheng.auth.model.api.authcode.AccessTokenIssueSpec;
 import com.ysheng.auth.model.api.exception.InternalException;
 
@@ -27,6 +26,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * Defines the RESTful endpoints related to access token related operations for
@@ -50,15 +50,19 @@ public class AccessTokensResource {
   }
 
   @POST
-  public AccessToken issue(
+  public Response issue(
       @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
       AccessTokenIssueSpec request) throws InternalException {
-    return authCodeGrantService.issueAccessToken(clientId, request);
+    return ResponseBuilder.build(
+        Response.Status.CREATED,
+        authCodeGrantService.issueAccessToken(clientId, request));
   }
 
   @GET
-  public ApiList<AccessToken> list(
+  public Response list(
       @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId) throws InternalException {
-    return authCodeGrantService.listAccessTokens(clientId);
+    return ResponseBuilder.build(
+        Response.Status.OK,
+        authCodeGrantService.listAccessTokens(clientId));
   }
 }

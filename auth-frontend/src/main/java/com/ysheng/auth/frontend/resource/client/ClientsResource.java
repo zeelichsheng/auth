@@ -14,9 +14,8 @@
 package com.ysheng.auth.frontend.resource.client;
 
 import com.ysheng.auth.core.ClientService;
+import com.ysheng.auth.frontend.resource.ResponseBuilder;
 import com.ysheng.auth.frontend.resource.route.ClientRoute;
-import com.ysheng.auth.model.api.ApiList;
-import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientRegistrationSpec;
 import com.ysheng.auth.model.api.exception.InternalException;
 
@@ -26,6 +25,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * Defines the RESTful endpoints related to client operations.
@@ -48,13 +48,17 @@ public class ClientsResource {
   }
 
   @POST
-  public Client register(
+  public Response register(
       ClientRegistrationSpec request) throws InternalException {
-    return clientService.register(request);
+    return ResponseBuilder.build(
+        Response.Status.CREATED,
+        clientService.register(request));
   }
 
   @GET
-  public ApiList<Client> list() {
-    return clientService.list();
+  public Response list() {
+    return ResponseBuilder.build(
+        Response.Status.OK,
+        clientService.list());
   }
 }

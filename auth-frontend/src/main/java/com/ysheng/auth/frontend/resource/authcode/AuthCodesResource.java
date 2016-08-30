@@ -14,10 +14,9 @@
 package com.ysheng.auth.frontend.resource.authcode;
 
 import com.ysheng.auth.core.AuthCodeGrantService;
+import com.ysheng.auth.frontend.resource.ResponseBuilder;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
-import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.authcode.AuthorizationGrantSpec;
-import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.exception.InternalException;
 
 import javax.ws.rs.Consumes;
@@ -27,6 +26,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * Defines the RESTful endpoints related to auth code grant operations for a specific client.
@@ -49,15 +49,19 @@ public class AuthCodesResource {
   }
 
   @POST
-  public AuthorizationTicket authorize(
+  public Response authorize(
       @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
       AuthorizationGrantSpec request) throws InternalException {
-    return authCodeGrantService.authorize(clientId, request);
+    return ResponseBuilder.build(
+        Response.Status.CREATED,
+        authCodeGrantService.authorize(clientId, request));
   }
 
   @GET
-  public ApiList<AuthorizationTicket> list(
+  public Response list(
       @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId) throws InternalException {
-    return authCodeGrantService.listAuthorizationTickets(clientId);
+    return ResponseBuilder.build(
+        Response.Status.OK,
+        authCodeGrantService.listAuthorizationTickets(clientId));
   }
 }

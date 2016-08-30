@@ -14,9 +14,9 @@
 package com.ysheng.auth.frontend.resource.authcode;
 
 import com.ysheng.auth.core.AuthCodeGrantService;
+import com.ysheng.auth.frontend.resource.ResponseBuilder;
 import com.ysheng.auth.frontend.resource.route.AuthCodeRoute;
 import com.ysheng.auth.model.api.authcode.AuthorizationRevokeSpec;
-import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.exception.InternalException;
 
 import javax.ws.rs.Consumes;
@@ -26,6 +26,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * Defines the RESTful endpoints related to auth code grant operations for
@@ -49,19 +50,22 @@ public class AuthCodeResource {
   }
 
   @GET
-  public AuthorizationTicket get(
+  public Response get(
       @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
       @PathParam(AuthCodeRoute.CODE_PATH_PARAM) String code)
     throws InternalException {
-    return authCodeGrantService.getAuthorizationTicket(clientId, code);
+    return ResponseBuilder.build(
+        Response.Status.OK,
+        authCodeGrantService.getAuthorizationTicket(clientId, code));
   }
 
   @POST
   @Path(AuthCodeRoute.REVOKE_AUTHORIZATION_ACTION)
-  public void revoke(
+  public Response revoke(
       @PathParam(AuthCodeRoute.CLIENT_ID_PATH_PARAM) String clientId,
       @PathParam(AuthCodeRoute.CODE_PATH_PARAM) String code,
       AuthorizationRevokeSpec request) throws InternalException {
     authCodeGrantService.revokeAuthorization(clientId, code, request);
+    return ResponseBuilder.build(Response.Status.CREATED);
   }
 }
