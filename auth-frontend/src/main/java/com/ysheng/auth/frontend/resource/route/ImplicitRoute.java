@@ -42,5 +42,5 @@ public class ImplicitRoute {
   public static final String ACCESS_TOKEN_PATH = ACCESS_TOKENS_PATH + "/{" + ACCESS_TOKEN_PATH_PARAM + "}";
 
   // This is the path to revoke access token, i.e /implicit/{clientId}/access-tokens/{accessToken}/revoke-access-token
-  public static final String REVOKE_ACCESS_TOKEN_ACTION = "/revoke-access-token";
+  public static final String REVOKE_ACCESS_TOKEN_ACTION = "/revoke";
 }

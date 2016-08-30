@@ -15,6 +15,7 @@ package com.ysheng.auth.sdk.api;
 
 import com.ysheng.auth.sdk.api.resource.AuthCodeGrantApi;
 import com.ysheng.auth.sdk.api.resource.ClientApi;
+import com.ysheng.auth.sdk.api.resource.ImplicitGrantApi;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 
 /**
@@ -31,6 +32,9 @@ public class ApiClient {
   // The authorization code grant related APIs.
   private AuthCodeGrantApi authCodeGrantApi;
 
+  // The implicit grant related APIs.
+  private ImplicitGrantApi implicitGrantApi;
+
   /**
    * Constructs an ApiClient object.
    *
@@ -44,6 +48,7 @@ public class ApiClient {
 
     this.clientApi = new ClientApi(restClient);
     this.authCodeGrantApi = new AuthCodeGrantApi(restClient);
+    this.implicitGrantApi = new ImplicitGrantApi(restClient);
   }
 
   ///
@@ -56,5 +61,9 @@ public class ApiClient {
 
   public AuthCodeGrantApi getAuthCodeGrantApi() {
     return authCodeGrantApi;
+  }
+
+  public ImplicitGrantApi getImplicitGrantApi() {
+    return implicitGrantApi;
   }
 }
