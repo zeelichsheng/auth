@@ -13,6 +13,7 @@
 
 package com.ysheng.auth.sdk.api;
 
+import com.ysheng.auth.sdk.api.resource.ClientApi;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 
 /**
@@ -22,6 +23,9 @@ public class ApiClient {
 
   // The client that performs RESTful operations.
   private final RestClient restClient;
+
+  // The auth client related APIs.
+  private ClientApi clientApi;
 
   /**
    * Constructs an ApiClient object.
@@ -33,5 +37,15 @@ public class ApiClient {
       String target,
       CloseableHttpAsyncClient httpClient) {
     this.restClient = new RestClient(target, httpClient);
+
+    this.clientApi = new ClientApi(restClient);
+  }
+
+  ///
+  /// Getters.
+  ///
+
+  public ClientApi getClientApi() {
+    return clientApi;
   }
 }
