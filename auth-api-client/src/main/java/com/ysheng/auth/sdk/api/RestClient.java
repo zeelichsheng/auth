@@ -13,8 +13,6 @@
 
 package com.ysheng.auth.sdk.api;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -135,20 +133,6 @@ public class RestClient {
       }
       throw new RuntimeException(msg.toString());
     }
-  }
-
-  /**
-   * Parses the HTTP response and returns entity.
-   *
-   * @param response The HTTP response obejct.
-   * @param classType The class type of the entity contained in the HTTP response.
-   * @param <T> The type of the entity contained in the HTTP response.
-   * @return The entity object.
-   * @throws IOException The error that contains the detail information.
-   */
-  public <T> T parseHttpResponse(HttpResponse response, TypeReference<T> classType) throws IOException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    return objectMapper.readValue(response.getEntity().getContent(), classType);
   }
 
   /**
