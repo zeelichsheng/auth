@@ -18,7 +18,6 @@ import com.ysheng.auth.model.api.implicit.AccessToken;
 import com.ysheng.auth.model.api.implicit.AccessTokenRevokeSpec;
 import com.ysheng.auth.model.api.implicit.AuthorizationGrantSpec;
 import com.ysheng.auth.sdk.api.RestClient;
-import com.ysheng.auth.sdk.api.util.JsonSerializer;
 import org.apache.http.HttpStatus;
 import org.apache.http.concurrent.FutureCallback;
 
@@ -45,6 +44,23 @@ public class ImplicitGrantApi extends BaseClient {
   }
 
   /**
+   * Issues an access token to the client synchronously.
+   *
+   * @param clientId The client identifier.
+   * @param spec The access token issue spec.
+   * @return The newly issued access token.
+   * @throws Exception The error that contains detail information.
+   */
+  public AccessToken issue(
+      final String clientId,
+      final AuthorizationGrantSpec spec) throws Exception {
+    return post(
+        UriBuilder.fromPath(ACCESS_TOKENS_PATH).build(clientId).toString(),
+        spec,
+        HttpStatus.SC_CREATED);
+  }
+
+  /**
    * Issues an access token to the client asynchronously.
    *
    * @param clientId The client identifier.
@@ -58,9 +74,22 @@ public class ImplicitGrantApi extends BaseClient {
       final FutureCallback<AccessToken> responseHandler) throws Exception {
     postAsync(
         UriBuilder.fromPath(ACCESS_TOKENS_PATH).build(clientId).toString(),
-        JsonSerializer.serialize(spec),
+        spec,
         HttpStatus.SC_CREATED,
         responseHandler);
+  }
+
+  /**
+   * Lists the access tokens that belong to the client synchronously.
+   *
+   * @param clientId The client identifier.
+   * @return The list of access tokens.
+   * @throws Exception The error that contains detail information.
+   */
+  public ApiList<AccessToken> listAccessTokens(final String clientId) throws Exception {
+    return get(
+        UriBuilder.fromPath(ACCESS_TOKENS_PATH).build(clientId).toString(),
+        HttpStatus.SC_OK);
   }
 
   /**
@@ -77,6 +106,22 @@ public class ImplicitGrantApi extends BaseClient {
         UriBuilder.fromPath(ACCESS_TOKENS_PATH).build(clientId).toString(),
         HttpStatus.SC_OK,
         responseHandler);
+  }
+
+  /**
+   * Gets an access token synchronously that matches the client identifier and the token.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   * @return The access token.
+   * @throws Exception The error that contains detail information.
+   */
+  public AccessToken getAccessToken(
+      final String clientId,
+      final String accessToken) throws Exception {
+    return get(
+        UriBuilder.fromPath(ACCESS_TOKEN_PATH).build(clientId, accessToken).toString(),
+        HttpStatus.SC_OK);
   }
 
   /**
@@ -98,6 +143,24 @@ public class ImplicitGrantApi extends BaseClient {
   }
 
   /**
+   * Revokes an access token from a client synchronously.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   * @param spec The access token revoke spec.
+   * @throws Exception The error that contains detail information.
+   */
+  public void revokeAccessToken(
+      final String clientId,
+      final String accessToken,
+      final AccessTokenRevokeSpec spec) throws Exception {
+    post(
+        UriBuilder.fromPath(REVOKE_ACCESS_TOKEN_PATH).build(clientId, accessToken).toString(),
+        spec,
+        HttpStatus.SC_CREATED);
+  }
+
+  /**
    * Revokes an access token from a client asynchronously.
    *
    * @param clientId The client identifier.
@@ -113,7 +176,7 @@ public class ImplicitGrantApi extends BaseClient {
       final FutureCallback<Void> responseHandler) throws Exception {
     postAsync(
         UriBuilder.fromPath(REVOKE_ACCESS_TOKEN_PATH).build(clientId, accessToken).toString(),
-        JsonSerializer.serialize(spec),
+        spec,
         HttpStatus.SC_CREATED,
         responseHandler);
   }

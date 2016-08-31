@@ -21,7 +21,6 @@ import com.ysheng.auth.model.api.authcode.AuthorizationGrantSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationRevokeSpec;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.sdk.api.RestClient;
-import com.ysheng.auth.sdk.api.util.JsonSerializer;
 import org.apache.http.HttpStatus;
 import org.apache.http.concurrent.FutureCallback;
 
@@ -54,6 +53,23 @@ public class AuthCodeGrantApi extends BaseClient {
   }
 
   /**
+   * Grants an authorization ticket to the client synchronously.
+   *
+   * @param clientId The client identifier.
+   * @param spec The authorization grant spec.
+   * @return The newly created authorization ticket.
+   * @throws Exception The error that contains detail information.
+   */
+  public AuthorizationTicket authorize(
+      final String clientId,
+      final AuthorizationGrantSpec spec) throws Exception {
+    return post(
+        UriBuilder.fromPath(AUTHORIZATIONS_PATH).build(clientId).toString(),
+        spec,
+        HttpStatus.SC_CREATED);
+  }
+
+  /**
    * Grants an authorization ticket to the client asynchronously.
    *
    * @param clientId The client identifier.
@@ -67,9 +83,22 @@ public class AuthCodeGrantApi extends BaseClient {
       final FutureCallback<AuthorizationTicket> responseHandler) throws Exception {
     postAsync(
         UriBuilder.fromPath(AUTHORIZATIONS_PATH).build(clientId).toString(),
-        JsonSerializer.serialize(spec),
+        spec,
         HttpStatus.SC_CREATED,
         responseHandler);
+  }
+
+  /**
+   * Lists the authorization tickets that belongs to the client synchronously.
+   *
+   * @param clientId The client identifier.
+   * @return A list of authorization tickets.
+   * @throws Exception The error that contains detail information.
+   */
+  public ApiList<AuthorizationTicket> listAuthorizationTickets(final String clientId) throws Exception {
+    return get(
+        UriBuilder.fromPath(AUTHORIZATIONS_PATH).build(clientId).toString(),
+        HttpStatus.SC_OK);
   }
 
   /**
@@ -86,6 +115,22 @@ public class AuthCodeGrantApi extends BaseClient {
         UriBuilder.fromPath(AUTHORIZATIONS_PATH).build(clientId).toString(),
         HttpStatus.SC_OK,
         responseHandler);
+  }
+
+  /**
+   * Gets an authorization ticket synchronously that matches the client identifier and code.
+   *
+   * @param clientId The client identifier.
+   * @param code The authorization code.
+   * @return The authorization ticket.
+   * @throws Exception The error that contains detail information.
+   */
+  public AuthorizationTicket getAuthorizationTicket(
+      final String clientId,
+      final String code) throws Exception {
+    return get(
+        UriBuilder.fromPath(AUTHORIZATIONS_PATH).build(clientId).toString(),
+        HttpStatus.SC_OK);
   }
 
   /**
@@ -107,6 +152,24 @@ public class AuthCodeGrantApi extends BaseClient {
   }
 
   /**
+   * Revokes an authorization ticket from a client synchronously.
+   *
+   * @param clientId The client identifier.
+   * @param code The authorization code.
+   * @param spec The authorization revoke spec.
+   * @throws Exception The error that contains detail information.
+   */
+  public void revokeAuthorizationTicket(
+      final String clientId,
+      final String code,
+      final AuthorizationRevokeSpec spec) throws Exception {
+    post(
+        UriBuilder.fromPath(REVOKE_AUTHORIZATION_PATH).build(clientId, code).toString(),
+        spec,
+        HttpStatus.SC_CREATED);
+  }
+
+  /**
    * Revokes an authorization ticket from a client asynchronously.
    *
    * @param clientId The client identifier.
@@ -122,9 +185,26 @@ public class AuthCodeGrantApi extends BaseClient {
       final FutureCallback<Void> responseHandler) throws Exception {
     postAsync(
         UriBuilder.fromPath(REVOKE_AUTHORIZATION_PATH).build(clientId, code).toString(),
-        JsonSerializer.serialize(spec),
+        spec,
         HttpStatus.SC_CREATED,
         responseHandler);
+  }
+
+  /**
+   * Issues an access token to the client synchronously.
+   *
+   * @param clientId The client identifier.
+   * @param spec The access token issue spec.
+   * @return The newly issued access token.
+   * @throws Exception The error that contains detail information.
+   */
+  public AccessToken issueAccessToken(
+      final String clientId,
+      final AccessTokenIssueSpec spec) throws Exception {
+    return post(
+        UriBuilder.fromPath(ACCESS_TOKENS_PATH).build(clientId).toString(),
+        spec,
+        HttpStatus.SC_CREATED);
   }
 
   /**
@@ -141,9 +221,22 @@ public class AuthCodeGrantApi extends BaseClient {
       final FutureCallback<AccessToken> responseHandler) throws Exception {
     postAsync(
         UriBuilder.fromPath(ACCESS_TOKENS_PATH).build(clientId).toString(),
-        JsonSerializer.serialize(spec),
+        spec,
         HttpStatus.SC_CREATED,
         responseHandler);
+  }
+
+  /**
+   * Lists the access tokens that belong to the client synchronously.
+   *
+   * @param clientId The client identifier.
+   * @return A list of .
+   * @throws Exception The error that contains detail information.
+   */
+  public ApiList<AccessToken> listAccessToken(final String clientId) throws Exception {
+    return get(
+        UriBuilder.fromPath(ACCESS_TOKENS_PATH).build(clientId).toString(),
+        HttpStatus.SC_OK);
   }
 
   /**
@@ -160,6 +253,22 @@ public class AuthCodeGrantApi extends BaseClient {
         UriBuilder.fromPath(ACCESS_TOKENS_PATH).build(clientId).toString(),
         HttpStatus.SC_OK,
         responseHandler);
+  }
+
+  /**
+   * Gets an access token synchronously that matches the client identifier and the token.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   * @return The access token.
+   * @throws Exception The error that contains detail information.
+   */
+  public AccessToken getAccessToken(
+      final String clientId,
+      final String accessToken) throws Exception {
+    return get(
+        UriBuilder.fromPath(ACCESS_TOKEN_PATH).build(clientId, accessToken).toString(),
+        HttpStatus.SC_OK);
   }
 
   /**
@@ -186,6 +295,24 @@ public class AuthCodeGrantApi extends BaseClient {
    * @param clientId The client identifier.
    * @param accessToken The access token.
    * @param spec The access token revoke spec.
+   * @throws Exception The error that contains detail information.
+   */
+  public void revokeAccessToken(
+      final String clientId,
+      final String accessToken,
+      final AccessTokenRevokeSpec spec) throws Exception {
+    post(
+        UriBuilder.fromPath(REVOKE_ACCESS_TOKEN_PATH).build(clientId, accessToken).toString(),
+        spec,
+        HttpStatus.SC_CREATED);
+  }
+
+  /**
+   * Revokes an access token from a client asynchronously.
+   *
+   * @param clientId The client identifier.
+   * @param accessToken The access token.
+   * @param spec The access token revoke spec.
    * @param responseHandler The response handler that handles the revocation.
    * @throws Exception The error that contains detail information.
    */
@@ -196,7 +323,7 @@ public class AuthCodeGrantApi extends BaseClient {
       final FutureCallback<Void> responseHandler) throws Exception {
     postAsync(
         UriBuilder.fromPath(REVOKE_ACCESS_TOKEN_PATH).build(clientId, accessToken).toString(),
-        JsonSerializer.serialize(spec),
+        spec,
         HttpStatus.SC_CREATED,
         responseHandler);
   }

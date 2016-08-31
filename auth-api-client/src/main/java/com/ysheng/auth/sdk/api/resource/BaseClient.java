@@ -16,7 +16,6 @@ package com.ysheng.auth.sdk.api.resource;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.ysheng.auth.sdk.api.RestClient;
 import com.ysheng.auth.sdk.api.util.JsonSerializer;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.concurrent.FutureCallback;
 
@@ -51,12 +50,12 @@ public class BaseClient {
    */
   public final <T> T post(
       final String path,
-      final HttpEntity payload,
+      final Object payload,
       final int expectedHttpStatus) throws IOException {
     HttpResponse httpResponse = restClient.perform(
         RestClient.Method.POST,
         path,
-        payload);
+        JsonSerializer.serialize(payload));
 
     restClient.checkResponse(httpResponse, expectedHttpStatus);
 
@@ -77,13 +76,13 @@ public class BaseClient {
    */
   public final <T> void postAsync(
       final String path,
-      final HttpEntity payload,
+      final Object payload,
       final int expectedHttpStatus,
       final FutureCallback<T> responseHandler) throws IOException {
     restClient.performAsync(
         RestClient.Method.POST,
         path,
-        payload,
+        JsonSerializer.serialize(payload),
         new FutureCallback<HttpResponse>() {
           @Override
           public void completed(HttpResponse httpResponse) {

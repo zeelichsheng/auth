@@ -18,7 +18,6 @@ import com.ysheng.auth.model.api.client.Client;
 import com.ysheng.auth.model.api.client.ClientRegistrationSpec;
 import com.ysheng.auth.model.api.client.ClientUnregistrationSpec;
 import com.ysheng.auth.sdk.api.RestClient;
-import com.ysheng.auth.sdk.api.util.JsonSerializer;
 import org.apache.http.HttpStatus;
 import org.apache.http.concurrent.FutureCallback;
 
@@ -45,6 +44,20 @@ public class ClientApi extends BaseClient {
   }
 
   /**
+   * Registers a client synchronously.
+   *
+   * @param spec The client registration spec.
+   * @return The client object newly registered.
+   * @throws Exception The error that contains detail information.
+   */
+  public Client register(final ClientRegistrationSpec spec) throws Exception {
+    return post(
+        CLIENTS_PATH,
+        spec,
+        HttpStatus.SC_CREATED);
+  }
+
+  /**
    * Registers a client asynchronously.
    *
    * @param spec The client registration spec.
@@ -56,9 +69,21 @@ public class ClientApi extends BaseClient {
       final FutureCallback<Client> responseHandler) throws Exception {
     postAsync(
         CLIENTS_PATH,
-        JsonSerializer.serialize(spec),
+        spec,
         HttpStatus.SC_CREATED,
         responseHandler);
+  }
+
+  /**
+   * Lists the clients synchronously.
+   *
+   * @return A list of clients.
+   * @throws Exception The error that contains detail information.
+   */
+  public ApiList<Client> list() throws Exception {
+    return get(
+        CLIENTS_PATH,
+        HttpStatus.SC_OK);
   }
 
   /**
@@ -73,6 +98,19 @@ public class ClientApi extends BaseClient {
         CLIENTS_PATH,
         HttpStatus.SC_OK,
         responseHandler);
+  }
+
+  /**
+   * Gets a client synchronously that matches the client identifier.
+   *
+   * @param clientId The client identifier to be matched.
+   * @@return The client object.
+   * @throws Exception The error that contains detail information.
+   */
+  public Client get(final String clientId) throws Exception {
+    return get(
+        UriBuilder.fromPath(CLIENT_PATH).build(clientId).toString(),
+        HttpStatus.SC_OK);
   }
 
   /**
@@ -92,6 +130,22 @@ public class ClientApi extends BaseClient {
   }
 
   /**
+   * Unregisters a client synchronously that matches the client identifier.
+   *
+   * @param clientId The client identifier to be matched.
+   * @param spec The client unregistration spec.
+   * @throws Exception The error that contains detail information.
+   */
+  public void unregister(
+      final String clientId,
+      final ClientUnregistrationSpec spec) throws Exception {
+    post(
+        UriBuilder.fromPath(UNREGISTER_CLIENT_PATH).build(clientId).toString(),
+        spec,
+        HttpStatus.SC_CREATED);
+  }
+
+  /**
    * Unregisters a client asynchronously that matches the client identifier.
    *
    * @param clientId The client identifier to be matched.
@@ -105,7 +159,7 @@ public class ClientApi extends BaseClient {
       final FutureCallback<Void> responseHandler) throws Exception {
     postAsync(
         UriBuilder.fromPath(UNREGISTER_CLIENT_PATH).build(clientId).toString(),
-        JsonSerializer.serialize(spec),
+        spec,
         HttpStatus.SC_CREATED,
         responseHandler);
   }
