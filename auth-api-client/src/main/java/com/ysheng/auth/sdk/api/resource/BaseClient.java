@@ -40,6 +40,32 @@ public class BaseClient {
   }
 
   /**
+   * Performs a synchronous POST operation.
+   *
+   * @param path The path of the RESTful operation.
+   * @param payload The payload of the RESTful operation.
+   * @param expectedHttpStatus The expected HTTP status of the operation.
+   * @param <T> The type of the response.
+   * @return The response of the RESTful operation.
+   * @throws IOException The error that contains detail information.
+   */
+  public final <T> T post(
+      final String path,
+      final HttpEntity payload,
+      final int expectedHttpStatus) throws IOException {
+    HttpResponse httpResponse = restClient.perform(
+        RestClient.Method.POST,
+        path,
+        payload);
+
+    restClient.checkResponse(httpResponse, expectedHttpStatus);
+
+    return JsonSerializer.deserialize(
+        httpResponse.getEntity(),
+        new TypeReference<T>() {});
+  }
+
+  /**
    * Performs an asynchronous POST operation.
    *
    * @param path The path of the RESTful operation.
@@ -89,6 +115,24 @@ public class BaseClient {
   }
 
   /**
+   * Performs an synchronous DELETE operation.
+   *
+   * @param path The path of the RESTful operation.
+   * @param expectedHttpStatus The expected HTTP status of the operation.
+   * @throws IOException The error that contains detail information.
+   */
+  public final void delete(
+      final String path,
+      final int expectedHttpStatus) throws IOException {
+    HttpResponse httpResponse = restClient.perform(
+        RestClient.Method.DELETE,
+        path,
+        null);
+
+    restClient.checkResponse(httpResponse, expectedHttpStatus);
+  }
+
+  /**
    * Performs an asynchronous DELETE operation.
    *
    * @param path The path of the RESTful operation.
@@ -127,6 +171,30 @@ public class BaseClient {
           }
         }
     );
+  }
+
+  /**
+   * Performs an synchronous GET operation.
+   *
+   * @param path The path of the RESTful operation.
+   * @param expectedHttpStatus The expected HTTP status of the operation.
+   * @param <T> The type of the response.
+   * @return The response of the RESTful operation.
+   * @throws IOException The error that contains detail information.
+   */
+  public final <T> T get(
+      final String path,
+      final int expectedHttpStatus) throws IOException {
+    HttpResponse httpResponse = restClient.perform(
+        RestClient.Method.GET,
+        path,
+        null);
+
+    restClient.checkResponse(httpResponse, expectedHttpStatus);
+
+    return JsonSerializer.deserialize(
+        httpResponse.getEntity(),
+        new TypeReference<T>() {});
   }
 
   /**
