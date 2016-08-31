@@ -17,6 +17,7 @@ import com.ysheng.auth.sdk.api.resource.AuthCodeGrantApi;
 import com.ysheng.auth.sdk.api.resource.ClientApi;
 import com.ysheng.auth.sdk.api.resource.ImplicitGrantApi;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 
 /**
  * Defines the API client class.
@@ -34,6 +35,16 @@ public class ApiClient {
 
   // The implicit grant related APIs.
   private ImplicitGrantApi implicitGrantApi;
+
+  /**
+   * Constructs an ApiClient object.
+   *
+   * @param target The address of the RESTful endpoint.
+   */
+  public ApiClient(String target) {
+    this(target,
+        HttpAsyncClientBuilder.create().build());
+  }
 
   /**
    * Constructs an ApiClient object.

@@ -67,6 +67,10 @@ public class RestClient {
 
     this.target = target;
     this.httpClient = httpClient;
+
+    if (!this.httpClient.isRunning()) {
+      this.httpClient.start();
+    }
   }
 
   /**
