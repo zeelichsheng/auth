@@ -136,15 +136,19 @@ h1 {
 
 /* the tables for resources and client */
 
-.grid-overview th.col-client-name {
-    width: 15%;
-}
-
 .grid-overview th.col-client-id {
     width: 15%;
 }
 
 .grid-overview th.col-client-secret {
+    width: 20%;
+}
+
+.grid-overview th.col-client-type {
+    width: 5%;
+}
+
+.grid-overview th.col-client-redirect-uri {
     width: 45%;
 }
 

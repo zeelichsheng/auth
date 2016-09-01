@@ -16,8 +16,10 @@
   <table class="table table-bordered grid-overview">
     <thead>
     <tr>
-      <th class="col-client-id">Client ID</th>
-      <th class="col-client-secret">Client Secret</th>
+      <th class="col-client-id">ID</th>
+      <th class="col-client-secret">Secret</th>
+      <th class="col-client-type">Type</th>
+      <th class="col-client-redirect-uri">Redirect URI</th>
       <th class="col-client-actions">Actions</th>
     </tr>
     </thead>
@@ -27,6 +29,12 @@
       <td>{{id}}</td>
       <td>
         <input class="copy-clipboard" readonly="readonly" value="{{secret}}"/><br>
+      </td>
+      <td>
+        {{type}}
+      </td>
+      <td>
+        {{redirectUri}}
       </td>
       <td>
         <a class="unregisterClientButton btn btn-small" href="#">Unregister</a>
