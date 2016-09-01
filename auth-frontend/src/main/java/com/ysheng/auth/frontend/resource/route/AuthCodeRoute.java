@@ -36,7 +36,7 @@ public class AuthCodeRoute {
   ///
 
   // This is the auth codes root path, i.e. /auth-code/{clientId}
-  private static final String ROOT_PATH = "/auth-code/{" + CLIENT_ID_PATH_PARAM + "}";
+  private static final String ROOT_PATH = BaseRoute.BASE_PATH + "/auth-code/{" + CLIENT_ID_PATH_PARAM + "}";
 
   // This is tha authorization codes path, i.e. /auth-code/{clientId}/authorizations
   public static final String AUTHORIZATIONS_PATH = ROOT_PATH + "/authorizations";

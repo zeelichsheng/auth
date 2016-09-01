@@ -1,0 +1,49 @@
+<!--
+  ~ Copyright 2016 Yu Sheng. All Rights Reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  ~ use this file except in compliance with the License.  You may obtain a copy of
+  ~ the License at http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software distributed
+  ~ under the License is distributed on an "AS IS" BASIS, without warranties or
+  ~ conditions of any kind, EITHER EXPRESS OR IMPLIED.  See the License for the
+  ~ specific language governing permissions and limitations under the License.
+  -->
+
+<div id="clientRegistration">
+  <div class="page-header">
+    <h1>Register New Client</h1>
+  </div>
+  <form class="form-horizontal" id="clientRegistrationForm">
+    <fieldset>
+      <div class="control-group">
+        <label class="control-label">Type</label>
+        <div class="controls">
+          <select required="required" name="clientTypesSelect" id="clientTypeSelect">
+            {{#each availableClientTypes}}
+            <option value="{{clientType}}">{{clientType}}</option>
+            {{/each}}
+          </select>
+          <i class="icon-question-sign icon-blue" rel="popover" name="client-type"></i>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Redirect URI</label>
+        <div class="controls">
+          <div class="input" id="clientRedirectUri">
+            <input type="url" id="clientRedirectUriInput" name="clientRedirectUriInput"
+                   placeholder="http://your-apps-uri/" size="16" class="input-append">
+            <i class="icon-question-sign icon-blue" rel="popover" name="client-redirectUri"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="button" class="cancel btn">Cancel</button>
+      </div>
+    </fieldset>
+  </form>
+</div>

@@ -51,12 +51,6 @@ public class ResponseBuilder {
           .type(MediaType.APPLICATION_JSON_TYPE);
     }
 
-    // TODO: this is temporary since we need to allow our management server
-    // (auth-web-server) to do cross-domain AJAX call. We will need to
-    // fix this as it opens security hole.
-    builder.header("Access-Control-Allow-Origin", "*");
-    builder.header("Access-Control-Allow-Methods", "POST, GET, DELETE");
-
     return builder.build();
   }
 }

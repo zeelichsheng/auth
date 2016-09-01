@@ -13,7 +13,7 @@
 
 var data = (function () {
 
-  var dataAjex = function (options) {
+  var dataAjax = function (options) {
     if (options.error) {
       var originalError = options.error;
     }
@@ -37,18 +37,34 @@ var data = (function () {
   };
 
   return {
+    registerClient: function(clientRegisterSpec, successHandler, failureHandler) {
+      dataAjax({
+        url: "../api/clients",
+        type: "POST", // jQuery Backward compatibility
+        method: "POST",
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify(clientRegisterSpec),
+        dataType: "json",
+        success: successHandler,
+        error: function(xhr, textStatus, errorThrown) {
+          failureHandler(xhr.responseText);
+        }
+      });
+    },
+
     listClients: function (resultHandler) {
-      dataAjex({
-        url: "http://127.0.0.1:8080/clients",
-        method: 'GET',
-        processData: true,
+      dataAjax({
+        url: "../api/clients",
+        type: "GET", // jQuery Backward compatibility
+        method: "GET",
+        dataType: "json",
         success: function (clients) {
           resultHandler(clients.items)
         },
         error: function () {
           resultHandler({})
         }
-      })
+      });
     }
   }
 })();

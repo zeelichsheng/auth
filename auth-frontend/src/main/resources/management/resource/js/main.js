@@ -19,7 +19,7 @@ var templateLoader = (function () {
       if (!tplCache[templateName]) {
         var template = $("#" + templateName);
         if (template.size() == 0) {
-          $.get("resource/template/" + templateName + ".html", function (data) {
+          $.get("management/resource/template/" + templateName + ".html", function (data) {
             tplCache[templateName] = Handlebars.compile(data);
             callback(tplCache[templateName]);
           });
@@ -43,7 +43,7 @@ var main = {
     });
 
     $("#nav-clients-apps").click(function () {
-      clientsManagementController.show();
+      clientController.showClientsManagement();
     });
   }
 };

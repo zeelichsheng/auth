@@ -33,7 +33,7 @@ public class ImplicitRoute {
   ///
 
   // This is the auth codes root path, i.e. /implicit/{clientId}
-  private static final String ROOT_PATH = "/implicit/{" + CLIENT_ID_PATH_PARAM + "}";
+  private static final String ROOT_PATH = BaseRoute.BASE_PATH + "/implicit/{" + CLIENT_ID_PATH_PARAM + "}";
 
   // This is the access tokens path, i.e. /implicit/{cliendId}/access-tokens
   public static final String ACCESS_TOKENS_PATH = ROOT_PATH +  "/access-tokens";

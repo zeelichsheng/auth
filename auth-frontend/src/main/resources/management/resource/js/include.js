@@ -13,7 +13,7 @@
 
 requirejs.config({
   //By default load any module IDs from js/lib
-  baseUrl: 'resource/js',
+  baseUrl: 'management/resource/js',
 
   paths: {
     lib: "lib"
@@ -33,15 +33,21 @@ requirejs.config({
       deps: ['lib/bootstrap']
     },
 
+    'data': {
+      deps: [
+        'lib/jquery'
+      ]
+    },
+
     'main': {
       deps: [
         'lib/bootstrap',
         'lib/handlebars',
         'lib/jquery.zclip',
         'lib/bootbox.min',
-        'lib/jquery.xdomainajax',
+        'lib/jquery-extensions',
         'data',
-        'clientsManagement'
+        'client'
       ]
     }
   }
@@ -50,5 +56,6 @@ requirejs.config({
 require([
   "lib/handlebars",
   "lib/bootstrap",
+  "lib/jquery-extensions",
   "main"
 ]);

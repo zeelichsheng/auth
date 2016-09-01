@@ -26,6 +26,7 @@ import com.ysheng.auth.frontend.resource.authcode.AuthCodesResource;
 import com.ysheng.auth.frontend.resource.client.ClientResource;
 import com.ysheng.auth.frontend.resource.client.ClientsResource;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -73,6 +74,7 @@ public class ApiService extends Application<ApiConfiguration> {
    */
   @Override
   public void initialize(Bootstrap<ApiConfiguration> bootstrap) {
+    bootstrap.addBundle(new AssetsBundle("/management/", "/management", "index.html"));
   }
 
   /**

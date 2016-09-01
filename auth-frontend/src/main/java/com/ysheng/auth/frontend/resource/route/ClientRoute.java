@@ -30,7 +30,7 @@ public class ClientRoute {
   ///
 
   // This is the clients root path, i.e. /clients
-  public static final String CLIENTS_PATH = "/clients";
+  public static final String CLIENTS_PATH = BaseRoute.BASE_PATH + "/clients";
 
   // This is the individual client path, i.e. /clients/{id}
   public static final String CLIENT_PATH = CLIENTS_PATH + "/{" + CLIENT_ID_PATH_PARAM + "}";
