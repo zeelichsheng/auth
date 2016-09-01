@@ -25,7 +25,7 @@
     </thead>
     <tbody>
     {{#each clients}}
-    <tr data-clientId="{{id}}">
+    <tr data-clientId="{{id}}" data-clientSecret="{{secret}}">
       <td>{{id}}</td>
       <td>
         <input class="copy-clipboard" readonly="readonly" value="{{secret}}"/><br>

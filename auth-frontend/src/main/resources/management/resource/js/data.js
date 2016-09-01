@@ -40,7 +40,7 @@ var data = (function () {
     registerClient: function(clientRegisterSpec, successHandler, failureHandler) {
       dataAjax({
         url: "../api/clients",
-        type: "POST", // jQuery Backward compatibility
+        type: "POST", // jQuery backward compatibility
         method: "POST",
         contentType: "application/json; charset=UTF-8",
         data: JSON.stringify(clientRegisterSpec),
@@ -55,7 +55,7 @@ var data = (function () {
     listClients: function (resultHandler) {
       dataAjax({
         url: "../api/clients",
-        type: "GET", // jQuery Backward compatibility
+        type: "GET", // jQuery backward compatibility
         method: "GET",
         dataType: "json",
         success: function (clients) {
@@ -63,6 +63,21 @@ var data = (function () {
         },
         error: function () {
           resultHandler({})
+        }
+      });
+    },
+
+    unregisterClient: function(
+      clientId, clientUnregistrationSpec, successHandler, failureHandler) {
+      dataAjax({
+        url: "../api/clients/" + clientId + "/unregister",
+        type: "POST", // jQuery backward compatibility
+        method: "POST",
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify(clientUnregistrationSpec),
+        success: successHandler,
+        error: function(xhr, textStatus, errorThrown) {
+          failureHandler(xhr.responseText);
         }
       });
     }

@@ -35,9 +35,10 @@ var clientView = (function () {
 
         $("a.unregisterClientButton").click(function(e) {
           var clientId = $(e.target).closest("tr").attr("data-clientId");
-          bootbox.confirm("Delete this client?", function(result) {
+          var clientSecret = $(e.target).closest("tr").attr("data-clientSecret");
+          bootbox.confirm("Unregister client " + clientId + "?", function(result) {
             if (result) {
-              // TODO: add delete client logic here
+              clientController.onClickClientUnregistration(clientId, clientSecret);
             }
           });
         });
@@ -115,7 +116,7 @@ var clientController = (function () {
       data.registerClient(
         clientRegisterSpec,
         function(client) {
-          view.pop("Client " + client.id + " registered");
+          view.pop("Client " + client.id + " registered.");
           view.hide();
           clientController.showClientsManagement();
         },
@@ -128,6 +129,26 @@ var clientController = (function () {
     onCancelClientRegistration: function() {
       view.hide();
       view.showClientsManagement();
+    },
+
+    onClickClientUnregistration: function(clientId, clientSecret) {
+      var clientUnregisterSpec = {
+        clientSecret: clientSecret
+      };
+
+      data.unregisterClient(
+        clientId,
+        clientUnregisterSpec,
+        function() {
+          view.pop("Client " + clientId + " unregistered.");
+          view.hide();
+          clientController.showClientsManagement();
+        },
+        function(errorText) {
+          view.hide();
+          clientController.showClientsManagement();
+        }
+      )
     },
 
     hide: view.hide
