@@ -21,7 +21,9 @@ import com.ysheng.auth.backend.redis.adapter.ImplicitAccessTokenAdapter;
 import com.ysheng.auth.model.api.authcode.AuthorizationTicket;
 import com.ysheng.auth.model.api.client.Client;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -83,8 +85,14 @@ public class RedisDatabase implements Database {
    * @return A list of all clients in database.
    */
   public List<Client> listClients() {
+    Set<String> keys = (redisClient.keys(ClientAdapter.getKey(null)));
+
+    if (keys.isEmpty()) {
+      return new ArrayList<>();
+    }
+
     return redisClient
-        .mget(redisClient.keys(ClientAdapter.getKey(null)))
+        .mget(keys)
         .stream()
         .map(ClientAdapter::fromHash)
         .collect(Collectors.toList());
@@ -112,8 +120,14 @@ public class RedisDatabase implements Database {
    * @return A list of authorization tickets.
    */
   public List<AuthorizationTicket> listAuthorizationTickets(String clientId) {
+    Set<String> keys = redisClient.keys(AuthorizationTicketAdapter.getKey(clientId, null));
+
+    if (keys.isEmpty()) {
+      return new ArrayList<>();
+    }
+
     return redisClient
-        .mget(redisClient.keys(AuthorizationTicketAdapter.getKey(clientId, null)))
+        .mget(keys)
         .stream()
         .map(AuthorizationTicketAdapter::fromHash)
         .collect(Collectors.toList());
@@ -161,8 +175,14 @@ public class RedisDatabase implements Database {
    * @return A list of access tokens.
    */
   public List<com.ysheng.auth.model.api.authcode.AccessToken> listAccessTokens(String clientId) {
+    Set<String> keys = redisClient.keys(AccessTokenAdapter.getKey(clientId, null));
+
+    if (keys.isEmpty()) {
+      return new ArrayList<>();
+    }
+
     return redisClient
-        .mget(redisClient.keys(AccessTokenAdapter.getKey(clientId, null)))
+        .mget(keys)
         .stream()
         .map(AccessTokenAdapter::fromHash)
         .collect(Collectors.toList());
@@ -214,8 +234,14 @@ public class RedisDatabase implements Database {
    * @return A list of access tokens.
    */
   public List<com.ysheng.auth.model.api.implicit.AccessToken> listImplicitAccessTokens(String clientId) {
+    Set<String> keys = redisClient.keys(ImplicitAccessTokenAdapter.getKey(clientId, null));
+
+    if (keys.isEmpty()) {
+      return new ArrayList<>();
+    }
+
     return redisClient
-        .mget(redisClient.keys(ImplicitAccessTokenAdapter.getKey(clientId, null)))
+        .mget(keys)
         .stream()
         .map(ImplicitAccessTokenAdapter::fromHash)
         .collect(Collectors.toList());
