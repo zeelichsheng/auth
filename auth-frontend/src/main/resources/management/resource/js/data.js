@@ -37,7 +37,7 @@ var data = (function () {
   };
 
   return {
-    registerClient: function(clientRegisterSpec, successHandler, failureHandler) {
+    registerClient: function (clientRegisterSpec, successHandler, failureHandler) {
       dataAjax({
         url: "../api/clients",
         type: "POST", // jQuery backward compatibility
@@ -46,7 +46,7 @@ var data = (function () {
         data: JSON.stringify(clientRegisterSpec),
         dataType: "json",
         success: successHandler,
-        error: function(xhr, textStatus, errorThrown) {
+        error: function (xhr, textStatus, errorThrown) {
           failureHandler(xhr.responseText);
         }
       });
@@ -67,8 +67,7 @@ var data = (function () {
       });
     },
 
-    unregisterClient: function(
-      clientId, clientUnregistrationSpec, successHandler, failureHandler) {
+    unregisterClient: function (clientId, clientUnregistrationSpec, successHandler, failureHandler) {
       dataAjax({
         url: "../api/clients/" + clientId + "/unregister",
         type: "POST", // jQuery backward compatibility
@@ -76,22 +75,37 @@ var data = (function () {
         contentType: "application/json; charset=UTF-8",
         data: JSON.stringify(clientUnregistrationSpec),
         success: successHandler,
-        error: function(xhr, textStatus, errorThrown) {
+        error: function (xhr, textStatus, errorThrown) {
           failureHandler(xhr.responseText);
         }
       });
     },
 
-    listAuthCodeAccessTokens: function(
-      clientId, successHandler, failureHandler) {
+    listAuthCodeAccessTokens: function (clientId, successHandler, failureHandler) {
       dataAjax({
         url: "../api/auth-code/" + clientId + "/access-tokens",
         type: "GET", // jQuery backward compatibility
         method: "GET",
         dataType: "json",
-        success: function(accessTokens) {
+        success: function (accessTokens) {
           successHandler(accessTokens.items);
         },
+        error: function (xhr, textStatus, errorThrown) {
+          failureHandler(xhr.responseText);
+        }
+      });
+    },
+
+    revokeAuthCodeAccessToken: function (
+      clientId, accessToken, accessTokenRevocationSpec, successHandler, failureHandler) {
+      dataAjax({
+        url: "../api/auth-code/" + clientId + "/access-tokens/" + accessToken + "/revoke",
+        type: "POST", // jQuery backward compatibility
+        method: "POST",
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify(accessTokenRevocationSpec),
+        dataType: "json",
+        success: successHandler,
         error: function(xhr, textStatus, errorThrown) {
           failureHandler(xhr.responseText);
         }

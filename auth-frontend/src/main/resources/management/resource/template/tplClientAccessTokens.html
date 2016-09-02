@@ -12,8 +12,8 @@
   -->
 
 <div id="clientAccessTokens">
-  <div data-clientId="{{clientId}}"></div>
-  <div data-clientSecret="{{clientSecret}}"></div>
+  <div data-clientId="{{clientId}}" id="clientIdForToken"></div>
+  <div data-clientSecret="{{clientSecret}}" id="clientSecretForToken"></div>
 
   {{#if authCodeAccessTokens}}
   <h1>Auth Code Grant Access Tokens</h1>
@@ -33,10 +33,12 @@
         <td>{{accessToken}}</td>
         <td>{{clientId}}</td>
         <td>{{scope}}</td>
-        <td><a class="deleteAccessTokenButton btn btn-small" href="#">Delete</a></td>
+        <td><a class="revokeAccessTokenButton btn btn-small" href="#">Revoke</a></td>
       </tr>
       {{/each}}
     </tbody>
   </table>
+  {{else}}
+  <h1>No access token is issued to client {{clientId}}.</h1>
   {{/if}}
 </div>

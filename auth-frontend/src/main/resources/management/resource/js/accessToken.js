@@ -27,7 +27,17 @@
          $(containerSelector).append(template(model));
          $(containerSelector).css("height", "");
 
-         $("a.deleteAccessTokenButton").click(function(e) {
+         $("a.revokeAccessTokenButton").click(function(e) {
+           var clientId = document.getElementById("clientIdForToken").getAttribute("data-clientId");
+           var clientSecret = document.getElementById("clientSecretForToken").getAttribute("data-clientSecret");
+           var accessToken = $(e.target).closest("tr").attr("data-accessTokenId");
+
+           bootbox.confirm("Revoke access token " + accessToken + " from client " + clientId + " ?",
+             function(result) {
+               if (result) {
+                 accessTokenController.onClickAccessTokenRevocation(clientId, clientSecret, accessToken);
+               }
+           });
          });
        });
      },
@@ -40,6 +50,15 @@
      refresh: function(accessTokens) {
        this.hide();
        this.show(accessTokens);
+     },
+
+     pop: function(text) {
+       bootbox.alert(
+         text,
+         "Close",
+         function(result) {
+           bootbox.hideAll();
+         });
      }
    }
  })();
@@ -60,6 +79,23 @@
          },
          function(errorText) {
          });
+     },
+
+     onClickAccessTokenRevocation: function(clientId, clientSecret, accessToken) {
+       var accessTokenRevokeSpec = {
+         clientSecret: clientSecret
+       };
+
+       data.revokeAuthCodeAccessToken(clientId, accessToken, accessTokenRevokeSpec,
+         function() {
+           accessTokenView.pop("Access token " + accessToken + " revoked.");
+           accessTokenView.hide();
+           accessTokenController.show(clientId, clientSecret);
+         },
+         function(errorText) {
+           accessTokenView.hide();
+           accessTokenController.show(clientId, clientSecret);
+         })
      },
 
      hide: accessTokenView.hide
