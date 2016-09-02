@@ -47,7 +47,8 @@ requirejs.config({
         'lib/bootbox.min',
         'lib/jquery-extensions',
         'data',
-        'client'
+        'client',
+        'accessToken'
       ]
     }
   }

@@ -35,16 +35,25 @@ var templateLoader = (function () {
 })();
 
 var main = {
-  onPageLoad: function () {
-    // On click of nav link, remove 'current' from all, add to actual current.
-    $("div.side-nav a").click(function () {
-      $("div.side-nav a").removeClass("cur");
-      $(this).addClass("cur");
-    });
 
+  clearContentView: function() {
+    $("div.side-nav a").removeClass("cur");
+    clientController.hide();
+    accessTokenController.hide();
+  },
+
+  onPageLoad: function () {
     $("#nav-clients-apps").click(function () {
+      main.clearContentView();
+      $("#nav-clients-apps").addClass("cur");
       clientController.showClientsManagement();
     });
+  },
+
+  showClientAccessTokens: function(clientId, clientSecret) {
+    this.clearContentView();
+    $("#nav-access-tokens").addClass("cur");
+    accessTokenController.show(clientId, clientSecret);
   }
 };
 
@@ -53,21 +62,6 @@ $(function () {
 
   // Attach global listeners
   $(".alert").alert();
-
-  $('body').tooltip({
-    selector: '[rel=tooltip]'
-  });
-
-  $('body').popover({
-    selector: '[rel=popover]',
-    //See popoverBundle.js
-    title: function () {
-      return popoverBundle.getTitle(this.attributes['name'].nodeValue);
-    },
-    content: function () {
-      return popoverBundle.getContent(this.attributes['name'].nodeValue);
-    }
-  });
 
   // Initialization of window controller.
   main.onPageLoad();

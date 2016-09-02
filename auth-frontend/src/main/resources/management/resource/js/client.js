@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-var clientView = (function () {
+var clientView = (function() {
 
   var clientsManagementTemplate = "tplClientsManagement";
   var clientRegistrationTemplate = "tplClientRegistration";
@@ -41,6 +41,12 @@ var clientView = (function () {
               clientController.onClickClientUnregistration(clientId, clientSecret);
             }
           });
+        });
+
+        $("a.showAccessTokensButton").click(function(e) {
+          var clientId = $(e.target).closest("tr").attr("data-clientId");
+          var clientSecret = $(e.target).closest("tr").attr("data-clientSecret");
+          main.showClientAccessTokens(clientId, clientSecret);
         });
       });
     },
@@ -89,11 +95,11 @@ var clientView = (function () {
   }
 })();
 
-var clientController = (function () {
+var clientController = (function() {
   var view = clientView;
 
   return {
-    showClientsManagement: function () {
+    showClientsManagement: function() {
       view.hide();
       data.listClients(function (clients) {
         view.showClientsManagement(clients)

@@ -59,10 +59,10 @@ var data = (function () {
         method: "GET",
         dataType: "json",
         success: function (clients) {
-          resultHandler(clients.items)
+          resultHandler(clients.items);
         },
         error: function () {
-          resultHandler({})
+          resultHandler({});
         }
       });
     },
@@ -76,6 +76,22 @@ var data = (function () {
         contentType: "application/json; charset=UTF-8",
         data: JSON.stringify(clientUnregistrationSpec),
         success: successHandler,
+        error: function(xhr, textStatus, errorThrown) {
+          failureHandler(xhr.responseText);
+        }
+      });
+    },
+
+    listAuthCodeAccessTokens: function(
+      clientId, successHandler, failureHandler) {
+      dataAjax({
+        url: "../api/auth-code/" + clientId + "/access-tokens",
+        type: "GET", // jQuery backward compatibility
+        method: "GET",
+        dataType: "json",
+        success: function(accessTokens) {
+          successHandler(accessTokens.items);
+        },
         error: function(xhr, textStatus, errorThrown) {
           failureHandler(xhr.responseText);
         }

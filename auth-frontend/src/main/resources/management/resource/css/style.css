@@ -77,13 +77,23 @@ h1 {
     border-bottom: 1px solid #efefef;
 }
 
-.side-nav a.cur,
-.side-nav a:hover {
-    color: #0072bc;
+.side-nav-apps a {
+    background-image: url(../img/icon-apps-grey.png)
 }
 
 .side-nav-apps a:hover,
 .side-nav-apps a.cur {
+    color: #0072bc;
+    background-image: url(../img/icon-apps-blue.png)
+}
+
+.side-nav-keys a {
+    background-image: url(../img/icon-keys-grey.png)
+}
+
+.side-nav-keys a.cur {
+    color: #0072bc;
+    background-image: url(../img/icon-keys-blue.png)
 }
 
 /* content div (always next to side-nav) */
