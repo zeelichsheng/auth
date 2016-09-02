@@ -30,6 +30,7 @@
     <module>./auth-core</module>
     <module>./auth-model</module>
     <module>./auth-api-client</module>
+    <module>./auth-portal</module>
   </modules>
 
   <dependencies>
