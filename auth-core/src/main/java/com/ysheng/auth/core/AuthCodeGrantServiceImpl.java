@@ -115,7 +115,7 @@ public class AuthCodeGrantServiceImpl implements AuthCodeGrantService{
       throw new ClientUnauthorizedException(clientId);
     }
 
-    AuthorizationTicket ticket = database.findAuthorizationTicketByCodeAndClientId(clientId, code);
+    AuthorizationTicket ticket = database.findAuthorizationTicketByCodeAndClientId(code, clientId);
     if (ticket == null) {
       throw new AuthorizationTicketNotFoundError(clientId, code);
     }
