@@ -1,0 +1,103 @@
+/*
+ * Copyright 2016 Yu Sheng. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License.  You may obtain a copy of
+ * the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the License is distributed on an "AS IS" BASIS, without warranties or
+ * conditions of any kind, EITHER EXPRESS OR IMPLIED.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
+/* fixes box model*/
+div {
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box; /* Firefox, other Gecko */
+    box-sizing: border-box; /* Opera/IE 8+ */
+}
+
+/* body stuff */
+
+body {
+    font-family: Helvetica;
+    margin: 0;
+    padding: 0;
+}
+
+/* h1 tweaks*/
+h1 {
+    font-size: 30px;
+    font-weight: 100;
+    line-height: 40px;
+    margin: 0 0 10px 0;
+}
+
+/* header of page */
+
+.head {
+    height: 75px;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+    box-shadow: inset 0px -2px 6px 0px rgba(0, 0, 0, .1);
+    background: #f8f8f8;
+}
+
+.user-info {
+    font-size: 20px;
+    font-weight: 200;
+    margin-right: 30px;
+}
+
+/* content div (always next to side-nav) */
+.content {
+    margin-left: 215px;
+    padding: 25px 50px;
+    border-left: 1px solid #efefef;
+    min-height: 240px;
+}
+
+/* full div, for no side-nav */
+
+.full {
+    padding: 25px 50px;
+}
+
+/* table, makes text fit and col-widths */
+
+.table {
+    font-size: 12px;
+    margin-bottom: 40px;
+}
+
+.key-secret {
+    width: 80px;
+    display: inline-block;
+}
+
+/* removes background and padding on form-actions  */
+.form-horizontal .form-actions {
+    background: none;
+    padding-left: 0;
+}
+
+/* left align form label */
+.form-horizontal .control-label {
+    text-align: left;
+}
+
+/* vertical spacing when using stacked fields */
+.multiple-fields {
+    margin-bottom: 9px;
+}
+
+.center {
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.copy-clipboard {
+    width: 300px;
+}

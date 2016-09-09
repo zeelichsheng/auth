@@ -31,6 +31,16 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.ysheng.auth</groupId>
+      <artifactId>auth-model</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ysheng.auth</groupId>
+      <artifactId>auth-api-client</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
       <version>9.4.0.M1</version>
