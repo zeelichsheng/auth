@@ -14,6 +14,7 @@
 package com.ysheng.auth.portal.filter;
 
 import com.ysheng.auth.portal.common.HttpSessionConstant;
+import org.eclipse.jetty.http.HttpStatus;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -28,16 +29,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Defines the authentication filter.
+ * Defines the grant permission filter.
  */
-public class AuthenticationFilter implements Filter {
+public class GrantPermissionFilter implements Filter {
 
   private ServletContext context;
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
     context = filterConfig.getServletContext();
-    context.log("AuthenticationFilter initialized");
+    context.log("GrantPermissionFilter initialized");
   }
 
   @Override
@@ -52,28 +53,35 @@ public class AuthenticationFilter implements Filter {
     }
 
     HttpServletRequest httpRequest = (HttpServletRequest) request;
-    String authState = getAuthState(httpRequest);
+    String permissionState = getPermissionState(httpRequest);
 
-    if (authState == null) {
-      context.log("Unauthenticated access request: " + httpRequest.getRequestURI());
+    if (permissionState == null) {
+      context.log("Permission not granted: " + httpRequest.getRequestURI());
       request.setAttribute(
-          HttpSessionConstant.ATTRIBUTE_NAME_AUTH_STATE,
-          "NOT_AUTHENTICATED");
+          HttpSessionConstant.ATTRIBUTE_NAME_PERMISSION_STATE,
+          "NOT_GRANTED");
       request.setAttribute(
           HttpSessionConstant.ATTRIBUTE_NAME_RETURN_URI,
           httpRequest.getRequestURI());
-      httpRequest.getRequestDispatcher("/resource/login.jsp").forward(request, response);
+      httpRequest.getRequestDispatcher("/resource/grant_permission.jsp").forward(request, response);
     } else {
-      // TODO: add the real authentication logic here
-      String username = httpRequest.getParameter("j_username");
-      String password = httpRequest.getParameter("j_password");
 
-      context.log("Access authenticated: " + httpRequest.getRequestURI());
-      request.setAttribute(
-          HttpSessionConstant.ATTRIBUTE_NAME_AUTH_STATE,
-          "AUTHENTICATED");
+      Boolean isPermissionGranted = Boolean.valueOf(httpRequest.getParameter(
+          HttpSessionConstant.PARAM_NAME_GRANT_PERMISSION));
 
-      chain.doFilter(request, response);
+      if (isPermissionGranted) {
+        context.log("Permission granted: " + httpRequest.getRequestURI());
+        request.setAttribute(
+            HttpSessionConstant.ATTRIBUTE_NAME_PERMISSION_STATE,
+            "GRANTED");
+
+        chain.doFilter(request, response);
+      } else {
+        context.log("Permission denied: " + httpRequest.getRequestURI());
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+        httpResponse.setStatus(HttpStatus.FORBIDDEN_403);
+        httpResponse.getWriter().print("User denied permission.");
+      }
     }
   }
 
@@ -81,12 +89,12 @@ public class AuthenticationFilter implements Filter {
   public void destroy() {
   }
 
-  private String getAuthState(HttpServletRequest request) {
-    String authState = (String) request.getAttribute(HttpSessionConstant.ATTRIBUTE_NAME_AUTH_STATE);
-    if (authState == null) {
-      authState = request.getParameter(HttpSessionConstant.ATTRIBUTE_NAME_AUTH_STATE);
+  private String getPermissionState(HttpServletRequest request) {
+    String permissionState = (String) request.getAttribute(HttpSessionConstant.ATTRIBUTE_NAME_PERMISSION_STATE);
+    if (permissionState == null) {
+      permissionState = request.getParameter(HttpSessionConstant.ATTRIBUTE_NAME_PERMISSION_STATE);
     }
 
-    return authState;
+    return permissionState;
   }
 }

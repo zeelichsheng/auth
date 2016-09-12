@@ -20,5 +20,9 @@ public class HttpSessionConstant {
 
   public final static String ATTRIBUTE_NAME_AUTH_STATE = "AUTH_STATE";
 
+  public final static String ATTRIBUTE_NAME_PERMISSION_STATE = "PERMISSION_STATE";
+
   public final static String ATTRIBUTE_NAME_RETURN_URI = "RETURN_URI";
+
+  public final static String PARAM_NAME_GRANT_PERMISSION = "grant_permission";
 }
