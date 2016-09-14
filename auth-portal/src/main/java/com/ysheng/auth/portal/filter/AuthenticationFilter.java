@@ -22,15 +22,19 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Defines the authentication filter.
  */
 public class AuthenticationFilter implements Filter {
+
+  private final static String COOKIE_AUTHENTICATED_USER = "authenticated_user";
 
   private ServletContext context;
 
@@ -52,13 +56,27 @@ public class AuthenticationFilter implements Filter {
     }
 
     HttpServletRequest httpRequest = (HttpServletRequest) request;
+    HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+    Cookie[] cookies = httpRequest.getCookies();
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if (cookie.getName().equals(COOKIE_AUTHENTICATED_USER)) {
+          // TODO: add a user look-up and sanity check before proceeding.
+          context.log("User has already been authenticated: " + httpRequest.getRequestURI());
+          chain.doFilter(request, response);
+          return;
+        }
+      }
+    }
+
     String authState = getAuthState(httpRequest);
 
     if (authState == null) {
       context.log("Unauthenticated access request: " + httpRequest.getRequestURI());
       request.setAttribute(
           HttpSessionConstant.ATTRIBUTE_NAME_AUTH_STATE,
-          "NOT_AUTHENTICATED");
+          "INITIALIZED");
       request.setAttribute(
           HttpSessionConstant.ATTRIBUTE_NAME_RETURN_URI,
           httpRequest.getRequestURI());
@@ -67,11 +85,18 @@ public class AuthenticationFilter implements Filter {
       // TODO: add the real authentication logic here
       String username = httpRequest.getParameter("j_username");
       String password = httpRequest.getParameter("j_password");
+      Boolean remember = "true".equalsIgnoreCase(httpRequest.getParameter("j_remember"));
 
       context.log("Access authenticated: " + httpRequest.getRequestURI());
-      request.setAttribute(
-          HttpSessionConstant.ATTRIBUTE_NAME_AUTH_STATE,
-          "AUTHENTICATED");
+
+      // TODO: other than saving the cookie, we need to save the relattion between
+      // the UUID saved in the cookie and the real user credentials, such that
+      // when we read the cookie above, we can validate it with real user credentials.
+      String cookieValue = remember ? UUID.randomUUID().toString() : null;
+      Cookie cookie = new Cookie(COOKIE_AUTHENTICATED_USER, cookieValue);
+      cookie.setMaxAge(60);
+      cookie.setPath("/");
+      httpResponse.addCookie(cookie);
 
       chain.doFilter(request, response);
     }
