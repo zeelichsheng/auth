@@ -47,6 +47,14 @@
                      data-original-title="Password" />
             </div>
           </div>
+
+          <div class="control-group">
+            <label class="control-label">Remember</label>
+            <div class="controls">
+              <input type="checkbox" name="j_remember" value="true" />
+            </div>
+          </div>
+
           <input type="hidden" name="AUTH_STATE" value="${AUTH_STATE}" />
         </fieldset>
 
