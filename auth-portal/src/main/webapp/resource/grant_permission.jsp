@@ -27,7 +27,6 @@
 
       <form class="form-horizontal" id="grantHere" method="post"
             action="${RETURN_URI}">
-        <input type="hidden" name="AUTH_STATE" value="${AUTH_STATE}" />
         <input type="hidden" name="PERMISSION_STATE" value="${PERMISSION_STATE}" />
 
         <div class="form-actions">

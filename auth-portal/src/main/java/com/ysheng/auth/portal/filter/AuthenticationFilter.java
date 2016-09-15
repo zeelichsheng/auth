@@ -14,6 +14,7 @@
 package com.ysheng.auth.portal.filter;
 
 import com.ysheng.auth.portal.common.HttpSessionConstant;
+import com.ysheng.auth.portal.util.CookieUtil;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -58,16 +59,15 @@ public class AuthenticationFilter implements Filter {
     HttpServletRequest httpRequest = (HttpServletRequest) request;
     HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-    Cookie[] cookies = httpRequest.getCookies();
-    if (cookies != null) {
-      for (Cookie cookie : cookies) {
-        if (cookie.getName().equals(COOKIE_AUTHENTICATED_USER)) {
-          // TODO: add a user look-up and sanity check before proceeding.
-          context.log("User has already been authenticated: " + httpRequest.getRequestURI());
-          chain.doFilter(request, response);
-          return;
-        }
-      }
+    Cookie cookie = CookieUtil.getCookieByName(
+        httpRequest,
+        COOKIE_AUTHENTICATED_USER);
+    
+    if (cookie != null) {
+      // TODO: add a user look-up and sanity check before proceeding.
+      context.log("User has already been authenticated: " + httpRequest.getRequestURI());
+      chain.doFilter(request, response);
+      return;
     }
 
     String authState = getAuthState(httpRequest);
@@ -92,11 +92,18 @@ public class AuthenticationFilter implements Filter {
       // TODO: other than saving the cookie, we need to save the relattion between
       // the UUID saved in the cookie and the real user credentials, such that
       // when we read the cookie above, we can validate it with real user credentials.
-      String cookieValue = remember ? UUID.randomUUID().toString() : null;
-      Cookie cookie = new Cookie(COOKIE_AUTHENTICATED_USER, cookieValue);
-      cookie.setMaxAge(60);
-      cookie.setPath("/");
-      httpResponse.addCookie(cookie);
+      if (remember) {
+        CookieUtil.addCookie(
+            httpResponse,
+            COOKIE_AUTHENTICATED_USER,
+            UUID.randomUUID().toString(),
+            "/",
+            60);
+      } else {
+        CookieUtil.removeCookie(
+            httpResponse,
+            COOKIE_AUTHENTICATED_USER);
+      }
 
       chain.doFilter(request, response);
     }
