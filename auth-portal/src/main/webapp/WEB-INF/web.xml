@@ -40,6 +40,15 @@
   </filter-mapping>
 
   <filter>
+    <filter-name>BastionNetworksInitialProvisionFilter</filter-name>
+    <filter-class>com.ysheng.auth.portal.filter.bastion.InitialProvisionFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>BastionNetworksInitialProvisionFilter</filter-name>
+    <url-pattern>/authorize</url-pattern>
+  </filter-mapping>
+
+  <filter>
     <filter-name>GrantPermissionFilter</filter-name>
     <filter-class>com.ysheng.auth.portal.filter.GrantPermissionFilter</filter-class>
   </filter>
