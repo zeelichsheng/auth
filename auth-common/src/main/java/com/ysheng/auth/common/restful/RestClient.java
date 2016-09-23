@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.sdk.api;
+package com.ysheng.auth.common.restful;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

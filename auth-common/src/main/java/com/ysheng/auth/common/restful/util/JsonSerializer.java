@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.sdk.api.util;
+package com.ysheng.auth.common.restful.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

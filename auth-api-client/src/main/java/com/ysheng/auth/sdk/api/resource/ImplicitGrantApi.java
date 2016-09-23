@@ -13,11 +13,12 @@
 
 package com.ysheng.auth.sdk.api.resource;
 
+import com.ysheng.auth.common.restful.BaseClient;
 import com.ysheng.auth.model.api.ApiList;
 import com.ysheng.auth.model.api.implicit.AccessToken;
 import com.ysheng.auth.model.api.implicit.AccessTokenRevokeSpec;
 import com.ysheng.auth.model.api.implicit.AuthorizationGrantSpec;
-import com.ysheng.auth.sdk.api.RestClient;
+import com.ysheng.auth.common.restful.RestClient;
 import org.apache.http.HttpStatus;
 import org.apache.http.concurrent.FutureCallback;
 
