@@ -11,11 +11,10 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.ysheng.auth.sdk.api.resource;
+package com.ysheng.auth.common.restful;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.ysheng.auth.sdk.api.RestClient;
-import com.ysheng.auth.sdk.api.util.JsonSerializer;
+import com.ysheng.auth.common.restful.util.JsonSerializer;
 import org.apache.http.HttpResponse;
 import org.apache.http.concurrent.FutureCallback;
 

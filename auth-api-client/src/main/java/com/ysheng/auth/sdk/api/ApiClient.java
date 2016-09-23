@@ -13,6 +13,7 @@
 
 package com.ysheng.auth.sdk.api;
 
+import com.ysheng.auth.common.restful.RestClient;
 import com.ysheng.auth.sdk.api.resource.AuthCodeGrantApi;
 import com.ysheng.auth.sdk.api.resource.ClientApi;
 import com.ysheng.auth.sdk.api.resource.ImplicitGrantApi;

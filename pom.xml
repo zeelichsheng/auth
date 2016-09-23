@@ -29,6 +29,7 @@
     <module>./auth-frontend</module>
     <module>./auth-core</module>
     <module>./auth-model</module>
+    <module>./auth-common</module>
     <module>./auth-api-client</module>
     <module>./auth-portal</module>
   </modules>
