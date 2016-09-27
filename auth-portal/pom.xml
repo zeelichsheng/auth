@@ -37,6 +37,11 @@
     </dependency>
     <dependency>
       <groupId>com.ysheng.auth</groupId>
+      <artifactId>auth-common</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ysheng.auth</groupId>
       <artifactId>auth-api-client</artifactId>
       <version>${parent.version}</version>
     </dependency>

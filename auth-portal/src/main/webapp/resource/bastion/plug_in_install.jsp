@@ -34,11 +34,10 @@
         </div>
 
         <div>
-          Type: ${USER_AGENT_TYPE}<br/>
-          Name: ${USER_AGENT_NAME}<br/>
-          Version: ${USER_AGENT_VERSION}<br/>
-          OS: ${USER_AGENT_OS}<br/>
-          Device: ${USER_AGENT_DEVICE_TYPE}
+          Operating System Type: ${OS_TYPE}<br/>
+          Operating System Version: ${OS_VERSION}<br/>
+          Browser Type: ${BROWSER_TYPE}<br/>
+          Browser Version: ${BROWSER_VERSION}<br/>
         </div>
 
         <div class="form-actions">

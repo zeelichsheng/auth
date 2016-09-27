@@ -14,6 +14,9 @@
 package com.ysheng.auth.portal.filter.bastion;
 
 import com.ysheng.auth.portal.common.HttpSessionConstant;
+import com.ysheng.auth.portal.common.bastion.BastionNetworksClient;
+import com.ysheng.auth.portal.common.bastion.BastionNetworksConstants;
+import com.ysheng.auth.portal.common.bastion.model.BrowserPluginSpec;
 import com.ysheng.auth.portal.util.CookieUtil;
 import jersey.repackaged.com.google.common.cache.Cache;
 import jersey.repackaged.com.google.common.cache.CacheBuilder;
@@ -34,7 +37,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * Defines the filter that handles initial BBE provision.
@@ -109,9 +114,6 @@ public class InitialProvisionFilter implements Filter {
           "agree_install"));
 
       if (isInstallationAgreed) {
-        context.log("User agrees to install Bastion Networks plug-in");
-        // TODO: get bundle from BBE and send back to browser for installation.
-
         // TODO: we use cookie hack to temporarily avoid dead looping in this page.
         CookieUtil.addCookie(
             httpResponse,
@@ -120,7 +122,21 @@ public class InitialProvisionFilter implements Filter {
             "/",
             60);
 
-        chain.doFilter(request, response);
+        context.log("User agrees to install Bastion Networks plug-in");
+        try {
+          BastionNetworksClient client = new BastionNetworksClient(BastionNetworksConstants.BASTION_BASE_URL);
+          BrowserPluginSpec spec = new BrowserPluginSpec();
+          fillBrowserPluginSpecWithUserAgentInfo(httpRequest, spec);
+          Map<String, String> plugin =  client.getInitializationApi().getBrowserPluginDownloadUrl(spec);
+
+          httpResponse.setStatus(HttpStatus.OK_200);
+          httpResponse.getWriter().print("Download plugin from: " + plugin.get("url"));
+
+          //chain.doFilter(request, response);
+        } catch (Exception ex) {
+          httpResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR_500);
+          httpResponse.getWriter().print("Failed to get browser plugin from Bastion Networks: " + ex.getMessage());
+        }
       } else {
         context.log("User refuses to install Bastion Networks plug-in");
         httpResponse.setStatus(HttpStatus.FORBIDDEN_403);
@@ -148,6 +164,43 @@ public class InitialProvisionFilter implements Filter {
   }
 
   private void fillHttpRequestWithUserAgentInfo(HttpServletRequest request) {
+    fillObjectWithUserAgentInfo(
+        request,
+        agent -> {
+          request.setAttribute(
+              "OS_TYPE",
+              agent.getOperatingSystem().getFamilyName());
+
+          request.setAttribute(
+              "OS_VERSION",
+              agent.getOperatingSystem().getVersionNumber().toVersionString());
+
+          request.setAttribute(
+              "BROWSER_TYPE",
+              agent.getFamily().getName());
+
+          request.setAttribute(
+              "BROWSER_VERSION",
+              agent.getVersionNumber().toVersionString());
+        });
+  }
+
+  private void fillBrowserPluginSpecWithUserAgentInfo(
+      HttpServletRequest request,
+      BrowserPluginSpec spec) {
+    fillObjectWithUserAgentInfo(
+        request,
+        agent -> {
+          spec.setOsType(agent.getOperatingSystem().getFamilyName());
+          spec.setOsVersion(agent.getOperatingSystem().getVersionNumber().toVersionString());
+          spec.setBrowserType(agent.getTypeName());
+          spec.setBrowserVersion(agent.getVersionNumber().toVersionString());
+        });
+  }
+
+  private void fillObjectWithUserAgentInfo(
+      HttpServletRequest request,
+      Consumer<ReadableUserAgent> consumer) {
     String userAgent = request.getHeader("User-Agent");
     ReadableUserAgent agent = cache.getIfPresent(userAgent);
     if (agent == null) {
@@ -155,24 +208,6 @@ public class InitialProvisionFilter implements Filter {
       cache.put(userAgent, agent);
     }
 
-    request.setAttribute(
-        "USER_AGENT_TYPE",
-        agent.getTypeName());
-
-    request.setAttribute(
-        "USER_AGENT_NAME",
-        agent.getName());
-
-    request.setAttribute(
-        "USER_AGENT_VERSION",
-        agent.getVersionNumber());
-
-    request.setAttribute(
-        "USER_AGENT_OS",
-        agent.getOperatingSystem());
-
-    request.setAttribute(
-        "USER_AGENT_DEVICE_TYPE",
-        agent.getDeviceCategory());
+    consumer.accept(agent);
   }
 }
